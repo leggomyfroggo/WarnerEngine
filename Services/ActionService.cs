@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ProjectWarnerShared.Entities;
-using ProjectWarnerShared.Lib;
+using WarnerEngine.Lib;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class ActionService : Service
     {

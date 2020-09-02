@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ProjectWarnerShared.Lib.Structure.Shadows
+namespace WarnerEngine.Lib.Structure.Shadows
 {
     public class ShadowStack
     {

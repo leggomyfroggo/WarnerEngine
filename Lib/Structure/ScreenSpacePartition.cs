@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib.Entities;
+using WarnerEngine.Lib.Entities;
 
-namespace ProjectWarnerShared.Lib.Structure
+namespace WarnerEngine.Lib.Structure
 {
     public struct ScreenSpacePartition<T> where T : IDraw
     {

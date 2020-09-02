@@ -1,8 +1,8 @@
 ﻿using System.Xml.Serialization;
 
-using ProjectWarnerShared.Services;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib.Dialog
+namespace WarnerEngine.Lib.Dialog
 {
     [XmlRoot("DialogChain")]
     public class DialogChain

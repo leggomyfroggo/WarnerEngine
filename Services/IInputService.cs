@@ -3,9 +3,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-using ProjectWarnerShared.Lib;
+using WarnerEngine.Lib;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public interface IInputService : IService
     {

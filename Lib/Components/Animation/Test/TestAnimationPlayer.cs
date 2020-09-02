@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace ProjectWarnerShared.Lib.Components.Animation.Test
+namespace WarnerEngine.Lib.Components.Animation.Test
 {
     public class TestAnimationPlayer : IAnimationPlayer
     {

@@ -3,10 +3,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectWarnerShared.Lib;
-using ProjectWarnerShared.Lib.Dialog;
+using WarnerEngine.Lib;
+using WarnerEngine.Lib.Dialog;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class DialogService : Service
     {
@@ -98,8 +98,8 @@ namespace ProjectWarnerShared.Services
                 GameService.GetService<RenderService>()
                     .SetRenderTarget(RENDER_TARGET_KEY, ClearColor: TARGET_COLOR)
                     .Start()
-                    .DrawNinePatch(Content.Constants.GAMEUI_DIALOG_WINDOW, new Rectangle(NAME_WINDOW_X, NAME_WINDOW_Y, nameWidth + NAME_WINDOW_HORIZONTAL_MARGIN * 2, NAME_WINDOW_HEIGHT), 8, 8, new Color(91, 86, 255))
-                    .DrawNinePatch(Content.Constants.GAMEUI_DIALOG_WINDOW, new Rectangle(DIALOG_WINDOW_X, DIALOG_WINDOW_Y, DIALOG_WINDOW_WIDTH, DIALOG_WINDOW_HEIGHT), 8, 8)
+                    .DrawNinePatch(ProjectWarnerShared.Content.Constants.GAMEUI_DIALOG_WINDOW, new Rectangle(NAME_WINDOW_X, NAME_WINDOW_Y, nameWidth + NAME_WINDOW_HORIZONTAL_MARGIN * 2, NAME_WINDOW_HEIGHT), 8, 8, new Color(91, 86, 255))
+                    .DrawNinePatch(ProjectWarnerShared.Content.Constants.GAMEUI_DIALOG_WINDOW, new Rectangle(DIALOG_WINDOW_X, DIALOG_WINDOW_Y, DIALOG_WINDOW_WIDTH, DIALOG_WINDOW_HEIGHT), 8, 8)
                     .DrawString("lana_pixel", currentDialog.CharacterName, NAME_START_POINT, Color.White)
                     .DrawDialogLink("lana_pixel", currentDialog, DIALOG_START_POINT, 240, displayedLength)
                     .End()

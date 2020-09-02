@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using ProjectWarnerShared.Entities.Enemies.FrogBanditEnemy.State;
-using ProjectWarnerShared.Services;
 
-namespace ProjectWarnerShared.Lib.UI
+using Microsoft.Xna.Framework;
+
+using WarnerEngine.Services;
+
+namespace WarnerEngine.Lib.UI
 {
     public abstract class UIElement<TElement> : IUIElement where TElement : UIElement<TElement>
     {

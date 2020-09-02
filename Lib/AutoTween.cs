@@ -1,6 +1,6 @@
-﻿using ProjectWarnerShared.Services;
+﻿using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib
+namespace WarnerEngine.Lib
 {
     public class AutoTween
     {

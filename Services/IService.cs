@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public interface IService
     {

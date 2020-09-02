@@ -1,7 +1,6 @@
-﻿using ProjectWarnerShared.Lib.Components;
-using ProjectWarnerShared.Scenes;
+﻿using WarnerEngine.Lib.Components;
 
-namespace ProjectWarnerShared.Lib.Entities
+namespace WarnerEngine.Lib.Entities
 {
     public interface ISpawnableEntity : ISceneEntity
     {

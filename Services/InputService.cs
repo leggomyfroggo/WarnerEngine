@@ -8,11 +8,12 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
 
-using ProjectWarnerShared.Lib;
-using ProjectWarnerShared.Lib.Helpers;
+using WarnerEngine.Lib;
+using WarnerEngine.Lib.Helpers;
+
 using ProjectWarnerShared.Scenes;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class InputService : IInputService
     {

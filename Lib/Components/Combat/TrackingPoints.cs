@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib.Helpers;
+using WarnerEngine.Lib.Helpers;
 
-namespace ProjectWarnerShared.Lib.Components.Combat
+namespace WarnerEngine.Lib.Components.Combat
 {
     public class TrackingPoints
     {

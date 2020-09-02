@@ -3,13 +3,9 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib;
-using ProjectWarnerShared.Lib.Components;
-using ProjectWarnerShared.Lib.Components.Physics;
-using ProjectWarnerShared.Lib.Helpers;
-using ProjectWarnerShared.Services;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared
+namespace WarnerEngine.Lib.Components.Physics
 {
     public class World : IWorld
     {

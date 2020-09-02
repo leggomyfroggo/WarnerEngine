@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace ProjectWarnerShared.Lib.Content
+namespace WarnerEngine.Lib.Content
 {
     [XmlRoot("ContentItem")]
     public struct ContentItem

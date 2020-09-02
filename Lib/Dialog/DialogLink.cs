@@ -2,9 +2,9 @@
 
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectWarnerShared.Services;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib.Dialog
+namespace WarnerEngine.Lib.Dialog
 {
     [XmlRoot("DialogLink")]
     public class DialogLink

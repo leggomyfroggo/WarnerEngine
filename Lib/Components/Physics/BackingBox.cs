@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework;
 
-namespace ProjectWarnerShared.Lib.Components
+namespace WarnerEngine.Lib.Components
 {
     [Serializable]
     public class BackingBox : IPositionableElement3, IComponent

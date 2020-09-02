@@ -1,4 +1,4 @@
-﻿namespace ProjectWarnerShared.Services
+﻿namespace WarnerEngine.Services
 {
     public enum InputAction
     {

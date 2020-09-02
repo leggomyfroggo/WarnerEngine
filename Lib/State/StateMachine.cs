@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ProjectWarnerShared.Lib.State
+namespace WarnerEngine.Lib.State
 {
     public abstract class StateMachine<S, T, E> where S : StateBase<S, T, E>
     {

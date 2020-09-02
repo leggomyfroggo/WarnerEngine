@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public struct ServiceCompositionMetadata : IEquatable<ServiceCompositionMetadata>
     {

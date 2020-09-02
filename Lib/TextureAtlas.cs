@@ -5,9 +5,9 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectWarnerShared.Services;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib
+namespace WarnerEngine.Lib
 {
     public class TextureAtlas
     {

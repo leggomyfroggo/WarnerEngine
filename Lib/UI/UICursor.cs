@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib.Components;
-using ProjectWarnerShared.Lib.Entities;
-using ProjectWarnerShared.Lib.Helpers;
-using ProjectWarnerShared.Scenes;
-using ProjectWarnerShared.Services;
+using WarnerEngine.Lib.Components;
+using WarnerEngine.Lib.Entities;
+using WarnerEngine.Lib.Helpers;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib.UI
+namespace WarnerEngine.Lib.UI
 {
     public class UICursor : ISceneEntity, IDraw
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using ProjectWarnerShared.Lib.Helpers;
+using WarnerEngine.Lib.Helpers;
 
-namespace ProjectWarnerShared.Lib.UI
+namespace WarnerEngine.Lib.UI
 {
     public class UIBox : UIElement<UIBox>
     {

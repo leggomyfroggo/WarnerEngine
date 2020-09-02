@@ -4,7 +4,7 @@ using System.Linq;
 
 using Microsoft.Xna.Framework;
 
-namespace ProjectWarnerShared.Lib
+namespace WarnerEngine.Lib
 {
     public class SpatialMaximaMap
     {

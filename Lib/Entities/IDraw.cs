@@ -1,6 +1,6 @@
-﻿using ProjectWarnerShared.Lib.Components;
+﻿using WarnerEngine.Lib.Components;
 
-namespace ProjectWarnerShared.Lib.Entities
+namespace WarnerEngine.Lib.Entities
 {
     public interface IDraw
     {

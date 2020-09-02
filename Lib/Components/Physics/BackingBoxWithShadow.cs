@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Entities;
-using ProjectWarnerShared.Lib.Components;
+using WarnerEngine.Lib.Components;
+using WarnerEngine.Lib.Helpers;
 
-namespace ProjectWarnerShared.Lib
+namespace WarnerEngine.Lib
 {
     public sealed class BackingBoxWithShadow : BackingBox
     {

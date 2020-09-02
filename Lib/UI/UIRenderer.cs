@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
-using ProjectWarnerShared.Lib.Components;
-using ProjectWarnerShared.Lib.Entities;
-using ProjectWarnerShared.Scenes;
-using ProjectWarnerShared.Services;
 
-namespace ProjectWarnerShared.Lib.UI
+using WarnerEngine.Lib.Components;
+using WarnerEngine.Lib.Entities;
+using WarnerEngine.Services;
+
+namespace WarnerEngine.Lib.UI
 {
     public class UIRenderer : ISceneEntity, IPreDraw, IDraw
     {

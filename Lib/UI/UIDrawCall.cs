@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib.Entities;
+using WarnerEngine.Lib.Entities;
 
-namespace ProjectWarnerShared.Lib.UI
+namespace WarnerEngine.Lib.UI
 {
     public struct UIDrawCall : IPreDraw
     {

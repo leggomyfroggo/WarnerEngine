@@ -8,12 +8,11 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-using ProjectWarnerShared.Lib;
-using ProjectWarnerShared.Lib.Content;
-using ProjectWarnerShared.Lib.Dialog;
-using ProjectWarnerShared.Scenes;
+using WarnerEngine.Lib;
+using WarnerEngine.Lib.Content;
+using WarnerEngine.Lib.Dialog;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class ContentService : IContentService
     {
@@ -30,7 +29,7 @@ namespace ProjectWarnerShared.Services
         private Dictionary<string, DialogChain> dialog;
         private Dictionary<string, DialogLink> dialogLinks;
         private Dictionary<string, Effect> effects;
-        private Dictionary<string, WorldGroupDefinition> worldGroupDefinitions;
+        private Dictionary<string, ProjectWarnerShared.Scenes.WorldGroupDefinition> worldGroupDefinitions;
 
         private TextureAtlas textureAtlas;
         private bool hasBakedTextureAtlas;
@@ -45,7 +44,7 @@ namespace ProjectWarnerShared.Services
             dialog = new Dictionary<string, DialogChain>();
             dialogLinks = new Dictionary<string, DialogLink>();
             effects = new Dictionary<string, Effect>();
-            worldGroupDefinitions = new Dictionary<string, WorldGroupDefinition>();
+            worldGroupDefinitions = new Dictionary<string, ProjectWarnerShared.Scenes.WorldGroupDefinition>();
 
             textureAtlas = new TextureAtlas(0, 0, ATLAS_WIDTH, ATLAS_HEIGHT);
             hasBakedTextureAtlas = false;
@@ -253,7 +252,7 @@ namespace ProjectWarnerShared.Services
 
         public IContentService LoadWorldGroupDefinition(string Path)
         {
-            var worldGroupDefinition = WorldGroupDefinition.LoadFromFile("Content/" + Path + ".xml");
+            var worldGroupDefinition = ProjectWarnerShared.Scenes.WorldGroupDefinition.LoadFromFile("Content/" + Path + ".xml");
             worldGroupDefinitions[worldGroupDefinition.GroupKey] = worldGroupDefinition;
             return this;
         }
@@ -320,7 +319,7 @@ namespace ProjectWarnerShared.Services
             return effects[Key];
         }
 
-        public WorldGroupDefinition GetWorldGroupDefinition(string Key)
+        public ProjectWarnerShared.Scenes.WorldGroupDefinition GetWorldGroupDefinition(string Key)
         {
             return worldGroupDefinitions[Key];
         }

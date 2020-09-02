@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Entities;
-using ProjectWarnerShared.Lib.Entities;
-using ProjectWarnerShared.Services;
+using WarnerEngine.Lib;
+using WarnerEngine.Lib.Entities;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib.Helpers
+namespace WarnerEngine.Lib.Helpers
 {
     public class GraphicsHelper
     {

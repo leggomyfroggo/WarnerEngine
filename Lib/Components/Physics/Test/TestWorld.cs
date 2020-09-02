@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Services;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib.Components.Physics.Test
+namespace WarnerEngine.Lib.Components.Physics.Test
 {
     public class TestWorld : IWorld
     {

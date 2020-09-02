@@ -1,4 +1,4 @@
-﻿namespace ProjectWarnerShared.Lib.Helpers
+﻿namespace WarnerEngine.Lib.Helpers
 {
     public class DataStructureHelper
     {

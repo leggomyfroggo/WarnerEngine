@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class Events
     {

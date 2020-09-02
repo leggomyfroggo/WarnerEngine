@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
-using ProjectWarnerShared.Lib.Components;
+using WarnerEngine.Lib.Components;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class AudioService : Service
     {

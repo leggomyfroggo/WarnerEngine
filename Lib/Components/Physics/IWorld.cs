@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace ProjectWarnerShared.Lib.Components.Physics
+namespace WarnerEngine.Lib.Components.Physics
 {
     public interface IWorld
     {

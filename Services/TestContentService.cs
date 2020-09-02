@@ -3,12 +3,12 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using ProjectWarnerShared.Lib;
-using ProjectWarnerShared.Lib.Content;
-using ProjectWarnerShared.Lib.Dialog;
-using ProjectWarnerShared.Scenes;
 
-namespace ProjectWarnerShared.Services
+using WarnerEngine.Lib;
+using WarnerEngine.Lib.Content;
+using WarnerEngine.Lib.Dialog;
+
+namespace WarnerEngine.Services
 {
     public class TestContentService : IContentService
     {
@@ -131,7 +131,7 @@ namespace ProjectWarnerShared.Services
             throw new NotImplementedException();
         }
 
-        public WorldGroupDefinition GetWorldGroupDefinition(string Key)
+        public ProjectWarnerShared.Scenes.WorldGroupDefinition GetWorldGroupDefinition(string Key)
         {
             throw new NotImplementedException();
         }

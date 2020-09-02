@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework;
 
-namespace ProjectWarnerShared.Lib.Components.Animation
+namespace WarnerEngine.Lib.Components.Animation
 {
     public interface IAnimationPlayer
     {

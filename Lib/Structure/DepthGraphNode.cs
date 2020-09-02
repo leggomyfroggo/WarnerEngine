@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib.Components;
-using ProjectWarnerShared.Lib.Entities;
+using WarnerEngine.Lib.Components;
+using WarnerEngine.Lib.Entities;
 
-namespace ProjectWarnerShared.Lib.Structure
+namespace WarnerEngine.Lib.Structure
 {
     public class DepthGraphNode
     {

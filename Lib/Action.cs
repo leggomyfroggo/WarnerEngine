@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ProjectWarnerShared.Services;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib
+namespace WarnerEngine.Lib
 {
     public abstract class Action<TActor, TReceiver> : BaseAction where TActor : class where TReceiver : class
     {

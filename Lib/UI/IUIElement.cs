@@ -1,7 +1,7 @@
-﻿using ProjectWarnerShared.Lib.Entities;
+﻿using WarnerEngine.Lib.Entities;
 using System.Collections.Generic;
 
-namespace ProjectWarnerShared.Lib.UI
+namespace WarnerEngine.Lib.UI
 {
     public interface IUIElement
     {

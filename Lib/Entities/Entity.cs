@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using ProjectWarnerShared.Lib.Components;
-using ProjectWarnerShared.Lib.Entities;
-using ProjectWarnerShared.Scenes;
+using WarnerEngine.Lib.Components;
 
-namespace ProjectWarnerShared.Lib.Entities
+namespace WarnerEngine.Lib.Entities
 {
     public abstract class Entity : ISceneEntity, IPreDraw, IPostDraw
     {

@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework;
 
-namespace ProjectWarnerShared.Lib.UI
+namespace WarnerEngine.Lib.UI
 {
     public class UIButton : UIElement<UIButton>
     {

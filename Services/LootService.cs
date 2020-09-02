@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using ProjectWarnerShared.Entities;
 using ProjectWarnerShared.Entities.Items;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public sealed class LootService : Service
     {

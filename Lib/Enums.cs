@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectWarnerShared.Lib
+namespace WarnerEngine.Lib
 {
     public class Enums
     {

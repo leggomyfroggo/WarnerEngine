@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProjectWarnerShared.Lib.Structure
+namespace WarnerEngine.Lib.Structure
 {
     public class DepthGraph
     {

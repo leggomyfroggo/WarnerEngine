@@ -2,10 +2,10 @@
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Input;
-using ProjectWarnerShared.Lib.Components.Physics;
+using WarnerEngine.Lib.Input;
+using WarnerEngine.Lib.Components.Physics;
 
-namespace ProjectWarnerShared.Lib.Components
+namespace WarnerEngine.Lib.Components
 {
     public class PlatformMovement
     {

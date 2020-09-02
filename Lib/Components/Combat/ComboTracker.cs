@@ -1,6 +1,6 @@
-﻿using ProjectWarnerShared.Lib.Entities;
+﻿using WarnerEngine.Lib.Entities;
 
-namespace ProjectWarnerShared.Lib.Components.Combat
+namespace WarnerEngine.Lib.Components.Combat
 {
     public class ComboTracker : IPreDraw
     {

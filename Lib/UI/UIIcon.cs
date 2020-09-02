@@ -2,10 +2,10 @@
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib.Helpers;
-using ProjectWarnerShared.Services;
+using WarnerEngine.Lib.Helpers;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib.UI
+namespace WarnerEngine.Lib.UI
 {
     public class UIIcon : UIElement<UIIcon>
     {

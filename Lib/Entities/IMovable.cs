@@ -1,4 +1,4 @@
-﻿namespace ProjectWarnerShared.Lib.Entities
+﻿namespace WarnerEngine.Lib.Entities
 {
     public interface IMovable : IDraw
     {

@@ -1,4 +1,4 @@
-﻿namespace ProjectWarnerShared.Lib.State
+﻿namespace WarnerEngine.Lib.State
 {
     public interface IStateBase<S, T, E>
     {

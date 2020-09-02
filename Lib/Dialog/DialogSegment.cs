@@ -2,7 +2,7 @@
 
 using Microsoft.Xna.Framework;
 
-namespace ProjectWarnerShared.Lib.Dialog
+namespace WarnerEngine.Lib.Dialog
 {
     [XmlRoot("DialogSegment")]
     public class DialogSegment

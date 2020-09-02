@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectWarnerShared.Scenes;
+using WarnerEngine.Lib;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class SceneService : Service
     {

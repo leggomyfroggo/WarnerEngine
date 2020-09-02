@@ -1,4 +1,4 @@
-﻿namespace ProjectWarnerShared.Lib
+﻿namespace WarnerEngine.Lib
 {
     public interface IWorldSerializable
     {

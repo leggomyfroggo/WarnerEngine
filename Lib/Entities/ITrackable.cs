@@ -1,6 +1,6 @@
-﻿using ProjectWarnerShared.Lib.Components.Combat;
+﻿using WarnerEngine.Lib.Components.Combat;
 
-namespace ProjectWarnerShared.Lib.Entities
+namespace WarnerEngine.Lib.Entities
 {
     public interface ITrackable : IDraw
     {

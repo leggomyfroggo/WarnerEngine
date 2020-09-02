@@ -12,13 +12,11 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Prebuilts\Entities\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Action.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\AutoIncrement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\AutoTween.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\BaseAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Animation\AnimationPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Animation\IAnimationPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Animation\Test\TestAnimationPlayer.cs" />
@@ -41,21 +39,26 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IDraw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IDrawableEntity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IEntityWithPlatformInputHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IMovable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IPostDraw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IPreDraw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\ISceneEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IShadowCaster.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\ISpawnableEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\ITrackable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Enums.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Flags.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Helpers\DataStructureHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Helpers\GraphicsHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Helpers\ShadowCasterHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Index2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Input\IPlatformInputHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Input\IPlatformInputHandlerWithTarget.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Input\StaticPlatformInputHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\IPositionableElement2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\IPositionableElement3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\IWorldSerializable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Scene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\SpatialMaximaMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\State\IStateBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\State\StateBase.cs" />
@@ -106,5 +109,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\TerminalService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\TestContentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\TestInputService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Prebuilts\Entities\" />
   </ItemGroup>
 </Project>

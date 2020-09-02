@@ -1,19 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-using ProjectWarnerShared.Lib;
-using ProjectWarnerShared.Lib.Content;
-using ProjectWarnerShared.Lib.Dialog;
-using ProjectWarnerShared.Scenes;
+using WarnerEngine.Lib;
+using WarnerEngine.Lib.Content;
+using WarnerEngine.Lib.Dialog;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public interface IContentService : IService
     {
@@ -40,7 +33,7 @@ namespace ProjectWarnerShared.Services
         DialogChain GetDialog(string Key);
         DialogLink GetDialogLink(string Key);
         Effect GetEffect(string Key);
-        WorldGroupDefinition GetWorldGroupDefinition(string Key);
+        ProjectWarnerShared.Scenes.WorldGroupDefinition GetWorldGroupDefinition(string Key);
 
         Texture2D GetAtlasTexture();
     }

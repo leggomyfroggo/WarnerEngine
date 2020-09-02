@@ -6,12 +6,12 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectWarnerShared.Lib;
-using ProjectWarnerShared.Lib.Dialog;
-using ProjectWarnerShared.Lib.Helpers;
-using ProjectWarnerShared.Lib.Structure.Shadows;
+using WarnerEngine.Lib;
+using WarnerEngine.Lib.Dialog;
+using WarnerEngine.Lib.Helpers;
+using WarnerEngine.Lib.Structure.Shadows;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class RenderService : Service
     {
@@ -141,7 +141,7 @@ namespace ProjectWarnerShared.Services
             int travelX = (int)(gameTimeFactor+ (int)CameraPosition.X) % 32;
             int travelY = (int)(gameTimeFactor + (int)CameraPosition.Y) % 32;
             DrawQuad(
-                Content.Constants.ENVIRONMENT_WATER_DISTORTION,
+                ProjectWarnerShared.Content.Constants.ENVIRONMENT_WATER_DISTORTION,
                 new Rectangle((int)Math.Round(CameraPosition.X - InternalResolutionX / 2), (int)Math.Round(CameraPosition.Y - InternalResolutionY / 2), InternalResolutionX, InternalResolutionY),
                 new Rectangle(travelX, travelY, InternalResolutionX, InternalResolutionY)
             );

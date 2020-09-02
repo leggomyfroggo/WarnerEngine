@@ -5,9 +5,9 @@ using System.Xml.Serialization;
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Services;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib.Content
+namespace WarnerEngine.Lib.Content
 {
     [XmlRoot("Animation")]
     public class Animation

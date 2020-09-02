@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class StateService : Service
     {

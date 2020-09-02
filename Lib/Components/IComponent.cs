@@ -1,4 +1,4 @@
-﻿namespace ProjectWarnerShared.Lib.Components
+﻿namespace WarnerEngine.Lib.Components
 {
     public interface IComponent
     {

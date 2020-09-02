@@ -3,10 +3,10 @@ using System.Linq;
 
 using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib.Components.Animation;
-using ProjectWarnerShared.Services;
+using WarnerEngine.Lib.Components.Animation;
+using WarnerEngine.Services;
 
-namespace ProjectWarnerShared.Lib.Components
+namespace WarnerEngine.Lib.Components
 {
     public class AnimationPlayer : IAnimationPlayer
     {

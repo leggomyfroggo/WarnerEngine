@@ -1,4 +1,4 @@
-﻿namespace ProjectWarnerShared.Lib.State
+﻿namespace WarnerEngine.Lib.State
 {
     public abstract class StateBase<S, T, E> : IStateBase<S, T, E>
     {

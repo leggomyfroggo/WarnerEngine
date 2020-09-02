@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-using ProjectWarnerShared.Lib.Components.Physics;
+using WarnerEngine.Lib.Components.Physics;
 
-namespace ProjectWarnerShared.Lib.Components
+namespace WarnerEngine.Lib.Components
 {
     public class BulletMovement
     {

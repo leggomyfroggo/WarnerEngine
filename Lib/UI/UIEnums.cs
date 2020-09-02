@@ -1,4 +1,4 @@
-﻿namespace ProjectWarnerShared.Lib.UI
+﻿namespace WarnerEngine.Lib.UI
 {
     public sealed class UIEnums
     {

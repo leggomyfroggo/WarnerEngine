@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 
-namespace ProjectWarnerShared.Lib.UI.State
+namespace WarnerEngine.Lib.UI.State
 {
     public abstract class StateConnector
     {

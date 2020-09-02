@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace ProjectWarnerShared.Lib
+namespace WarnerEngine.Lib
 {
     public interface IPositionableElement2
     {

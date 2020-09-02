@@ -1,6 +1,4 @@
-﻿using ProjectWarnerShared.Scenes;
-
-namespace ProjectWarnerShared.Lib.Entities
+﻿namespace WarnerEngine.Lib.Entities
 {
     public interface ISceneEntity
     {

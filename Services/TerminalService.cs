@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class TerminalService : Service
     {

@@ -5,10 +5,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ProjectWarnerShared.Entities.UI;
 using ProjectWarnerShared.Entities.Warner;
-using ProjectWarnerShared.Lib;
-using ProjectWarnerShared.Lib.Helpers;
+using WarnerEngine.Lib;
+using WarnerEngine.Lib.Helpers;
 
-namespace ProjectWarnerShared.Services
+namespace WarnerEngine.Services
 {
     public class InventoryService : IService
     {
@@ -159,7 +159,7 @@ namespace ProjectWarnerShared.Services
                         if (IsItemEquipped(inventoryEntry))
                         {
                             renderService.DrawQuad(
-                                Content.Constants.GAMEUI_STATS_OVERLAY,
+                                ProjectWarnerShared.Content.Constants.GAMEUI_STATS_OVERLAY,
                                 iconPosition - new Vector2(4f),
                                 EQUIPPED_SLOT_SOURCE,
                                 Tint: Color.DarkSlateGray
@@ -167,7 +167,7 @@ namespace ProjectWarnerShared.Services
                         }
                         renderService
                             .DrawQuad(
-                                Content.Constants.ITEMS_COLLECTABLES,
+                                ProjectWarnerShared.Content.Constants.ITEMS_COLLECTABLES,
                                 iconPosition,
                                 GraphicsHelper.GetSheetCell(inventoryEntry.Metadata.IconIndex, 16, 16)
                             )
@@ -193,7 +193,7 @@ namespace ProjectWarnerShared.Services
                             );
                             renderService
                                 .DrawNinePatch(
-                                    Content.Constants.GAMEUI_DIALOG_WINDOW,
+                                    ProjectWarnerShared.Content.Constants.GAMEUI_DIALOG_WINDOW,
                                     new Rectangle(
                                         (int)nameWindowPosition.X,
                                         (int)nameWindowPosition.Y,
@@ -211,7 +211,7 @@ namespace ProjectWarnerShared.Services
                                     Color.White
                                 )
                                 .DrawNinePatch(
-                                    Content.Constants.GAMEUI_DIALOG_WINDOW,
+                                    ProjectWarnerShared.Content.Constants.GAMEUI_DIALOG_WINDOW,
                                     new Rectangle(
                                         (int)descriptionDialogPosition.X,
                                         (int)descriptionDialogPosition.Y,
@@ -232,7 +232,7 @@ namespace ProjectWarnerShared.Services
                     else
                     {
                         renderService.DrawQuad(
-                            Content.Constants.GAMEUI_STATS_OVERLAY,
+                            ProjectWarnerShared.Content.Constants.GAMEUI_STATS_OVERLAY,
                             iconPosition - new Vector2(4f),
                             EMPTY_SLOT_SOURCE
                         );
@@ -240,7 +240,7 @@ namespace ProjectWarnerShared.Services
                     if (i == SelectedInventoryEntryIndex)
                     {
                         renderService.DrawQuad(
-                            Content.Constants.GAMEUI_STATS_OVERLAY,
+                            ProjectWarnerShared.Content.Constants.GAMEUI_STATS_OVERLAY,
                             iconPosition - new Vector2(4f),
                             SELECTED_SLOT_SOURCE
                         );
@@ -258,7 +258,7 @@ namespace ProjectWarnerShared.Services
             };
         }
 
-        private bool IsItemEquipped(Entities.Warner.Inventory.WarnerInventoryItem Item)
+        private bool IsItemEquipped(ProjectWarnerShared.Entities.Warner.Inventory.WarnerInventoryItem Item)
         {
             if (ActiveInventory == null)
             {

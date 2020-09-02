@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using ProjectWarnerShared.Input;
 
-namespace ProjectWarnerShared.Lib.State
+using WarnerEngine.Lib.Input;
+
+namespace WarnerEngine.Lib.State
 {
     public abstract class StateMachineWithInputHandler<S, T, E> : StateMachine<S, T, E>, IPlatformInputHandler where S : StateBase<S, T, E>, IPlatformInputHandler
     {
