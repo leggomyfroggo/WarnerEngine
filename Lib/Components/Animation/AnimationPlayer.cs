@@ -148,7 +148,7 @@ namespace WarnerEngine.Lib.Components
 
         public float GetProgress()
         {
-            return (float)CurrentFrame / GetAnimation().FrameCount;
+            return (float)CurrentFrame / GetAsset<Content.Animation>().FrameCount;
         }
 
         protected void ResetFrameState()
@@ -162,7 +162,7 @@ namespace WarnerEngine.Lib.Components
             DidChangeFrame = false;
             if (IsPlaying)
             {
-                Content.Animation currentAnimation = GameService.GetService<IContentService>().GetAnimation(NormalizedAnimationName);
+                Content.Animation currentAnimation = GameService.GetService<IContentService>().GetAsset<Content.Animation>(NormalizedAnimationName);
                 FrameTime += DT * SpeedMultiplier;
                 while (FrameTime >= currentAnimation.GetFrameLength(CurrentFrame))
                 {
@@ -188,7 +188,7 @@ namespace WarnerEngine.Lib.Components
         public void Draw(Color? Tint = null, float Angle = 0f, string TargetAlphaStack = null, bool DuplicateToAlphaStack = false)
         {
             Vector2 position = BackingPositionable.GetProjectedPosition2();
-            Content.Animation currentAnimation = GameService.GetService<IContentService>().GetAnimation(NormalizedAnimationName);
+            Content.Animation currentAnimation = GameService.GetService<IContentService>().GetAsset<Content.Animation>(NormalizedAnimationName);
             bool hasDrawnMainAnim = false;
 
             if (AnimToSubAnim.ContainsKey(CurrentAnimationName)) {
@@ -228,9 +228,9 @@ namespace WarnerEngine.Lib.Components
             }
         }
 
-        protected Content.Animation GetAnimation()
+        protected Content.Animation GetAsset<Animation>()
         {
-            return GameService.GetService<IContentService>().GetAnimation(NormalizedAnimationName);
+            return GameService.GetService<IContentService>().GetAsset<Content.Animation>(NormalizedAnimationName);
         }
 
         protected (string, string) GetNormalizedSubAnimationDetails(string SubAnimation)
@@ -247,7 +247,7 @@ namespace WarnerEngine.Lib.Components
         protected (Content.Animation, string) GetSubAnimation(string SubAnimation)
         {
             (string subAnimName, string animHotspot) = GetNormalizedSubAnimationDetails(SubAnimation);
-            return (GameService.GetService<IContentService>().GetAnimation(subAnimName), animHotspot);
+            return (GameService.GetService<IContentService>().GetAsset<Content.Animation>(subAnimName), animHotspot);
         }
 
         public Vector3 GetSubAnimPosition(string SubAnimation)
@@ -259,7 +259,7 @@ namespace WarnerEngine.Lib.Components
 
         protected Vector2 GetSubAnimationOffset(string SubAnimation)
         {
-            Content.Animation currentAnimation = GetAnimation();
+            Content.Animation currentAnimation = GetAsset<Content.Animation>();
             (Content.Animation subAnim, string animHotspot) = GetSubAnimation(SubAnimation);
             Vector2 currentFrameOrigin = currentAnimation.GetOriginAtFrame(CurrentFrame);
             Vector2 hotspotOffset = currentAnimation.GetHotspot2AtFrame(animHotspot, CurrentFrame);
@@ -270,7 +270,7 @@ namespace WarnerEngine.Lib.Components
 
         public Vector3 GetHotspotPosition(string Hotspot)
         {
-            return GetAnimation().GetHotspotAtFrame(Hotspot, CurrentFrame);
+            return GetAsset<Content.Animation>().GetHotspotAtFrame(Hotspot, CurrentFrame);
         }
     }
 }

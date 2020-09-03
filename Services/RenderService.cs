@@ -415,12 +415,12 @@ namespace WarnerEngine.Services
 
         public RenderService DrawQuad(string TextureKey, Rectangle DestRect, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, bool IsTiling = false)
         {
-            return DrawQuad(GameService.GetService<IContentService>().GetTexture(TextureKey), DestRect, SourceRect, Tint, Origin, Rotation, IsTiling);
+            return DrawQuad(GameService.GetService<IContentService>().GetxAsset<Texture2D>(TextureKey), DestRect, SourceRect, Tint, Origin, Rotation, IsTiling);
         }
 
         public RenderService DrawQuad(string TextureKey, Vector2 Position, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, float Scale = 1f, bool IsTiling = false)
         {
-            return DrawQuad(GameService.GetService<IContentService>().GetTexture(TextureKey), Position, SourceRect, Tint, Origin, Rotation, Scale, IsTiling);
+            return DrawQuad(GameService.GetService<IContentService>().GetxAsset<Texture2D>(TextureKey), Position, SourceRect, Tint, Origin, Rotation, Scale, IsTiling);
         }
 
         public RenderService DrawNinePatch(string TextureKey, Rectangle DestRect, int TileWidth, int TileHeight, Color? Tint = null, Index2? Offset = null)
@@ -464,7 +464,7 @@ namespace WarnerEngine.Services
 
         public RenderService DrawString(string SpriteFontKey, string Text, Vector2 Position, Color Tint)
         {
-            spriteBatch.DrawString(GameService.GetService<IContentService>().GetSpriteFont(SpriteFontKey), Text, Position, Tint);
+            spriteBatch.DrawString(GameService.GetService<IContentService>().GetxAsset<SpriteFont>(SpriteFontKey), Text, Position, Tint);
             return this;
         }
 
@@ -474,7 +474,7 @@ namespace WarnerEngine.Services
             {
                 return this;
             }
-            SpriteFont font = GameService.GetService<IContentService>().GetSpriteFont(SpriteFontKey);
+            SpriteFont font = GameService.GetService<IContentService>().GetxAsset<SpriteFont>(SpriteFontKey);
             float offsetX = 0;
             float offsetY = 0;
             int lengthCounter = 0;

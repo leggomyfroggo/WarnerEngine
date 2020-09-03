@@ -21,12 +21,12 @@ namespace WarnerEngine.Lib.Helpers
         public static readonly Color GLOBAL_SHADOW_COLOR = new Color(0, 0, 200);
 
         public static string CIRCLE_SHADOW_TEXTURE_KEY = "shadow";
-        public static Texture2D CIRCLE_SHADOW_TEXTURE => GameService.GetService<IContentService>().GetTexture(CIRCLE_SHADOW_TEXTURE_KEY);
+        public static Texture2D CIRCLE_SHADOW_TEXTURE => GameService.GetService<IContentService>().GetxAsset<Texture2D>(CIRCLE_SHADOW_TEXTURE_KEY);
         // TODO: Decouple this from Warner Game
-        public static Texture2D BIG_CLOUD_SHADOW_TEXTURE => GameService.GetService<IContentService>().GetTexture(ProjectWarnerShared.Content.Constants.ENVIRONMENT_BIG_CLOUD_SHADOW);
-        public static Texture2D BIG_CLOUD_SHADOW_2_TEXTURE => GameService.GetService<IContentService>().GetTexture(ProjectWarnerShared.Content.Constants.ENVIRONMENT_BIG_CLOUD_SHADOW_2);
+        public static Texture2D BIG_CLOUD_SHADOW_TEXTURE => GameService.GetService<IContentService>().GetxAsset<Texture2D>(ProjectWarnerShared.Content.Constants.ENVIRONMENT_BIG_CLOUD_SHADOW);
+        public static Texture2D BIG_CLOUD_SHADOW_2_TEXTURE => GameService.GetService<IContentService>().GetxAsset<Texture2D>(ProjectWarnerShared.Content.Constants.ENVIRONMENT_BIG_CLOUD_SHADOW_2);
         public static string TREE_SHADOW_TEXTURE_KEY = "tree_shadow";
-        public static Texture2D TREE_SHADOW_TEXTURE => GameService.GetService<IContentService>().GetTexture(TREE_SHADOW_TEXTURE_KEY);
+        public static Texture2D TREE_SHADOW_TEXTURE => GameService.GetService<IContentService>().GetxAsset<Texture2D>(TREE_SHADOW_TEXTURE_KEY);
 
         public static readonly Vector3 SHADOW_2_SAMPLE_1 = Vector3.Normalize(new Vector3(-1, 0, -1));
         public static readonly Vector3 SHADOW_2_SAMPLE_2 = Vector3.Normalize(new Vector3(1, 0, -1));

@@ -71,9 +71,6 @@ namespace WarnerEngine.Services
 
         public static void Draw()
         {
-            Effect circleWipe = GetService<IContentService>().GetEffect("circle_wipe").Clone();
-            circleWipe.Parameters["radius"].SetValue(0.25f);
-
             RenderService rs = GetService<RenderService>();
             List<ServiceCompositionMetadata> outputs = new List<ServiceCompositionMetadata>();
             foreach (IService service in orderedServices)

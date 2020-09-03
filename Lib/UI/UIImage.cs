@@ -42,7 +42,7 @@ namespace WarnerEngine.Lib.UI
 
         public override void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY)
         {
-            Texture2D texture = GameService.GetService<IContentService>().GetTexture(textureKey);
+            Texture2D texture = GameService.GetService<IContentService>().GetxAsset<Texture2D>(textureKey);
             switch (scaling)
             {
                 case Scaling.Stretch:

@@ -23,17 +23,10 @@ namespace WarnerEngine.Services
 
         TextureMetadata GetTextureMetadata(string Key);
         TextureMetadata GetTextureMetadata(Texture2D Key);
-        Animation GetxAnimation(string Key);
-        Animation GetAnimation(string Key);
-        SpriteFont GetSpriteFont(string Key);
-        SoundEffect GetSoundEffect(string Key);
-        DialogLink GetDialogLink(string Key);
-        Effect GetEffect(string Key);
 
-        TAsset GetAsset<TAsset>(string Key);
+        TAsset GetAsset<TAsset>(string Key) where TAsset : class;
+        TAsset GetxAsset<TAsset>(string Key);
 
         Texture2D GetAtlasTexture();
-
-        Texture2D GetTexture(string Key);
     }
 }

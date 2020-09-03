@@ -50,7 +50,7 @@ namespace WarnerEngine.Services
         public AudioService PlaySoundEffect(string Key, Vector3? SourcePosition = null)
         {
             Random rand = GameService.GetService<StateService>().GetGlobalRandom();
-            SoundEffectInstance instance = GameService.GetService<IContentService>().GetSoundEffect(Key)?.CreateInstance();
+            SoundEffectInstance instance = GameService.GetService<IContentService>().GetxAsset<SoundEffect>(Key)?.CreateInstance();
             // TODO: Make this error out, but provide a test implementation of AudioService
             if (instance != null)
             {

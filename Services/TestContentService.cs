@@ -21,31 +21,6 @@ namespace WarnerEngine.Services
 
         public void PostDraw() { }
 
-        public Animation GetAnimation(string Key)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public DialogLink GetDialogLink(string Key)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Effect GetEffect(string Key)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public SoundEffect GetSoundEffect(string Key)
-        {
-            return null;
-        }
-
-        public SpriteFont GetSpriteFont(string Key)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public TextureMetadata GetTextureMetadata(string Key)
         {
             throw new System.NotImplementedException();
@@ -56,52 +31,12 @@ namespace WarnerEngine.Services
             throw new System.NotImplementedException();
         }
 
-        public Animation GetxAnimation(string Key)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public IContentService InitializeContentService(ContentManager CM, GraphicsDevice GD)
         {
             throw new System.NotImplementedException();
         }
 
-        public IContentService LoadAllAnimationDirections(string Path)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public IContentService LoadAllContent()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IContentService LoadAnimation(string Path)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IContentService LoadDialog(string Path)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IContentService LoadDialogLinks(string Path)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IContentService LoadEffect(string Key, string Path)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IContentService LoadSoundEffect(string Key, string Path)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IContentService LoadSpriteFont(string Key, string Path)
         {
             throw new System.NotImplementedException();
         }
@@ -131,12 +66,12 @@ namespace WarnerEngine.Services
             throw new NotImplementedException();
         }
 
-        public TAsset GetAsset<TAsset>(string Key)
+        public TAsset GetAsset<TAsset>(string Key) where TAsset : class
         {
             throw new NotImplementedException();
         }
 
-        public Texture2D GetTexture(string Key)
+        public TAsset GetxAsset<TAsset>(string Key)
         {
             throw new NotImplementedException();
         }

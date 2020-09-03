@@ -179,8 +179,8 @@ namespace WarnerEngine.Services
                             );
                         if (SelectedInventoryEntryIndex == i)
                         {
-                            SpriteFont nameFont = GameService.GetService<IContentService>().GetSpriteFont("pixel_operator");
-                            SpriteFont descriptionFont = GameService.GetService<IContentService>().GetSpriteFont("stats_overlay");
+                            SpriteFont nameFont = GameService.GetService<IContentService>().GetxAsset<SpriteFont>("pixel_operator");
+                            SpriteFont descriptionFont = GameService.GetService<IContentService>().GetxAsset<SpriteFont>("stats_overlay");
                             Vector2 nameSize = nameFont.MeasureString(inventoryEntry.Metadata.Name);
                             Vector2 descriptionSize = descriptionFont.MeasureString(inventoryEntry.Metadata.Description);
                             Vector2 nameWindowPosition = new Vector2(

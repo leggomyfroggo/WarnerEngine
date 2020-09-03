@@ -94,7 +94,7 @@ namespace WarnerEngine.Services
 
             if (currentDialog != null)
             {
-                int nameWidth = (int)GameService.GetService<IContentService>().GetSpriteFont("lana_pixel").MeasureString(currentDialog.CharacterName).X;
+                int nameWidth = (int)GameService.GetService<IContentService>().GetxAsset<SpriteFont>("lana_pixel").MeasureString(currentDialog.CharacterName).X;
                 GameService.GetService<RenderService>()
                     .SetRenderTarget(RENDER_TARGET_KEY, ClearColor: TARGET_COLOR)
                     .Start()
@@ -132,7 +132,7 @@ namespace WarnerEngine.Services
             }
             pauseKey = newPauseKey;
             fadeIn.Start();
-            currentDialog = GameService.GetService<IContentService>().GetDialogLink(DialogKey);
+            currentDialog = GameService.GetService<IContentService>().GetxAsset<DialogLink>(DialogKey);
             displayedLength = 0;
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using WarnerEngine.Services;
 
@@ -184,7 +185,7 @@ namespace WarnerEngine.Lib.Content
             if (DuplicateToAlphaStack || TargetAlphaStack == null)
             {
                 RM.DrawQuad(
-                    GameService.GetService<IContentService>().GetTexture(spriteSheetKey),
+                    GameService.GetService<IContentService>().GetxAsset<Texture2D>(spriteSheetKey),
                     destRect,
                     sourceRect,
                     Tint,
@@ -197,7 +198,7 @@ namespace WarnerEngine.Lib.Content
             {
                 destRect.X -= (int)origin.X;
                 destRect.Y -= (int)origin.Y;
-                RM.PushAlphaFragment(TargetAlphaStack, GameService.GetService<IContentService>().GetTexture(spriteSheetKey), destRect, sourceRect);
+                RM.PushAlphaFragment(TargetAlphaStack, GameService.GetService<IContentService>().GetxAsset<Texture2D>(spriteSheetKey), destRect, sourceRect);
             }
         }
 

@@ -26,7 +26,7 @@ namespace WarnerEngine.Lib.Dialog
                 {
                     return null;
                 }
-                return GameService.GetService<IContentService>().GetDialogLink(NextKey);
+                return GameService.GetService<IContentService>().GetxAsset<DialogLink>(NextKey);
             }
         }
 
@@ -74,7 +74,7 @@ namespace WarnerEngine.Lib.Dialog
 
         public float GetDrawnWidth(string FontKey)
         {
-            SpriteFont font = GameService.GetService<IContentService>().GetSpriteFont(FontKey);
+            SpriteFont font = GameService.GetService<IContentService>().GetxAsset<SpriteFont>(FontKey);
             return font.MeasureString(FullText).X;
         }
 

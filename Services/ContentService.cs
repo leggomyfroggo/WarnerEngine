@@ -272,11 +272,6 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public Texture2D GetTexture(string Key)
-        {
-            return GetAsset<Texture2D>(Key);
-        }
-
         public TextureMetadata GetTextureMetadata(string Key)
         {
             if (!textureAtlas.StringKeyedTextureInfo.ContainsKey(Key))
@@ -295,41 +290,16 @@ namespace WarnerEngine.Services
             return textureAtlas.TextureKeyedTextureInfo[Key];
         }
 
-        public Animation GetxAnimation(string Key)
+        public TAsset GetAsset<TAsset>(string Key) where TAsset : class
         {
-            return GetAsset<Animation>(Key);
-        }
-
-        public Animation GetAnimation(string Key)
-        {
-            if (Key == null || !assets.ContainsKey(typeof(Animation)) || !assets[typeof(Animation)].ContainsKey(Key))
+            if (Key == null || !assets.ContainsKey(typeof(TAsset)) || !assets[typeof(TAsset)].ContainsKey(Key))
             {
                 return null;
             }
-            return GetxAnimation(Key);
+            return GetxAsset<TAsset>(Key);
         }
 
-        public SpriteFont GetSpriteFont(string Key)
-        {
-            return GetAsset<SpriteFont>(Key);
-        }
-
-        public SoundEffect GetSoundEffect(string Key)
-        {
-            return GetAsset<SoundEffect>(Key);
-        }
-
-        public DialogLink GetDialogLink(string Key)
-        {
-            return GetAsset<DialogLink>(Key);
-        }
-
-        public Effect GetEffect(string Key)
-        {
-            return GetAsset<Effect>(Key);
-        }
-
-        public TAsset GetAsset<TAsset>(string Key)
+        public TAsset GetxAsset<TAsset>(string Key)
         {
             return (TAsset)assets[typeof(TAsset)][Key];
         }
