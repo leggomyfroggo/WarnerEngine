@@ -33,7 +33,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Physics\World.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Content\Animation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Content\ContentItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\Dialog\DialogChain.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Dialog\DialogLink.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Dialog\DialogSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\Entity.cs" />

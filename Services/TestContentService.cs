@@ -26,11 +26,6 @@ namespace WarnerEngine.Services
             throw new System.NotImplementedException();
         }
 
-        public DialogChain GetDialog(string Key)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public DialogLink GetDialogLink(string Key)
         {
             throw new System.NotImplementedException();
@@ -47,11 +42,6 @@ namespace WarnerEngine.Services
         }
 
         public SpriteFont GetSpriteFont(string Key)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Texture2D GetTexture(string Key)
         {
             throw new System.NotImplementedException();
         }
@@ -116,27 +106,37 @@ namespace WarnerEngine.Services
             throw new System.NotImplementedException();
         }
 
-        public IContentService LoadTexture(string Key, string Resource)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public Type GetBackingInterfaceType()
         {
             return typeof(IContentService);
         }
 
-        public IContentService LoadWorldGroupDefinition(string Path)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ProjectWarnerShared.Scenes.WorldGroupDefinition GetWorldGroupDefinition(string Key)
-        {
-            throw new NotImplementedException();
-        }
-
         public Texture2D GetAtlasTexture()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IContentService RegisterAssetLoader<TAsset>(Func<string, string, (string, object)[]> Loader, string ContentType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IContentService LoadAsset<TAsset>(string Path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IContentService LoadKeyedAsset<TAsset>(string Key, string Path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TAsset GetAsset<TAsset>(string Key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Texture2D GetTexture(string Key)
         {
             throw new NotImplementedException();
         }

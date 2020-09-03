@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using System;
+
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
@@ -12,29 +14,26 @@ namespace WarnerEngine.Services
     {
         IContentService InitializeContentService(ContentManager CM, GraphicsDevice GD);
 
-        IContentService LoadAllContent();
-        IContentService LoadTexture(string Key, string Resource);
-        IContentService LoadAnimation(string Path);
-        IContentService LoadAllAnimationDirections(string Path);
-        IContentService LoadSpriteFont(string Key, string Path);
-        IContentService LoadSoundEffect(string Key, string Path);
-        IContentService LoadDialog(string Path);
-        IContentService LoadDialogLinks(string Path);
-        IContentService LoadEffect(string Key, string Path);
-        IContentService LoadWorldGroupDefinition(string Path);
+        IContentService RegisterAssetLoader<TAsset>(Func<string, string, (string, object)[]> Loader, string ContentType);
 
-        Texture2D GetTexture(string Key);
+        IContentService LoadAllContent();
+
+        IContentService LoadAsset<TAsset>(string Path);
+        IContentService LoadKeyedAsset<TAsset>(string Key, string Path);
+
         TextureMetadata GetTextureMetadata(string Key);
         TextureMetadata GetTextureMetadata(Texture2D Key);
         Animation GetxAnimation(string Key);
         Animation GetAnimation(string Key);
         SpriteFont GetSpriteFont(string Key);
         SoundEffect GetSoundEffect(string Key);
-        DialogChain GetDialog(string Key);
         DialogLink GetDialogLink(string Key);
         Effect GetEffect(string Key);
-        ProjectWarnerShared.Scenes.WorldGroupDefinition GetWorldGroupDefinition(string Key);
+
+        TAsset GetAsset<TAsset>(string Key);
 
         Texture2D GetAtlasTexture();
+
+        Texture2D GetTexture(string Key);
     }
 }

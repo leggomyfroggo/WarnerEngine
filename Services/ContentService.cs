@@ -22,14 +22,10 @@ namespace WarnerEngine.Services
 
         private ContentManager contentManager;
         private GraphicsDevice graphicsDevice;
-        private Dictionary<string, Texture2D> textures;
-        private Dictionary<string, Animation> animations;
-        private Dictionary<string, SpriteFont> spriteFonts;
-        private Dictionary<string, SoundEffect> soundEffects;
-        private Dictionary<string, DialogChain> dialog;
-        private Dictionary<string, DialogLink> dialogLinks;
-        private Dictionary<string, Effect> effects;
-        private Dictionary<string, ProjectWarnerShared.Scenes.WorldGroupDefinition> worldGroupDefinitions;
+
+        private Dictionary<Type, Func<string, string, (string, object)[]>> assetLoaders;
+        private Dictionary<string, Type> contentTypesToAssetTypes;
+        private Dictionary<Type, Dictionary<string, object>> assets;
 
         private TextureAtlas textureAtlas;
         private bool hasBakedTextureAtlas;
@@ -37,14 +33,16 @@ namespace WarnerEngine.Services
 
         public ContentService()
         {
-            textures = new Dictionary<string, Texture2D>();
-            animations = new Dictionary<string, Animation>();
-            spriteFonts = new Dictionary<string, SpriteFont>();
-            soundEffects = new Dictionary<string, SoundEffect>();
-            dialog = new Dictionary<string, DialogChain>();
-            dialogLinks = new Dictionary<string, DialogLink>();
-            effects = new Dictionary<string, Effect>();
-            worldGroupDefinitions = new Dictionary<string, ProjectWarnerShared.Scenes.WorldGroupDefinition>();
+            assetLoaders = new Dictionary<Type, Func<string, string, (string, object)[]>>();
+            contentTypesToAssetTypes = new Dictionary<string, Type>();
+            RegisterAssetLoader<Texture2D>(LoadTexture, "Texture");
+            RegisterAssetLoader<Animation>(LoadAnimation, "Animation");
+            RegisterAssetLoader<Effect>(LoadEffect, "Effect");
+            RegisterAssetLoader<DialogLink>(LoadDialogLinks, "Dialog");
+            RegisterAssetLoader<SoundEffect>(LoadSoundEffect, "Sound");
+            RegisterAssetLoader<SpriteFont>(LoadSpriteFont, "SpriteFont");
+
+            assets = new Dictionary<Type, Dictionary<string, object>>();
 
             textureAtlas = new TextureAtlas(0, 0, ATLAS_WIDTH, ATLAS_HEIGHT);
             hasBakedTextureAtlas = false;
@@ -85,6 +83,13 @@ namespace WarnerEngine.Services
         {
             contentManager = CM;
             graphicsDevice = GD;
+            return this;
+        }
+
+        public IContentService RegisterAssetLoader<TAsset>(Func<string, string, (string, object)[]> Loader, string ContentType)
+        {
+            assetLoaders[typeof(TAsset)] = Loader;
+            contentTypesToAssetTypes[ContentType] = typeof(TAsset);
             return this;
         }
 
@@ -139,127 +144,137 @@ namespace WarnerEngine.Services
                         string filePath = manifestPath + item.Path;
                         switch (item.Type)
                         {
-                            case ContentItem.ContentType.Animation:
-                                LoadAnimation(filePath);
+                            case "Animation":
+                                LoadAsset<Animation>(filePath);
                                 break;
-                            case ContentItem.ContentType.Animation4:
+                            case "Animation4":
                                 LoadAllAnimationDirections(filePath);
                                 break;
-                            case ContentItem.ContentType.Texture:
-                                LoadTexture(item.Key, filePath);
+                            case "Texture":
+                                LoadKeyedAsset<Texture2D>(item.Key, filePath);
                                 break;
-                            case ContentItem.ContentType.Sound:
-                                LoadSoundEffect(item.Key, filePath);
+                            case "Sound":
+                                LoadKeyedAsset<SoundEffect>(item.Key, filePath);
                                 break;
-                            case ContentItem.ContentType.SpriteFont:
-                                LoadSpriteFont(item.Key, filePath);
+                            case "SpriteFont":
+                                LoadKeyedAsset<SpriteFont>(item.Key, filePath);
                                 break;
-                            case ContentItem.ContentType.Dialog:
-                                LoadDialogLinks(filePath);
+                            case "Dialog":
+                                LoadAsset<DialogLink>(filePath);
                                 break;
-                            case ContentItem.ContentType.Effect:
-                                LoadEffect(item.Key, filePath);
+                            case "Effect":
+                                LoadKeyedAsset<Effect>(item.Key, filePath);
                                 break;
-                            case ContentItem.ContentType.WorldGroupDefinition:
-                                LoadWorldGroupDefinition(filePath);
+                            default:
+                                LoadKeyedAssetImplementation(item.Key, filePath, contentTypesToAssetTypes[item.Type]);
                                 break;
                         }
                     }
                 }
             }
             // Build the texture atlas from all of the textures loaded
-            textureAtlas.BulkAddTextures(textures);
+            //textureAtlas.BulkAddTextures(assets[typeof(Texture2D)]);
             return this;
         }
 
-        public IContentService LoadTexture(string Key, string Resource)
+        private (string, object)[] LoadTexture(string Key, string Resource)
         {
+            Texture2D texture;
             using (Stream fs = TitleContainer.OpenStream("Content/" + Resource + ".png"))
             {
-                textures[Key] = Texture2D.FromStream(graphicsDevice, fs);
+                texture = Texture2D.FromStream(graphicsDevice, fs);
             }
-            return this;
+            return new (string, object)[] { (Key, texture) };
         }
 
-        public IContentService LoadAnimation(string Path)
+        private (string, object)[] LoadAnimation(string _, string Path)
         {
             XmlSerializer s = new XmlSerializer(typeof(Animation));
+            Animation animation;
             using (Stream fs = TitleContainer.OpenStream("Content/" + Path + ".xml"))
             {
-                Animation animation = (Animation)s.Deserialize(fs);
-                animations[animation.animationKey] = animation;
+                animation = (Animation)s.Deserialize(fs);
             }
-            return this;
+            return new (string, object)[] { (animation.animationKey, animation) };
         }
 
-        public IContentService LoadAllAnimationDirections(string Path)
+        private IContentService LoadAllAnimationDirections(string Path)
         {
             foreach (string dir in Enum.GetNames(typeof(Enums.Direction)))
             {
-                LoadAnimation(Path + "_" + dir);
+                LoadAsset<Animation>(Path + "_" + dir);
             }
             return this;
         }
 
-        public IContentService LoadSpriteFont(string Key, string Path)
+        private (string, object)[] LoadSpriteFont(string Key, string Path)
         {
-            spriteFonts[Key] = contentManager.Load<SpriteFont>(Path);
-            return this;
+            SpriteFont font = contentManager.Load<SpriteFont>(Path);
+            return new (string, object)[] { (Key, font) };
         }
 
-        public IContentService LoadSoundEffect(string Key, string Path)
+        private (string, object)[] LoadSoundEffect(string Key, string Path)
         {
+            SoundEffect sound;
             using (Stream fs = TitleContainer.OpenStream("Content/" + Path + ".wav"))
             {
-                soundEffects[Key] = SoundEffect.FromStream(fs);
+                sound = SoundEffect.FromStream(fs);
             }
-            return this;
+            return new (string, object)[] { (Key, sound) };
         }
 
-        public IContentService LoadDialog(string Path)
-        {
-            XmlSerializer s = new XmlSerializer(typeof(DialogChain[]));
-            using (Stream fs = TitleContainer.OpenStream("Content/" + Path + ".xml"))
-            {
-                DialogChain[] loadedDialog = (DialogChain[])s.Deserialize(fs);
-                foreach (DialogChain d in loadedDialog)
-                {
-                    dialog[d.DialogKey] = d;
-                }
-            }
-            return this;
-        }
-
-        public IContentService LoadDialogLinks(string Path)
+        private (string, object)[] LoadDialogLinks(string _, string Path)
         {
             XmlSerializer s = new XmlSerializer(typeof(DialogLink[]));
+            List<(string, object)> dialogLinks = new List<(string, object)>();
             using (Stream fs = TitleContainer.OpenStream("Content/" + Path + ".xml"))
             {
                 DialogLink[] loadedDialog = (DialogLink[])s.Deserialize(fs);
                 foreach (DialogLink d in loadedDialog)
                 {
-                    dialogLinks[d.Key] = d;
+                    dialogLinks.Add((d.Key, d));
                 }
             }
-            return this;
+            return dialogLinks.ToArray();
         }
 
-        public IContentService LoadEffect(string Key, string Path)
+        private (string, object)[] LoadEffect(string Key, string Path)
         {
-            effects[Key] = contentManager.Load<Effect>(Path);
-            return this;
+            Effect effect = contentManager.Load<Effect>(Path);
+            return new (string, object)[] { (Key, effect) };
         }
 
-        public IContentService LoadWorldGroupDefinition(string Path)
+        public IContentService LoadAsset<TAsset>(string Path)
         {
-            var worldGroupDefinition = ProjectWarnerShared.Scenes.WorldGroupDefinition.LoadFromFile("Content/" + Path + ".xml");
-            worldGroupDefinitions[worldGroupDefinition.GroupKey] = worldGroupDefinition;
+            return LoadKeyedAsset<TAsset>(null, Path);
+        }
+
+        public IContentService LoadKeyedAsset<TAsset>(string Key, string Path)
+        {
+            return LoadKeyedAssetImplementation(Key, Path, typeof(TAsset));
+        }
+
+        public IContentService LoadKeyedAssetImplementation(string Key, string Path, Type AssetType)
+        {
+            if (!assetLoaders.ContainsKey(AssetType))
+            {
+                throw new Exception("No loader present for asset type");
+            }
+            (string, object)[] loadedAssets = assetLoaders[AssetType](Key, Path);
+            if (!assets.ContainsKey(AssetType))
+            {
+                assets[AssetType] = new Dictionary<string, object>();
+            }
+            foreach ((string key, object asset) in loadedAssets)
+            {
+                assets[AssetType][key] = asset;
+            }
             return this;
         }
 
         public Texture2D GetTexture(string Key)
         {
-            return textures[Key];
+            return GetAsset<Texture2D>(Key);
         }
 
         public TextureMetadata GetTextureMetadata(string Key)
@@ -282,12 +297,12 @@ namespace WarnerEngine.Services
 
         public Animation GetxAnimation(string Key)
         {
-            return animations[Key];
+            return GetAsset<Animation>(Key);
         }
 
         public Animation GetAnimation(string Key)
         {
-            if (Key == null || !animations.ContainsKey(Key))
+            if (Key == null || !assets.ContainsKey(typeof(Animation)) || !assets[typeof(Animation)].ContainsKey(Key))
             {
                 return null;
             }
@@ -296,32 +311,27 @@ namespace WarnerEngine.Services
 
         public SpriteFont GetSpriteFont(string Key)
         {
-            return spriteFonts[Key];
+            return GetAsset<SpriteFont>(Key);
         }
 
         public SoundEffect GetSoundEffect(string Key)
         {
-            return soundEffects[Key];
-        }
-
-        public DialogChain GetDialog(string Key)
-        {
-            return dialog[Key];
+            return GetAsset<SoundEffect>(Key);
         }
 
         public DialogLink GetDialogLink(string Key)
         {
-            return dialogLinks[Key];
+            return GetAsset<DialogLink>(Key);
         }
 
         public Effect GetEffect(string Key)
         {
-            return effects[Key];
+            return GetAsset<Effect>(Key);
         }
 
-        public ProjectWarnerShared.Scenes.WorldGroupDefinition GetWorldGroupDefinition(string Key)
+        public TAsset GetAsset<TAsset>(string Key)
         {
-            return worldGroupDefinitions[Key];
+            return (TAsset)assets[typeof(TAsset)][Key];
         }
 
         public Texture2D GetAtlasTexture()
