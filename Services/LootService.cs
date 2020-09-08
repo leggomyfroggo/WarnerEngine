@@ -17,7 +17,12 @@ namespace WarnerEngine.Services
             { LootClass.MidLevelEnemy, new (string, float)[] {(Ribble.ENTITY_KEY_ONE, 0.2f), (Ribble.ENTITY_KEY_FIVE, 0.7f), (Ribble.ENTITY_KEY_TWENTY, 0.75f) }}
         };
 
-        public LootService() { }
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>();
+        }
+
+        public override void Initialize() { }
 
         public void DropLoot(LootClass Class, Vector3 Position, int NumberOfRolls = 1)
         {

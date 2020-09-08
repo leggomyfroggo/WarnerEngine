@@ -15,7 +15,12 @@ namespace WarnerEngine.Services
 
         public BackingBox TrackedObject { get; private set; }
 
-        public AudioService()
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>() { };
+        }
+
+        public override void Initialize()
         {
             SoundEffect.DistanceScale = 100;
             queue = new List<(SoundEffectInstance, Vector3)>();

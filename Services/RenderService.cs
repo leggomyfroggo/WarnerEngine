@@ -54,7 +54,12 @@ namespace WarnerEngine.Services
         public int ResolutionX => GraphicsDevice.PresentationParameters.BackBufferWidth;
         public int ResolutionY => GraphicsDevice.PresentationParameters.BackBufferHeight;
 
-        public RenderService()
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>();
+        }
+
+        public override void Initialize()
         {
             targets = new Dictionary<string, RenderTarget2D>();
             IsDrawing = false;

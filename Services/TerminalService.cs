@@ -35,7 +35,12 @@ namespace WarnerEngine.Services
         protected string lastOutput;
         protected bool wasLastOutputSuccessful;
 
-        public TerminalService()
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>() { typeof(EventService), typeof(IInputService) };
+        }
+
+        public override void Initialize()
         {
             GameService.GetService<EventService>().Subscribe(
                 Events.INTERNAL_RESOLUTION_CHANGED,

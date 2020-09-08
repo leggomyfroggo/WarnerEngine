@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -9,6 +10,13 @@ namespace WarnerEngine.Services
 {
     public class TestInputService : IInputService
     {
+        public HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>();
+        }
+
+        public void Initialize() { }
+
         public void PreDraw(float DT)
         {
             throw new NotImplementedException();

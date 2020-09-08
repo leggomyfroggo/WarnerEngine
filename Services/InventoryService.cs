@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectWarnerShared.Entities.UI;
 using ProjectWarnerShared.Entities.Warner;
 using WarnerEngine.Lib;
 using WarnerEngine.Lib.Helpers;
@@ -60,7 +60,15 @@ namespace WarnerEngine.Services
             }
         }
 
-        public InventoryService()
+        public HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>()
+            { 
+                typeof(EventService),
+            };
+        }
+
+        public void Initialize()
         {
             GameService.GetService<EventService>().Subscribe(
                 Events.INTERNAL_RESOLUTION_CHANGED,

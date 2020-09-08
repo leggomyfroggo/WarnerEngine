@@ -26,7 +26,12 @@ namespace WarnerEngine.Services
         private bool shouldReset;
         public Scene CurrentScene { get; private set; }
 
-        public SceneService()
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>() { typeof(EventService) };
+        }
+
+        public override void Initialize()
         {
             GameService.GetService<EventService>().Subscribe(
                 Events.INTERNAL_RESOLUTION_CHANGED,
@@ -56,7 +61,7 @@ namespace WarnerEngine.Services
             );
 
             scenes = new Dictionary<string, Scene>();
-            shouldReset = false; ;
+            shouldReset = false;
             CurrentScene = null;
         }
 

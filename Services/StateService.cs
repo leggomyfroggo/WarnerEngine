@@ -10,7 +10,12 @@ namespace WarnerEngine.Services
         private const string GLOBAL_FRAME_COUNT_KEY = "global_frame_count";
         private Dictionary<string, object> state;
 
-        public StateService()
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>();
+        }
+
+        public override void Initialize()
         {
             state = new Dictionary<string, object>();
             SetState(GLOBAL_RANDOM_KEY, new Random());

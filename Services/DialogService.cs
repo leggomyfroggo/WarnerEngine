@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -38,7 +38,16 @@ namespace WarnerEngine.Services
         private AutoTween fadeIn;
         private AutoTween fadeOut;
 
-        public DialogService()
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>() 
+            { 
+                typeof(EventService), 
+                typeof(IInputService), 
+            };
+        }
+
+        public override void Initialize()
         {
             GameService.GetService<EventService>().Subscribe(
                 Events.INTERNAL_RESOLUTION_CHANGED,

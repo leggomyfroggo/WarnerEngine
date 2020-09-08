@@ -31,7 +31,15 @@ namespace WarnerEngine.Services
         private bool hasBakedTextureAtlas;
         private Texture2D atlasTexture;
 
-        public ContentService()
+        public HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>()
+            {
+                typeof(EventService),
+            };
+        }
+
+        public void Initialize()
         {
             assetLoaders = new Dictionary<Type, Func<string, string, (string, object)[]>>();
             contentTypesToAssetTypes = new Dictionary<string, Type>();
@@ -79,7 +87,7 @@ namespace WarnerEngine.Services
 
         public void PostDraw() { }
 
-        public IContentService InitializeContentService(ContentManager CM, GraphicsDevice GD)
+        public IContentService Bootstrap(ContentManager CM, GraphicsDevice GD)
         {
             contentManager = CM;
             graphicsDevice = GD;
@@ -299,7 +307,7 @@ namespace WarnerEngine.Services
             return GetxAsset<TAsset>(Key);
         }
 
-        public TAsset GetxAsset<TAsset>(string Key)
+        public TAsset GetxAsset<TAsset>(string Key) where TAsset : class
         {
             return (TAsset)assets[typeof(TAsset)][Key];
         }

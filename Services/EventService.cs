@@ -7,7 +7,12 @@ namespace WarnerEngine.Services
     {
         private Dictionary<string, List<Action<object>>> events;
 
-        public EventService()
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>();
+        }
+
+        public override void Initialize()
         {
             events = new Dictionary<string, List<Action<object>>>();
         }

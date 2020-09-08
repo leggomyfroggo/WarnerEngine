@@ -1,17 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using WarnerEngine.Lib;
-using WarnerEngine.Lib.Content;
-using WarnerEngine.Lib.Dialog;
 
 namespace WarnerEngine.Services
 {
     public class TestContentService : IContentService
     {
+        public HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>();
+        }
+
+        public void Initialize() {}
+
         public void PreDraw(float DT) { }
 
         public ServiceCompositionMetadata Draw()
@@ -31,7 +36,7 @@ namespace WarnerEngine.Services
             throw new System.NotImplementedException();
         }
 
-        public IContentService InitializeContentService(ContentManager CM, GraphicsDevice GD)
+        public IContentService Bootstrap(ContentManager CM, GraphicsDevice GD)
         {
             throw new System.NotImplementedException();
         }
@@ -68,12 +73,12 @@ namespace WarnerEngine.Services
 
         public TAsset GetAsset<TAsset>(string Key) where TAsset : class
         {
-            throw new NotImplementedException();
+            return null;
         }
 
-        public TAsset GetxAsset<TAsset>(string Key)
+        public TAsset GetxAsset<TAsset>(string Key) where TAsset : class
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

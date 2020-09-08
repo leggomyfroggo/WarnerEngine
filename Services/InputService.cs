@@ -37,7 +37,12 @@ namespace WarnerEngine.Services
 
         private bool isClickPropagationPaused;
 
-        public InputService()
+        public HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>();
+        }
+
+        public void Initialize()
         {
             actionToKey = new Dictionary<InputAction, Keys>();
             actionToButton = new Dictionary<InputAction, Buttons>();

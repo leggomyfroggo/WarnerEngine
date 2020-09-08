@@ -11,7 +11,12 @@ namespace WarnerEngine.Services
 
         private Dictionary<Type, IEnumerable<object>> cachedEntities;
 
-        public ActionService()
+        public override HashSet<Type> GetDependencies()
+        {
+            return new HashSet<Type>() { };
+        }
+
+        public override void Initialize()
         {
             actions = new List<BaseAction>();
             cachedEntities = new Dictionary<Type, IEnumerable<object>>();
