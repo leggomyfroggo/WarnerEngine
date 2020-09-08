@@ -5,6 +5,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ProjectWarnerShared.Engine.Services;
+
 namespace WarnerEngine.Services
 {
     public class GameService
@@ -22,14 +24,11 @@ namespace WarnerEngine.Services
             RegisterService(new EventService());
             RegisterService(new InputService());
             RegisterService(new TerminalService());
-            RegisterService(new InventoryService());
             RegisterService(new SceneService());
             RegisterService(new ActionService());
-            RegisterService(new DialogService());
             RegisterService(new RenderService());
             RegisterService(new AudioService());
             RegisterService(new ContentService());
-            RegisterService(new LootService());
             RegisterService(new StateService());
             orderedServices = DetermineTopologicalOrdering();
             InitializeRegisteredServices();
@@ -40,14 +39,11 @@ namespace WarnerEngine.Services
             RegisterService(new EventService());
             RegisterService(new TestInputService());
             RegisterService(new TerminalService());
-            RegisterService(new InventoryService());
             RegisterService(new SceneService());
             RegisterService(new ActionService());
-            RegisterService(new DialogService());
             RegisterService(new RenderService());
             RegisterService(new AudioService());
             RegisterService(new TestContentService());
-            RegisterService(new LootService());
             RegisterService(new StateService());
             orderedServices = DetermineTopologicalOrdering();
             InitializeRegisteredServices();
@@ -85,6 +81,10 @@ namespace WarnerEngine.Services
             {
                 foreach (Type serviceKey in services.Keys)
                 {
+                    if (!upstream.ContainsKey(serviceKey))
+                    {
+                        continue;
+                    }
                     var upstreamDependencies = upstream[serviceKey];
                     if (upstreamDependencies.Count > 0)
                     {
@@ -112,7 +112,7 @@ namespace WarnerEngine.Services
             }
         }
 
-        private static void RegisterService<T>(T Service) where T : IService
+        public static void RegisterService<T>(T Service) where T : IService
         {
             services[Service.GetBackingInterfaceType()] = Service;
         }

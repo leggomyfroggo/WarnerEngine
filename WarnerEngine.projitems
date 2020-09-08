@@ -89,7 +89,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\ActionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AudioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ContentService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\DialogService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Events.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\GameService.cs" />
@@ -97,9 +96,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\IInputService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\InputAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\InputService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\InventoryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\LootService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RenderService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SceneService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Service.cs" />
