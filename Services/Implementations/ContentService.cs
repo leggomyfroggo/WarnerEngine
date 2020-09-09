@@ -41,7 +41,7 @@ namespace WarnerEngine.Services.Implementations
         {
             return new HashSet<Type>()
             {
-                typeof(EventService),
+                typeof(IEventService),
             };
         }
 

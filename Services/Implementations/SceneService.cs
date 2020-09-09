@@ -28,7 +28,7 @@ namespace WarnerEngine.Services.Implementations
 
         public HashSet<Type> GetDependencies()
         {
-            return new HashSet<Type>() { typeof(EventService) };
+            return new HashSet<Type>() { typeof(IEventService) };
         }
 
         public void Initialize()
