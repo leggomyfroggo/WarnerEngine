@@ -12,7 +12,7 @@ using WarnerEngine.Services;
 namespace WarnerEngine.Lib.Components.Physics
 {
     [Serializable]
-    public class BaseWorldTile : IWorldSerializable, ISceneEntity, IDraw
+    public abstract class BaseWorldTile : IWorldSerializable, ISceneEntity, IDraw
     {
         public enum ShadowReceiverMode { Exact, PointCheck, None }
         private enum VisibilityState { Unknown, Visible, Invisible }
@@ -176,8 +176,12 @@ namespace WarnerEngine.Lib.Components.Physics
                             {
 #if DEBUG
                                 isTiling = true;
-                                tex = GameService.GetService<IContentService>().GetxAsset<Texture2D>("blank_texture");
-                                appliedTint = (sx + sz) % 2 == 0 ? CHECK_COLOR_TOP_EVEN : CHECK_COLOR_TOP_ODD;
+                                var maybeTex = GameService.GetService<IContentService>().GetxAsset<Texture2D>("blank_texture");
+                                if (maybeTex != null)
+                                {
+                                    tex = maybeTex;
+                                    appliedTint = (sx + sz) % 2 == 0 ? CHECK_COLOR_TOP_EVEN : CHECK_COLOR_TOP_ODD;
+                                }
 #else
                                 continue;
 #endif
@@ -205,12 +209,7 @@ namespace WarnerEngine.Lib.Components.Physics
                                 );
                                 float time = GameService.GetService<StateService>().GetGlobalGameTime();
                             }
-                            GameService.GetService<RenderService>().PushAlphaFragment(
-                                RenderService.WATER_STACK,
-                                GameService.GetService<IContentService>().GetxAsset<Texture2D>("forest_tiles_stencil"),
-                                tilePlacer,
-                                new Rectangle(tx * 8, ty * 8, sourceTileWidth, sourceTileDepth)
-                            );
+                            DrawTileLayer(tilePlacer, new Rectangle(tx * 8, ty * 8, sourceTileWidth, sourceTileDepth));
                             appliedTint = shadowTint;
                             tilePlacer.Y += sourceTileDepth;
                         }
@@ -231,8 +230,12 @@ namespace WarnerEngine.Lib.Components.Physics
                             {
 #if DEBUG
                                 isTiling = true;
-                                tex = GameService.GetService<IContentService>().GetxAsset<Texture2D>("blank_texture");
-                                appliedTint = (sx + sy) % 2 == 0 ? CHECK_COLOR_FRONT_EVEN : CHECK_COLOR_FRONT_ODD;
+                                var maybeTex = GameService.GetService<IContentService>().GetAsset<Texture2D>("blank_texture");
+                                if (maybeTex != null)
+                                {
+                                    tex = maybeTex;
+                                    appliedTint = (sx + sy) % 2 == 0 ? CHECK_COLOR_FRONT_EVEN : CHECK_COLOR_FRONT_ODD;
+                                }
 #else
                                 continue;
 #endif
@@ -260,12 +263,7 @@ namespace WarnerEngine.Lib.Components.Physics
                                 );
                                 float time = GameService.GetService<StateService>().GetGlobalGameTime();
                             }
-                            GameService.GetService<RenderService>().PushAlphaFragment(
-                                RenderService.WATER_STACK,
-                                GameService.GetService<IContentService>().GetxAsset<Texture2D>("forest_tiles_stencil"),
-                                tilePlacer,
-                                new Rectangle(tx * 8, ty * 8, sourceTileWidth, sourceTileHeight)
-                            );
+                            DrawTileLayer(tilePlacer, new Rectangle(tx * 8, ty * 8, sourceTileWidth, sourceTileHeight));
                             appliedTint = shadowTint;
                             tilePlacer.Y += sourceTileHeight;
                         }
@@ -275,6 +273,8 @@ namespace WarnerEngine.Lib.Components.Physics
             }
             DrawShadows();
         }
+
+        protected virtual void DrawTileLayer(Rectangle TileDestination, Rectangle TileSource) { }
 
         public BackingBox GetBackingBox()
         {
