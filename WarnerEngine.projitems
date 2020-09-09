@@ -27,6 +27,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Movement\PlatformMovement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Physics\BackingBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Physics\BackingBoxWithShadow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Physics\BaseWorldTile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Physics\WorldTileFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Physics\Box.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Physics\IWorld.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Physics\Test\TestWorld.cs" />

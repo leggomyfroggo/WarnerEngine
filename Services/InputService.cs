@@ -9,9 +9,8 @@ using Microsoft.Xna.Framework.Input.Touch;
 #endif
 
 using WarnerEngine.Lib;
+using WarnerEngine.Lib.Components.Physics;
 using WarnerEngine.Lib.Helpers;
-
-using ProjectWarnerShared.Scenes;
 
 namespace WarnerEngine.Services
 {
@@ -359,9 +358,9 @@ namespace WarnerEngine.Services
         public Vector3 GetMouseInWorldSpace3()
         {
             Vector2 worldPosition2 = GetMouseInWorldSpace2();
-            List<WorldTile> worldTiles = GameService.GetService<SceneService>().CurrentScene.GetEntitiesOfType<WorldTile>();
-            IEnumerable<WorldTile> orderedWorldTiles = worldTiles.OrderByDescending(wt => wt.BackingBox.Top);
-            foreach (WorldTile wt in orderedWorldTiles)
+            List<BaseWorldTile> worldTiles = GameService.GetService<SceneService>().CurrentScene.GetEntitiesOfType<BaseWorldTile>();
+            IEnumerable<BaseWorldTile> orderedWorldTiles = worldTiles.OrderByDescending(wt => wt.BackingBox.Top);
+            foreach (BaseWorldTile wt in orderedWorldTiles)
             {
                 if (
                     worldPosition2.X >= wt.BackingBox.Left &&
