@@ -22,10 +22,10 @@ namespace WarnerEngine.Lib
 
         public Vector2 Offset { get; set; }
 
-        public float Left => position.X - GameService.GetService<RenderService>().InternalResolutionX / 2;
-        public float Right => position.X + GameService.GetService<RenderService>().InternalResolutionX / 2;
-        public float Top => position.Y - GameService.GetService<RenderService>().InternalResolutionY / 2;
-        public float Bottom => position.Y + GameService.GetService<RenderService>().InternalResolutionY / 2;
+        public float Left => position.X - GameService.GetService<IRenderService>().InternalResolutionX / 2;
+        public float Right => position.X + GameService.GetService<IRenderService>().InternalResolutionX / 2;
+        public float Top => position.Y - GameService.GetService<IRenderService>().InternalResolutionY / 2;
+        public float Bottom => position.Y + GameService.GetService<IRenderService>().InternalResolutionY / 2;
 
         public Rectangle? Limits;
 
@@ -55,19 +55,19 @@ namespace WarnerEngine.Lib
                 {
                     Rectangle limits = Limits.Value;
                     if (Left < limits.Left) {
-                        position.X = limits.Left + GameService.GetService<RenderService>().InternalResolutionX / 2;
+                        position.X = limits.Left + GameService.GetService<IRenderService>().InternalResolutionX / 2;
                     }
                     if (Right > limits.Right)
                     {
-                        position.X = limits.Right - GameService.GetService<RenderService>().InternalResolutionX / 2;
+                        position.X = limits.Right - GameService.GetService<IRenderService>().InternalResolutionX / 2;
                     }
                     if (Top < limits.Top)
                     {
-                        position.Y = limits.Top + GameService.GetService<RenderService>().InternalResolutionY / 2;
+                        position.Y = limits.Top + GameService.GetService<IRenderService>().InternalResolutionY / 2;
                     }
                     if (Bottom > limits.Bottom)
                     {
-                        position.Y = limits.Bottom - GameService.GetService<RenderService>().InternalResolutionY / 2;
+                        position.Y = limits.Bottom - GameService.GetService<IRenderService>().InternalResolutionY / 2;
                     }
                 }
             }

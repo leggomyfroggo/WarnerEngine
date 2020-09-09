@@ -27,7 +27,7 @@ namespace WarnerEngine.Lib.UI
 
         public override void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY)
         {
-            GameService.GetService<RenderService>().DrawQuad(
+            GameService.GetService<IRenderService>().DrawQuad(
                 iconInfo.IconTextureKey,
                 new Rectangle(RenderedX, RenderedY, iconInfo.IconWidth, iconInfo.IconHeight),
                 GraphicsHelper.GetSheetCell(iconInfo.IconIndex, iconInfo.IconWidth, iconInfo.IconHeight)

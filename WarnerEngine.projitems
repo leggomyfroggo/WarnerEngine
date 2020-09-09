@@ -88,28 +88,35 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UILeftRight.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UIRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UISize.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\ActionService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\AudioService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\ContentService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IEventService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\ActionService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\AudioService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\ContentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Events.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\EventService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\EventService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\GameService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IActionService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IAudioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IContentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IInputService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\InputAction.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\InputService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\InputService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IRenderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ISceneService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\RenderService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\SceneService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Service.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\RenderService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\SceneService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IStateService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ITerminalService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ServiceCompositionMetadata.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\StateService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\TerminalService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\TestContentService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\TestInputService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\StateService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\TerminalService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\Test\TestContentService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\Test\TestInputService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Prebuilts\Entities\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Services\Implementations\Test\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)__Content__\whiteTile.png">

@@ -1,21 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
-    public class EventService : Service
+    public class EventService : IEventService
     {
         private Dictionary<string, List<Action<object>>> events;
 
-        public override HashSet<Type> GetDependencies()
+        public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>();
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             events = new Dictionary<string, List<Action<object>>>();
         }
+
+        public void PreDraw(float DT) { }
+
+        public ServiceCompositionMetadata Draw()
+        {
+            return ServiceCompositionMetadata.Empty;
+        }
+
+        public void PostDraw() { }
 
         public void Subscribe(string EventKey, Action<object> EventCallback)
         {
@@ -47,9 +56,9 @@ namespace WarnerEngine.Services
             }
         }
 
-        public override Type GetBackingInterfaceType()
+        public Type GetBackingInterfaceType()
         {
-            return typeof(EventService);
+            return typeof(IEventService);
         }
     }
 }

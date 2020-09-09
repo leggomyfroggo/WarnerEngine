@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
-    public class TerminalService : Service
+    public class TerminalService : ITerminalService
     {
         private const string RENDER_TARGET_KEY = "terminal";
 
@@ -35,18 +35,18 @@ namespace WarnerEngine.Services
         protected string lastOutput;
         protected bool wasLastOutputSuccessful;
 
-        public override HashSet<Type> GetDependencies()
+        public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>() { typeof(EventService), typeof(IInputService) };
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
-            GameService.GetService<EventService>().Subscribe(
+            GameService.GetService<IEventService>().Subscribe(
                 Events.INTERNAL_RESOLUTION_CHANGED,
                 _ =>
                 {
-                    RenderService renderService = GameService.GetService<RenderService>();
+                    IRenderService renderService = GameService.GetService<IRenderService>();
                     renderService.AddRenderTarget(
                         RENDER_TARGET_KEY,
                         renderService.InternalResolutionX,
@@ -72,18 +72,18 @@ namespace WarnerEngine.Services
             RegisterConsoleCommands();
         }
 
-        public override void PreDraw(float DT)
+        public void PreDraw(float DT)
         {
             if (GameService.GetService<IInputService>().WasKeyPressed(Keys.F12))
             {
                 if (IsActive)
                 {
-                    GameService.GetService<SceneService>().CurrentScene.Unpause(pauseKey);
+                    GameService.GetService<ISceneService>().CurrentScene.Unpause(pauseKey);
                     IsActive = false;
                 }
                 else
                 {
-                    int newPauseKey = GameService.GetService<SceneService>().CurrentScene.PauseAndLock();
+                    int newPauseKey = GameService.GetService<ISceneService>().CurrentScene.PauseAndLock();
                     if (newPauseKey != -1)
                     {
                         pauseKey = newPauseKey;
@@ -99,6 +99,29 @@ namespace WarnerEngine.Services
             ProcessKeyboardInput();
             ProcessActiveCommand();
         }
+
+        public ServiceCompositionMetadata Draw()
+        {
+            if (!IsActive)
+            {
+                return ServiceCompositionMetadata.Empty;
+            }
+            GameService.GetService<IRenderService>()
+                .SetRenderTarget(RENDER_TARGET_KEY, Color.Black)
+                .Start()
+                .DrawString("stats_overlay", GetCurrentCommandForDraw(), CURRENT_COMMAND_POSITION, Color.White)
+                .DrawString("stats_overlay", lastOutput, LAST_OUTPUT_POSITION, wasLastOutputSuccessful ? Color.Green : Color.Red)
+                .End();
+            return new ServiceCompositionMetadata()
+            {
+                RenderTargetKey = RENDER_TARGET_KEY,
+                Position = Vector2.Zero,
+                Priority = 100,
+                Tint = Color.White,
+            };
+        }
+
+        public void PostDraw() { }
 
         private void RegisterConsoleCommands()
         {
@@ -234,11 +257,11 @@ namespace WarnerEngine.Services
                 // Split the command by spaces
                 string[] commands = activeCommand.Split(' ');
                 var allCommands = consoleCommands;
-                var localCommands = GameService.GetService<SceneService>().CurrentScene.GetLocalTerminalCommands();
+                var localCommands = GameService.GetService<ISceneService>().CurrentScene.GetLocalTerminalCommands();
                 if (localCommands != null)
                 {
                     allCommands = consoleCommands
-                        .Union(GameService.GetService<SceneService>().CurrentScene.GetLocalTerminalCommands())
+                        .Union(GameService.GetService<ISceneService>().CurrentScene.GetLocalTerminalCommands())
                         .ToDictionary(k => k.Key, v => v.Value);
                 }
                 if (allCommands.ContainsKey(commands[0]))
@@ -279,35 +302,14 @@ namespace WarnerEngine.Services
             return "Level changed";
         }
 
-        public override ServiceCompositionMetadata Draw()
-        {
-            if (!IsActive)
-            {
-                return ServiceCompositionMetadata.Empty;
-            }
-            GameService.GetService<RenderService>()
-                .SetRenderTarget(RENDER_TARGET_KEY, Color.Black)
-                .Start()
-                .DrawString("stats_overlay", GetCurrentCommandForDraw(), CURRENT_COMMAND_POSITION, Color.White)
-                .DrawString("stats_overlay", lastOutput, LAST_OUTPUT_POSITION, wasLastOutputSuccessful ? Color.Green : Color.Red)
-                .End();
-            return new ServiceCompositionMetadata()
-            {
-                RenderTargetKey = RENDER_TARGET_KEY,
-                Position = Vector2.Zero,
-                Priority = 100,
-                Tint = Color.White,
-            };
-        }
-
         public string GetCurrentCommandForDraw()
         {
             return currentCommand.ToString() + (blinkTimer < 30 ? "_" : "");
         }
 
-        public override Type GetBackingInterfaceType()
+        public Type GetBackingInterfaceType()
         {
-            return typeof(TerminalService);
+            return typeof(ITerminalService);
         }
     }
 }

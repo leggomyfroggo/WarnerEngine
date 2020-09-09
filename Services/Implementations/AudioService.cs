@@ -6,35 +6,35 @@ using Microsoft.Xna.Framework.Audio;
 
 using WarnerEngine.Lib.Components;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
-    public class AudioService : Service
+    public class AudioService : IAudioService
     {
         public const float DISTANCE_LIMIT = 300f;
         private List<(SoundEffectInstance, Vector3)> queue;
 
         public BackingBox TrackedObject { get; private set; }
 
-        public override HashSet<Type> GetDependencies()
+        public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>() { };
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             SoundEffect.DistanceScale = 100;
             queue = new List<(SoundEffectInstance, Vector3)>();
             TrackedObject = BackingBox.Dummy;
         }
 
-        public override void PreDraw(float DT)
+        public void PreDraw(float DT)
         {
             if (TrackedObject == null)
             {
                 return;
             }
             Vector3 trackedObjectPos = TrackedObject.GetCenterPoint();
-            for (int i = 0; i < queue.Count; )
+            for (int i = 0; i < queue.Count;)
             {
                 if (queue[i].Item1.State != SoundState.Playing)
                 {
@@ -46,15 +46,22 @@ namespace WarnerEngine.Services
             }
         }
 
-        public AudioService SetTrackedObject(BackingBox TrackedObject)
+        public ServiceCompositionMetadata Draw()
+        {
+            return ServiceCompositionMetadata.Empty;
+        }
+
+        public void PostDraw() { }
+
+        public IAudioService SetTrackedObject(BackingBox TrackedObject)
         {
             this.TrackedObject = TrackedObject;
             return this;
         }
 
-        public AudioService PlaySoundEffect(string Key, Vector3? SourcePosition = null)
+        public IAudioService PlaySoundEffect(string Key, Vector3? SourcePosition = null)
         {
-            Random rand = GameService.GetService<StateService>().GetGlobalRandom();
+            Random rand = GameService.GetService<IStateService>().GetGlobalRandom();
             SoundEffectInstance instance = GameService.GetService<IContentService>().GetxAsset<SoundEffect>(Key)?.CreateInstance();
             // TODO: Make this error out, but provide a test implementation of AudioService
             if (instance != null)
@@ -67,9 +74,9 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public override Type GetBackingInterfaceType()
+        public Type GetBackingInterfaceType()
         {
-            return typeof(AudioService);
+            return typeof(IAudioService);
         }
     }
 }

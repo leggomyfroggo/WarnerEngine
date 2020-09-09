@@ -12,7 +12,7 @@ using WarnerEngine.Lib;
 using WarnerEngine.Lib.Components.Physics;
 using WarnerEngine.Lib.Helpers;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
     public class InputService : IInputService
     {
@@ -336,7 +336,7 @@ namespace WarnerEngine.Services
 
         public Vector2 GetMouseInScreenSpace(int Rollback = 0)
         {
-            RenderService rs = GameService.GetService<RenderService>();
+            IRenderService rs = GameService.GetService<IRenderService>();
             MouseState mouseState = GetRolledbackMouseState(Rollback);
             return new Vector2(
                 mouseState.Position.X / rs.GetTargetToDisplayRatioX(),
@@ -346,8 +346,8 @@ namespace WarnerEngine.Services
 
         public Vector2 GetMouseInWorldSpace2()
         {
-            RenderService rs = GameService.GetService<RenderService>();
-            Vector2 cameraPosition = GameService.GetService<SceneService>().CurrentScene.Camera.GetCenterPoint();
+            IRenderService rs = GameService.GetService<IRenderService>();
+            Vector2 cameraPosition = GameService.GetService<ISceneService>().CurrentScene.Camera.GetCenterPoint();
             MouseState mouseState = GetCurrentMouseState();
             return new Vector2(
                 mouseState.Position.X / rs.GetTargetToDisplayRatioX() + cameraPosition.X - rs.InternalResolutionX / 2,
@@ -358,7 +358,7 @@ namespace WarnerEngine.Services
         public Vector3 GetMouseInWorldSpace3()
         {
             Vector2 worldPosition2 = GetMouseInWorldSpace2();
-            List<BaseWorldTile> worldTiles = GameService.GetService<SceneService>().CurrentScene.GetEntitiesOfType<BaseWorldTile>();
+            List<BaseWorldTile> worldTiles = GameService.GetService<ISceneService>().CurrentScene.GetEntitiesOfType<BaseWorldTile>();
             IEnumerable<BaseWorldTile> orderedWorldTiles = worldTiles.OrderByDescending(wt => wt.BackingBox.Top);
             foreach (BaseWorldTile wt in orderedWorldTiles)
             {

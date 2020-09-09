@@ -45,7 +45,7 @@ namespace WarnerEngine.Lib.Components.Physics
         {
             if (DBehavior == DecalBehavior.HappyBounce)
             {
-                float time = GameService.GetService<StateService>().GetGlobalGameTime();
+                float time = GameService.GetService<IStateService>().GetGlobalGameTime();
                 return new Vector2(
                     (float)Math.Sin(time / DecalBehaviorSpeed) * DecalBehaviorRangeX + DecalOffsetX,
                     (float)Math.Abs(Math.Cos(time / DecalBehaviorSpeed)) * DecalBehaviorRangeY + DecalOffsetY
@@ -53,7 +53,7 @@ namespace WarnerEngine.Lib.Components.Physics
             }
             else if (DBehavior == DecalBehavior.Windy)
             {
-                float timeInSeconds = GameService.GetService<StateService>().GetGlobalGameTime() / 1000f;
+                float timeInSeconds = GameService.GetService<IStateService>().GetGlobalGameTime() / 1000f;
                 double innerSinTerm = (timeInSeconds * 4) + TimeOffset;
                 return new Vector2(
                     (float)(Math.Sin(innerSinTerm) + Math.Sin(innerSinTerm * 1.5)) * DecalBehaviorRangeX,

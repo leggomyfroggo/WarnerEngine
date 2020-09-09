@@ -33,7 +33,7 @@ namespace WarnerEngine.Lib.Structure.Shadows
         public void Draw(Color? Tint = null)
         {
             Color tint = Tint.HasValue ? Tint.Value : this.Tint;
-            GameService.GetService<RenderService>()
+            GameService.GetService<IRenderService>()
                 .SetDepth(Depth)
                 .DrawQuad(
                     Texture, 

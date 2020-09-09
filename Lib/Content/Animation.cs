@@ -172,7 +172,7 @@ namespace WarnerEngine.Lib.Content
             return this;
         }
 
-        public void Draw(RenderService RM, Vector2 Position, int Frame, Color? Tint, float Scale = 1f, float Depth = 1f, float Angle = 0f, string TargetAlphaStack = null, bool DuplicateToAlphaStack = false)
+        public void Draw(IRenderService RM, Vector2 Position, int Frame, Color? Tint, float Scale = 1f, float Depth = 1f, float Angle = 0f, string TargetAlphaStack = null, bool DuplicateToAlphaStack = false)
         {
             Frame = Frame % FrameCount;
             int frameXIndex = Frame % XFrameCount + firstXIndex;

@@ -24,7 +24,7 @@ namespace WarnerEngine.Lib.UI
         {
             if (shouldDrawDeferred)
             {
-                GameService.GetService<RenderService>().AddDeferredCall(_ => DrawImplementation());
+                GameService.GetService<IRenderService>().AddDeferredCall(_ => DrawImplementation());
             } 
             else
             {

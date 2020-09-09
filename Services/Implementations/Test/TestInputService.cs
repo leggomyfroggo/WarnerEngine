@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 using WarnerEngine.Lib;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations.Test
 {
     public class TestInputService : IInputService
     {

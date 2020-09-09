@@ -181,7 +181,7 @@ namespace WarnerEngine.Lib.Helpers
             Texture2D whiteTileTexture = GameService.GetService<IContentService>().GetWhiteTileTexture();
             if (IsFilled)
             {
-                GameService.GetService<RenderService>().DrawQuad(
+                GameService.GetService<IRenderService>().DrawQuad(
                     whiteTileTexture,
                     new Rectangle(X, Y, W, H),
                     new Rectangle(0, 0, 8, 8),
@@ -190,13 +190,13 @@ namespace WarnerEngine.Lib.Helpers
                 return;
             }
             // Top line
-            GameService.GetService<RenderService>().DrawQuad(whiteTileTexture, new Rectangle(X, Y, W, 1), new Rectangle(0, 0, 8, 8), Tint);
+            GameService.GetService<IRenderService>().DrawQuad(whiteTileTexture, new Rectangle(X, Y, W, 1), new Rectangle(0, 0, 8, 8), Tint);
             // Right line
-            GameService.GetService<RenderService>().DrawQuad(whiteTileTexture, new Rectangle(X + W - 1, Y, 1, H), new Rectangle(0, 0, 8, 8), Tint);
+            GameService.GetService<IRenderService>().DrawQuad(whiteTileTexture, new Rectangle(X + W - 1, Y, 1, H), new Rectangle(0, 0, 8, 8), Tint);
             // Bottom line
-            GameService.GetService<RenderService>().DrawQuad(whiteTileTexture, new Rectangle(X, Y + H - 1, W, 1), new Rectangle(0, 0, 8, 8), Tint);
+            GameService.GetService<IRenderService>().DrawQuad(whiteTileTexture, new Rectangle(X, Y + H - 1, W, 1), new Rectangle(0, 0, 8, 8), Tint);
             // Left line
-            GameService.GetService<RenderService>().DrawQuad(whiteTileTexture, new Rectangle(X, Y, 1, H), new Rectangle(0, 0, 8, 8), Tint);
+            GameService.GetService<IRenderService>().DrawQuad(whiteTileTexture, new Rectangle(X, Y, 1, H), new Rectangle(0, 0, 8, 8), Tint);
         }
 
         public static void DrawCube(int X, int Y, int Z, int W, int H, int D, Color Tint)
@@ -217,7 +217,7 @@ namespace WarnerEngine.Lib.Helpers
             Texture2D whiteTileTexture = GameService.GetService<IContentService>().GetWhiteTileTexture();
             Vector2 v1 = new Vector2(X1, Y1);
             Vector2 v2 = new Vector2(X2, Y2);
-            GameService.GetService<RenderService>().DrawQuad(
+            GameService.GetService<IRenderService>().DrawQuad(
                 whiteTileTexture, 
                 new Rectangle((int)v1.X, (int)v1.Y, (int)Vector2.Distance(v1, v2), 1), 
                 new Rectangle(0, 0, 8, 8), 
@@ -253,8 +253,8 @@ namespace WarnerEngine.Lib.Helpers
         public static Vector2 GetScreenRelativeLocation(Vector3 WorldCoordinate)
         {
             Vector2 projection = ProjectVector3(WorldCoordinate);
-            Camera camera = GameService.GetService<SceneService>().CurrentScene.Camera;
-            Vector2 result = new Vector2((projection.X - camera.Left) / GameService.GetService<RenderService>().InternalResolutionX, (projection.Y - camera.Top) / GameService.GetService<RenderService>().InternalResolutionY);
+            Camera camera = GameService.GetService<ISceneService>().CurrentScene.Camera;
+            Vector2 result = new Vector2((projection.X - camera.Left) / GameService.GetService<IRenderService>().InternalResolutionX, (projection.Y - camera.Top) / GameService.GetService<IRenderService>().InternalResolutionY);
             return result;
         }
 

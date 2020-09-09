@@ -24,7 +24,7 @@ namespace WarnerEngine.Lib.Structure.Shadows
 
         public void Draw()
         {
-            GameService.GetService<RenderService>()
+            GameService.GetService<IRenderService>()
                 .SetDepth(Depth)
                 .DrawQuad(Texture, DestinationRectangle, SourceRectangle, Color.White * Opacity);
         }

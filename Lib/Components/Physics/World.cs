@@ -305,14 +305,14 @@ namespace WarnerEngine.Lib.Components.Physics
         public static IWorld AddWorldToCurrentLevel()
         {
             World world = new World();
-            GameService.GetService<SceneService>().CurrentScene
+            GameService.GetService<ISceneService>().CurrentScene
                 .SetLocalValue(WORLD_KEY, world);
             return world;
         }
 
         public static IWorld GetWorldFromCurrentLevel()
         {
-            return GameService.GetService<SceneService>().CurrentScene.GetLocalValue<IWorld>(WORLD_KEY);
+            return GameService.GetService<ISceneService>().CurrentScene.GetLocalValue<IWorld>(WORLD_KEY);
         }
     }
 }

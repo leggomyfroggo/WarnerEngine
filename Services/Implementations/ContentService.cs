@@ -12,7 +12,7 @@ using WarnerEngine.Lib;
 using WarnerEngine.Lib.Content;
 using WarnerEngine.Lib.Dialog;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
     public class ContentService : IContentService
     {
@@ -61,11 +61,11 @@ namespace WarnerEngine.Services
             textureAtlas = new TextureAtlas(0, 0, ATLAS_WIDTH, ATLAS_HEIGHT);
             hasBakedTextureAtlas = false;
 
-            GameService.GetService<EventService>().Subscribe(
+            GameService.GetService<IEventService>().Subscribe(
                 Events.GRAPHICS_DEVICE_INITIALIZED,
                 _ =>
                 {
-                    RenderService renderService = GameService.GetService<RenderService>();
+                    IRenderService renderService = GameService.GetService<IRenderService>();
                     renderService
                         .AddRenderTarget(
                             ATLAS_TARGET_KEY,
@@ -86,7 +86,7 @@ namespace WarnerEngine.Services
                 return ServiceCompositionMetadata.Empty;
             }
             textureAtlas.BakeTextureAtlas(ATLAS_TARGET_KEY);
-            atlasTexture = GameService.GetService<RenderService>().ConvertRenderTargetToTexture(ATLAS_TARGET_KEY);
+            atlasTexture = GameService.GetService<IRenderService>().ConvertRenderTargetToTexture(ATLAS_TARGET_KEY);
             hasBakedTextureAtlas = true;
             return ServiceCompositionMetadata.Empty;
         }

@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
-    public class StateService : Service
+    public class StateService : IStateService
     {
         private const string GLOBAL_RANDOM_KEY = "global_random";
         private const string GLOBAL_GAME_TIME_KEY = "global_game_time";
         private const string GLOBAL_FRAME_COUNT_KEY = "global_frame_count";
         private Dictionary<string, object> state;
 
-        public override HashSet<Type> GetDependencies()
+        public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>();
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             state = new Dictionary<string, object>();
             SetState(GLOBAL_RANDOM_KEY, new Random());
@@ -23,7 +24,16 @@ namespace WarnerEngine.Services
             SetState(GLOBAL_FRAME_COUNT_KEY, 0);
         }
 
-        public StateService SetState<TValue>(string Key, TValue Value)
+        public void PreDraw(float DT) { }
+
+        public ServiceCompositionMetadata Draw()
+        {
+            return ServiceCompositionMetadata.Empty;
+        }
+
+        public void PostDraw() { }
+
+        public IStateService SetState<TValue>(string Key, TValue Value)
         {
             state[Key] = Value;
             return this;
@@ -59,13 +69,13 @@ namespace WarnerEngine.Services
             return GetState<int>(GLOBAL_FRAME_COUNT_KEY);
         }
 
-        public StateService SetFlag(string Flag)
+        public IStateService SetFlag(string Flag)
         {
             SetState(Flag, true);
             return this;
         }
 
-        public StateService UnsetFlag(string Flag)
+        public IStateService UnsetFlag(string Flag)
         {
             SetState(Flag, false);
             return this;
@@ -80,9 +90,9 @@ namespace WarnerEngine.Services
             return (bool)state[Flag];
         }
 
-        public override Type GetBackingInterfaceType()
+        public Type GetBackingInterfaceType()
         {
-            return typeof(StateService);
+            return typeof(IStateService);
         }
     }
 }

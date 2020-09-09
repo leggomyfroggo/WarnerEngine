@@ -100,7 +100,7 @@ namespace WarnerEngine.Lib
 
         public void BakeTextureAtlas(string RenderTargetKey)
         {
-            var renderService = GameService.GetService<RenderService>();
+            var renderService = GameService.GetService<IRenderService>();
             renderService
                 .SetRenderTarget(RenderTargetKey)
                 .Start();

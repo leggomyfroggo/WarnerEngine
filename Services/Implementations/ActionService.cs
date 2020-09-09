@@ -3,32 +3,32 @@ using System.Collections.Generic;
 
 using WarnerEngine.Lib;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
-    public class ActionService : Service
+    public class ActionService : IActionService
     {
         private List<BaseAction> actions;
 
         private Dictionary<Type, IEnumerable<object>> cachedEntities;
 
-        public override HashSet<Type> GetDependencies()
+        public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>() { };
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             actions = new List<BaseAction>();
             cachedEntities = new Dictionary<Type, IEnumerable<object>>();
         }
 
-        public ActionService RegisterAction(BaseAction Action)
+        public IActionService RegisterAction(BaseAction Action)
         {
             actions.Add(Action);
             return this;
         }
 
-        public override void PreDraw(float DT)
+        public void PreDraw(float DT)
         {
             cachedEntities.Clear();
             foreach (BaseAction action in actions)
@@ -37,14 +37,21 @@ namespace WarnerEngine.Services
             }
         }
 
-        public List<T> GetCachedEntities<T>()
+        public ServiceCompositionMetadata Draw()
         {
-            return GameService.GetService<SceneService>().CurrentScene.GetEntitiesOfType<T>();
+            return ServiceCompositionMetadata.Empty;
         }
 
-        public override Type GetBackingInterfaceType()
+        public void PostDraw() { }
+
+        public List<T> GetCachedEntities<T>()
         {
-            return typeof(ActionService);
+            return GameService.GetService<ISceneService>().CurrentScene.GetEntitiesOfType<T>();
+        }
+
+        public Type GetBackingInterfaceType()
+        {
+            return typeof(IActionService);
         }
     }
 }

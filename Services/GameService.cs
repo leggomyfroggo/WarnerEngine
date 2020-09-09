@@ -21,30 +21,30 @@ namespace WarnerEngine.Services
 
         public static void Initialize()
         {
-            RegisterService(new EventService());
-            RegisterService(new InputService());
-            RegisterService(new TerminalService());
-            RegisterService(new SceneService());
-            RegisterService(new ActionService());
-            RegisterService(new RenderService());
-            RegisterService(new AudioService());
-            RegisterService(new ContentService());
-            RegisterService(new StateService());
+            RegisterService(new Implementations.EventService());
+            RegisterService(new Implementations.InputService());
+            RegisterService(new Implementations.TerminalService());
+            RegisterService(new Implementations.SceneService());
+            RegisterService(new Implementations.ActionService());
+            RegisterService(new Implementations.RenderService());
+            RegisterService(new Implementations.AudioService());
+            RegisterService(new Implementations.ContentService());
+            RegisterService(new Implementations.StateService());
             orderedServices = DetermineTopologicalOrdering();
             InitializeRegisteredServices();
         }
 
         public static void InitializeTest()
         {
-            RegisterService(new EventService());
-            RegisterService(new TestInputService());
-            RegisterService(new TerminalService());
-            RegisterService(new SceneService());
-            RegisterService(new ActionService());
-            RegisterService(new RenderService());
-            RegisterService(new AudioService());
-            RegisterService(new TestContentService());
-            RegisterService(new StateService());
+            RegisterService(new Implementations.EventService());
+            RegisterService(new Implementations.Test.TestInputService());
+            RegisterService(new Implementations.TerminalService());
+            RegisterService(new Implementations.SceneService());
+            RegisterService(new Implementations.ActionService());
+            RegisterService(new Implementations.RenderService());
+            RegisterService(new Implementations.AudioService());
+            RegisterService(new Implementations.Test.TestContentService());
+            RegisterService(new Implementations.StateService());
             orderedServices = DetermineTopologicalOrdering();
             InitializeRegisteredServices();
         }
@@ -132,7 +132,7 @@ namespace WarnerEngine.Services
 
         public static void Draw()
         {
-            RenderService rs = GetService<RenderService>();
+            IRenderService rs = GetService<IRenderService>();
             List<ServiceCompositionMetadata> outputs = new List<ServiceCompositionMetadata>();
             foreach (IService service in orderedServices)
             {
@@ -149,7 +149,7 @@ namespace WarnerEngine.Services
             var sortedOutputs = outputs.OrderBy(output => output.Priority);
 
             rs
-                .SetRenderTarget(RenderService.FINAL_TARGET_KEY, Color.Black)
+                .SetRenderTarget(Implementations.RenderService.FINAL_TARGET_KEY, Color.Black)
                 .SetDepthStencilState(DepthStencilState.None)
                 .Start()
                 .Render(() => {

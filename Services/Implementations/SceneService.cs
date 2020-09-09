@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using WarnerEngine.Lib;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
-    public class SceneService : Service
+    public class SceneService : ISceneService
     {
         public const string DEPTH_TARGET_KEY = "scene_depth";
         public const string BUFFER_TARGET_KEY = "scene_buffer";
@@ -26,18 +26,18 @@ namespace WarnerEngine.Services
         private bool shouldReset;
         public Scene CurrentScene { get; private set; }
 
-        public override HashSet<Type> GetDependencies()
+        public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>() { typeof(EventService) };
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
-            GameService.GetService<EventService>().Subscribe(
+            GameService.GetService<IEventService>().Subscribe(
                 Events.INTERNAL_RESOLUTION_CHANGED,
                 _ =>
                 {
-                    RenderService renderService = GameService.GetService<RenderService>();
+                    IRenderService renderService = GameService.GetService<IRenderService>();
                     renderService
                         .AddRenderTarget(
                             DEPTH_TARGET_KEY,
@@ -65,13 +65,13 @@ namespace WarnerEngine.Services
             CurrentScene = null;
         }
 
-        public SceneService RegisterScene(string Key, Scene L)
+        public ISceneService RegisterScene(string Key, Scene L)
         {
             scenes[Key] = L;
             return this;
         }
 
-        public SceneService SetScene(string Key)
+        public ISceneService SetScene(string Key)
         {
             if (CurrentScene != null)
             {
@@ -83,13 +83,13 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public SceneService ResetCurrentScene()
+        public ISceneService ResetCurrentScene()
         {
             shouldReset = true;
             return this;
         }
 
-        public override void PreDraw(float DT)
+        public void PreDraw(float DT)
         {
             if (CurrentScene != null)
             {
@@ -103,7 +103,7 @@ namespace WarnerEngine.Services
             }
         }
 
-        public override ServiceCompositionMetadata Draw()
+        public ServiceCompositionMetadata Draw()
         {
             if (CurrentScene != null)
             {
@@ -120,7 +120,7 @@ namespace WarnerEngine.Services
             return ServiceCompositionMetadata.Empty;
         }
 
-        public override void PostDraw()
+        public void PostDraw()
         {
             if (CurrentScene != null)
             {
@@ -128,9 +128,9 @@ namespace WarnerEngine.Services
             }
         }
 
-        public override Type GetBackingInterfaceType()
+        public Type GetBackingInterfaceType()
         {
-            return typeof(SceneService);
+            return typeof(ISceneService);
         }
     }
 }

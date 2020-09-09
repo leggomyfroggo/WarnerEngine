@@ -148,7 +148,7 @@ namespace WarnerEngine.Lib.Components.Physics
         public void Draw()
         {
             Vector2 pos = BackingBox.GetFullProjectedPosition2();
-            Camera camera = GameService.GetService<SceneService>().CurrentScene.Camera;
+            Camera camera = GameService.GetService<ISceneService>().CurrentScene.Camera;
             Color shadowTint = shadowReceiverMode == ShadowReceiverMode.Exact ? Color.White : ShadowCasterHelper.GetShadowTintForBox(BackingBox.B);
             Color appliedTint = shadowTint;
             if (topFaceTiles.Length > 0 || frontFaceTiles.Length > 0)
@@ -184,7 +184,7 @@ namespace WarnerEngine.Lib.Components.Physics
                             }
                             int tx = t % 96;
                             int ty = t / 96;
-                            GameService.GetService<RenderService>().DrawQuad(
+                            GameService.GetService<IRenderService>().DrawQuad(
                                 tex,
                                 tilePlacer,
                                 new Rectangle(tx * 8, ty * 8, sourceTileWidth, sourceTileDepth),
@@ -197,13 +197,13 @@ namespace WarnerEngine.Lib.Components.Physics
                                 int dx = decalIndex % 96;
                                 int dy = decalIndex / 96;
                                 Vector2 behaviorOffset = tileFace.GetBehavioralOffset(sz + sx);
-                                GameService.GetService<RenderService>().DrawQuad(
+                                GameService.GetService<IRenderService>().DrawQuad(
                                     tex,
                                     new Vector2(tilePlacer.X, tilePlacer.Y) + behaviorOffset,
                                     new Rectangle(dx * 8, dy * 8, sourceTileWidth, sourceTileDepth),
                                     appliedTint
                                 );
-                                float time = GameService.GetService<StateService>().GetGlobalGameTime();
+                                float time = GameService.GetService<IStateService>().GetGlobalGameTime();
                             }
                             DrawTileLayer(tilePlacer, new Rectangle(tx * 8, ty * 8, sourceTileWidth, sourceTileDepth));
                             appliedTint = shadowTint;
@@ -234,7 +234,7 @@ namespace WarnerEngine.Lib.Components.Physics
                             }
                             int tx = t % 96;
                             int ty = t / 96;
-                            GameService.GetService<RenderService>().DrawQuad(
+                            GameService.GetService<IRenderService>().DrawQuad(
                                 tex,
                                 tilePlacer,
                                 new Rectangle(tx * 8, ty * 8, sourceTileWidth, sourceTileHeight),
@@ -247,13 +247,13 @@ namespace WarnerEngine.Lib.Components.Physics
                                 int dx = decalIndex % 96;
                                 int dy = decalIndex / 96;
                                 Vector2 behaviorOffset = tileFace.GetBehavioralOffset(sx + sy);
-                                GameService.GetService<RenderService>().DrawQuad(
+                                GameService.GetService<IRenderService>().DrawQuad(
                                     tex,
                                     new Vector2(tilePlacer.X, tilePlacer.Y) + behaviorOffset,
                                     new Rectangle(dx * 8, dy * 8, sourceTileWidth, sourceTileDepth),
                                     appliedTint
                                 );
-                                float time = GameService.GetService<StateService>().GetGlobalGameTime();
+                                float time = GameService.GetService<IStateService>().GetGlobalGameTime();
                             }
                             DrawTileLayer(tilePlacer, new Rectangle(tx * 8, ty * 8, sourceTileWidth, sourceTileHeight));
                             appliedTint = shadowTint;
@@ -285,7 +285,7 @@ namespace WarnerEngine.Lib.Components.Physics
 
         public bool IsVisible()
         {
-            return Visibility == VisibilityState.Visible || GameService.GetService<StateService>().IsFlagSet(Flags.LE_DEBUG_RENDER);
+            return Visibility == VisibilityState.Visible || GameService.GetService<IStateService>().IsFlagSet(Flags.LE_DEBUG_RENDER);
         }
 
         private void DrawShadows()
@@ -326,8 +326,8 @@ namespace WarnerEngine.Lib.Components.Physics
                 float opacity = (1f - (shadowVolume.Top - BackingBox.B.Top) / shadowVolume.Height) * shadowCaster.GetShadowOpacity();
                 if (!BackingBox.B.isRamp)
                 {
-                    GameService.GetService<RenderService>().PushAlphaFragment(
-                        RenderService.SHADOW_STACK,
+                    GameService.GetService<IRenderService>().PushAlphaFragment(
+                        WarnerEngine.Services.Implementations.RenderService.SHADOW_STACK,
                         shadowTexture,
                         new Rectangle((int)Math.Round(shadowBox.Value.Left), (int)Math.Round(shadowBox.Value.Back - shadowBox.Value.Top), (int)Math.Round(shadowBox.Value.Width), (int)Math.Round(shadowBox.Value.Depth)),
                         new Rectangle(xIndex, yIndex, sourceWidth, sourceHeight),
@@ -336,8 +336,8 @@ namespace WarnerEngine.Lib.Components.Physics
                     );
                     if (shadowBox.Value.Front == BackingBox.B.Front)
                     {
-                        GameService.GetService<RenderService>().PushAlphaFragment(
-                            RenderService.SHADOW_STACK,
+                        GameService.GetService<IRenderService>().PushAlphaFragment(
+                            WarnerEngine.Services.Implementations.RenderService.SHADOW_STACK,
                             shadowTexture,
                             new Rectangle((int)Math.Round(shadowBox.Value.Left), (int)Math.Round(shadowBox.Value.Front - shadowBox.Value.Top), (int)Math.Round(shadowBox.Value.Width), (int)Math.Round(shadowBox.Value.Height)),
                             new Rectangle(xIndex, yIndex + sourceHeight - 1, sourceWidth, 1),
@@ -348,8 +348,8 @@ namespace WarnerEngine.Lib.Components.Physics
                 }
                 else
                 {
-                    GameService.GetService<RenderService>().PushAlphaFragment(
-                        RenderService.SHADOW_STACK,
+                    GameService.GetService<IRenderService>().PushAlphaFragment(
+                        WarnerEngine.Services.Implementations.RenderService.SHADOW_STACK,
                         shadowTexture,
                         new Rectangle((int)Math.Round(shadowBox.Value.Left), ((int)shadowBox.Value.Back - (int)BackingBox.Back) / 2 + (int)Math.Round(shadowBox.Value.Back - BackingBox.B.Top), (int)Math.Round(shadowBox.Value.Width), (int)Math.Round(shadowBox.Value.Depth * 1.5f)),
                         new Rectangle(xIndex, yIndex, sourceWidth, sourceHeight),

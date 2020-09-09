@@ -11,9 +11,9 @@ using WarnerEngine.Lib.Dialog;
 using WarnerEngine.Lib.Helpers;
 using WarnerEngine.Lib.Structure.Shadows;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations
 {
-    public class RenderService : Service
+    public class RenderService : IRenderService
     {
         public const string SHADOW_STACK = "overworld_ss";
         public const int SHADOW_STACK_SIZE = 500;
@@ -54,12 +54,12 @@ namespace WarnerEngine.Services
         public int ResolutionX => GraphicsDevice.PresentationParameters.BackBufferWidth;
         public int ResolutionY => GraphicsDevice.PresentationParameters.BackBufferHeight;
 
-        public override HashSet<Type> GetDependencies()
+        public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>();
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             targets = new Dictionary<string, RenderTarget2D>();
             IsDrawing = false;
@@ -75,24 +75,33 @@ namespace WarnerEngine.Services
             BuildAlphaStack(TRANSPARENT_ITEM_STACK, TRANSPARENT_ITEM_STACK_SIZE);
         }
 
-        public RenderService SetGraphicsDevice(GraphicsDevice GD)
+        public void PreDraw(float DT) { }
+
+        public ServiceCompositionMetadata Draw()
+        {
+            return ServiceCompositionMetadata.Empty;
+        }
+
+        public void PostDraw() { }
+
+        public IRenderService SetGraphicsDevice(GraphicsDevice GD)
         {
             GraphicsDevice = GD;
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            GameService.GetService<EventService>().Notify(Events.GRAPHICS_DEVICE_INITIALIZED);
+            GameService.GetService<IEventService>().Notify(Events.GRAPHICS_DEVICE_INITIALIZED);
             return this;
         }
 
-        public RenderService SetInternalResolution(int X, int Y)
+        public IRenderService SetInternalResolution(int X, int Y)
         {
             InternalResolutionX = X;
             InternalResolutionY = Y;
-            GameService.GetService<EventService>().Notify(Events.INTERNAL_RESOLUTION_CHANGED);
+            GameService.GetService<IEventService>().Notify(Events.INTERNAL_RESOLUTION_CHANGED);
             AddRenderTarget(FINAL_TARGET_KEY, InternalResolutionX, InternalResolutionY, RenderTargetUsage.PreserveContents);
             return this;
         }
 
-        public RenderService ConditionallyRunPipelineBlock(Func<RenderService, bool> ConditionFunction, Func<RenderService, RenderService> PipelineBlock)
+        public IRenderService ConditionallyRunPipelineBlock(Func<IRenderService, bool> ConditionFunction, Func<IRenderService, IRenderService> PipelineBlock)
         {
             if (ConditionFunction(this))
             {
@@ -101,13 +110,13 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService BuildAlphaStack(string Key, int Size)
+        public IRenderService BuildAlphaStack(string Key, int Size)
         {
             alphaStacks[Key] = new AlphaStack(Size);
             return this;
         }
 
-        public RenderService PushAlphaFragment(string Key, Texture2D Texture, Rectangle DestinationRectangle, Rectangle SourceRectangle, float Opacity = 1f, float Rotation = 0f, Vector2? Origin = null, Color? Tint = null, bool IsTiling = false)
+        public IRenderService PushAlphaFragment(string Key, Texture2D Texture, Rectangle DestinationRectangle, Rectangle SourceRectangle, float Opacity = 1f, float Rotation = 0f, Vector2? Origin = null, Color? Tint = null, bool IsTiling = false)
         {
             alphaStacks[Key].PushFragment(
                 Texture,
@@ -123,13 +132,13 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService DrawAlphaStack(string Key, Color? Tint = null)
+        public IRenderService DrawAlphaStack(string Key, Color? Tint = null)
         {
             alphaStacks[Key].Draw(Tint);
             return this;
         }
 
-        public RenderService FlushAlphaStack(string Key, Color? Tint = null)
+        public IRenderService FlushAlphaStack(string Key, Color? Tint = null)
         {
             DrawAlphaStack(Key, Tint);
             alphaStacks[Key].ClearStack();
@@ -140,9 +149,9 @@ namespace WarnerEngine.Services
         {
             return alphaStacks[Key].TotalFragments;
         }
-        public RenderService DrawFullscreenWaterDistortion(Vector2 CameraPosition)
+        public IRenderService DrawFullscreenWaterDistortion(Vector2 CameraPosition)
         {
-            float gameTimeFactor = GameService.GetService<StateService>().GetGlobalGameTime() / 50;
+            float gameTimeFactor = GameService.GetService<IStateService>().GetGlobalGameTime() / 50;
             int travelX = (int)(gameTimeFactor + (int)CameraPosition.X) % 32;
             int travelY = (int)(gameTimeFactor + (int)CameraPosition.Y) % 32;
             DrawQuad(
@@ -153,32 +162,32 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService SetSortMode(SpriteSortMode SortMode)
+        public IRenderService SetSortMode(SpriteSortMode SortMode)
         {
             sortMode = SortMode;
             return this;
         }
 
-        public RenderService SetBlendState(BlendState BlendState)
+        public IRenderService SetBlendState(BlendState BlendState)
         {
             blendState = BlendState;
             return this;
         }
 
-        public RenderService SetSamplerState(SamplerState SS)
+        public IRenderService SetSamplerState(SamplerState SS)
         {
             samplerState = SS;
             return this;
         }
 
-        public RenderService SetDepthStencilState(DepthStencilState DSS)
+        public IRenderService SetDepthStencilState(DepthStencilState DSS)
         {
             depthStencilState = DSS;
             return this;
         }
 
 
-        public RenderService Start(Vector2? Scroll = null)
+        public IRenderService Start(Vector2? Scroll = null)
         {
             Matrix scrollMatrix = Matrix.Identity;
             if (Scroll != null)
@@ -191,7 +200,7 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService AddRenderTarget(string Key, int Width, int Height, RenderTargetUsage? Usage = RenderTargetUsage.DiscardContents)
+        public IRenderService AddRenderTarget(string Key, int Width, int Height, RenderTargetUsage? Usage = RenderTargetUsage.DiscardContents)
         {
             if (GraphicsDevice == null)
             {
@@ -201,20 +210,20 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService FreeRenderTarget(string Key)
+        public IRenderService FreeRenderTarget(string Key)
         {
             targets[Key].Dispose();
             targets.Remove(Key);
             return this;
         }
 
-        public RenderService SetDepth(float Depth)
+        public IRenderService SetDepth(float Depth)
         {
             depth = Depth;
             return this;
         }
 
-        public RenderService SetEffect(Effect E)
+        public IRenderService SetEffect(Effect E)
         {
             currentEffect = E;
             return this;
@@ -225,27 +234,27 @@ namespace WarnerEngine.Services
             return currentEffect;
         }
 
-        public RenderService SetRenderTarget(string Key)
+        public IRenderService SetRenderTarget(string Key)
         {
             return SetRenderTarget(Key, 0, Color.White, 0);
         }
 
-        public RenderService SetRenderTarget(string Key, Color ClearColor)
+        public IRenderService SetRenderTarget(string Key, Color ClearColor)
         {
             return SetRenderTarget(Key, ClearOptions.Target, ClearColor, 0);
         }
 
-        public RenderService SetRenderTarget(string Key, float Depth)
+        public IRenderService SetRenderTarget(string Key, float Depth)
         {
             return SetRenderTarget(Key, ClearOptions.DepthBuffer, Color.White, Depth);
         }
 
-        public RenderService SetRenderTarget(string Key, Color ClearColor, float Depth)
+        public IRenderService SetRenderTarget(string Key, Color ClearColor, float Depth)
         {
             return SetRenderTarget(Key, ClearOptions.Target | ClearOptions.DepthBuffer, ClearColor, Depth);
         }
 
-        public RenderService SetRenderTarget(string Key, ClearOptions CO, Color ClearColor, float Depth)
+        public IRenderService SetRenderTarget(string Key, ClearOptions CO, Color ClearColor, float Depth)
         {
             bool didStop = false;
             if (IsDrawing)
@@ -268,7 +277,7 @@ namespace WarnerEngine.Services
             return targets[Key];
         }
 
-        public RenderService StretchCurrentTargetToBackBuffer(bool ShouldLetterbox = false, Color? Tint = null)
+        public IRenderService StretchCurrentTargetToBackBuffer(bool ShouldLetterbox = false, Color? Tint = null)
         {
             if (currentTarget == null)
             {
@@ -310,7 +319,7 @@ namespace WarnerEngine.Services
             worldLockedDeferredCalls.Clear();
         }
 
-        public RenderService DrawTargetAtPosition(string Key, Vector2 Position, Rectangle? SourceRect = null, Color? Tint = null, float Scale = 1f)
+        public IRenderService DrawTargetAtPosition(string Key, Vector2 Position, Rectangle? SourceRect = null, Color? Tint = null, float Scale = 1f)
         {
             RenderTarget2D target = targets[Key];
             DrawQuad(
@@ -323,13 +332,13 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService Render(Action A)
+        public IRenderService Render(Action A)
         {
             A();
             return this;
         }
 
-        public RenderService End()
+        public IRenderService End()
         {
             if (!IsDrawing)
             {
@@ -340,17 +349,17 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService DrawRenderTarget(RenderTarget2D Target, Color? Tint = null)
+        public IRenderService DrawRenderTarget(RenderTarget2D Target, Color? Tint = null)
         {
             return DrawQuad(Target, Vector2.Zero, new Rectangle(0, 0, Target.Width, Target.Height), Tint);
         }
 
-        public RenderService DrawRenderTarget(string Key, Color? Tint = null)
+        public IRenderService DrawRenderTarget(string Key, Color? Tint = null)
         {
             return DrawRenderTarget(targets[Key], Tint);
         }
 
-        public RenderService DrawQuad(Texture2D Texture, Rectangle DestRect, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, bool IsTiling = false)
+        public IRenderService DrawQuad(Texture2D Texture, Rectangle DestRect, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, bool IsTiling = false)
         {
             var contentService = GameService.GetService<IContentService>();
             var metadata = contentService.GetTextureMetadata(Texture);
@@ -383,7 +392,7 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService DrawQuad(Texture2D Texture, Vector2 Position, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, float Scale = 1f, bool IsTiling = false)
+        public IRenderService DrawQuad(Texture2D Texture, Vector2 Position, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, float Scale = 1f, bool IsTiling = false)
         {
             var contentService = GameService.GetService<IContentService>();
             var metadata = contentService.GetTextureMetadata(Texture);
@@ -418,17 +427,17 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService DrawQuad(string TextureKey, Rectangle DestRect, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, bool IsTiling = false)
+        public IRenderService DrawQuad(string TextureKey, Rectangle DestRect, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, bool IsTiling = false)
         {
             return DrawQuad(GameService.GetService<IContentService>().GetxAsset<Texture2D>(TextureKey), DestRect, SourceRect, Tint, Origin, Rotation, IsTiling);
         }
 
-        public RenderService DrawQuad(string TextureKey, Vector2 Position, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, float Scale = 1f, bool IsTiling = false)
+        public IRenderService DrawQuad(string TextureKey, Vector2 Position, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0f, float Scale = 1f, bool IsTiling = false)
         {
             return DrawQuad(GameService.GetService<IContentService>().GetxAsset<Texture2D>(TextureKey), Position, SourceRect, Tint, Origin, Rotation, Scale, IsTiling);
         }
 
-        public RenderService DrawNinePatch(string TextureKey, Rectangle DestRect, int TileWidth, int TileHeight, Color? Tint = null, Index2? Offset = null)
+        public IRenderService DrawNinePatch(string TextureKey, Rectangle DestRect, int TileWidth, int TileHeight, Color? Tint = null, Index2? Offset = null)
         {
             Index2 offset = Offset.HasValue ? Offset.Value : Index2.Zero;
             int edgeWidth = Math.Min(DestRect.Width / 2, TileWidth);
@@ -467,13 +476,13 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService DrawString(string SpriteFontKey, string Text, Vector2 Position, Color Tint)
+        public IRenderService DrawString(string SpriteFontKey, string Text, Vector2 Position, Color Tint)
         {
             spriteBatch.DrawString(GameService.GetService<IContentService>().GetxAsset<SpriteFont>(SpriteFontKey), Text, Position, Tint);
             return this;
         }
 
-        public RenderService DrawDialogLink(string SpriteFontKey, DialogLink Link, Vector2 Position, int MaxDisplayWidth, int MaxLength = -1, float Opacity = 1f)
+        public IRenderService DrawDialogLink(string SpriteFontKey, DialogLink Link, Vector2 Position, int MaxDisplayWidth, int MaxLength = -1, float Opacity = 1f)
         {
             if (Link == null || MaxLength == 0)
             {
@@ -526,13 +535,13 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService AddDeferredCall(Action<SpriteBatch> A)
+        public IRenderService AddDeferredCall(Action<SpriteBatch> A)
         {
             deferredCalls.Add(A);
             return this;
         }
 
-        public RenderService FlushDeferredCalls()
+        public IRenderService FlushDeferredCalls()
         {
             foreach (Action<SpriteBatch> A in deferredCalls)
             {
@@ -542,13 +551,13 @@ namespace WarnerEngine.Services
             return this;
         }
 
-        public RenderService AddWorldLockedDeferredCall(Action A)
+        public IRenderService AddWorldLockedDeferredCall(Action A)
         {
             worldLockedDeferredCalls.Add(A);
             return this;
         }
 
-        public RenderService FlushWorldLockedDeferredCalls()
+        public IRenderService FlushWorldLockedDeferredCalls()
         {
             foreach (Action A in worldLockedDeferredCalls)
             {
@@ -587,9 +596,9 @@ namespace WarnerEngine.Services
             }
         }
 
-        public override Type GetBackingInterfaceType()
+        public Type GetBackingInterfaceType()
         {
-            return typeof(RenderService);
+            return typeof(IRenderService);
         }
     }
 }

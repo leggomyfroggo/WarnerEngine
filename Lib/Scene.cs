@@ -80,7 +80,7 @@ namespace WarnerEngine.Lib
             foreach (IDraw entity in sortedEntities)
             {
                 float depth = (currentIndex++) / totalEntities;
-                GameService.GetService<RenderService>().SetDepth(depth);
+                GameService.GetService<IRenderService>().SetDepth(depth);
                 entity.Draw();
             }
         }

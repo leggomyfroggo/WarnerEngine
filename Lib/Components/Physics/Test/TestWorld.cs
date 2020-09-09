@@ -39,7 +39,7 @@ namespace WarnerEngine.Lib.Components.Physics.Test
         public static IWorld AddTestWorldToCurrentScene()
         {
             IWorld world = new TestWorld();
-            GameService.GetService<SceneService>().CurrentScene
+            GameService.GetService<ISceneService>().CurrentScene
                 .SetLocalValue(World.WORLD_KEY, world);
             return world;
         }

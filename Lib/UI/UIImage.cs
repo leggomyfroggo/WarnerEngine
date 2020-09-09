@@ -46,7 +46,7 @@ namespace WarnerEngine.Lib.UI
             switch (scaling)
             {
                 case Scaling.Stretch:
-                    GameService.GetService<RenderService>().DrawQuad(
+                    GameService.GetService<IRenderService>().DrawQuad(
                         texture,
                         new Rectangle(RenderedX, RenderedY, RenderedWidth, RenderedHeight),
                         new Rectangle(0, 0, texture.Width, texture.Height)
@@ -55,7 +55,7 @@ namespace WarnerEngine.Lib.UI
                 case Scaling.LetterBox:
                     float elementRatio = (float)RenderedWidth / RenderedHeight;
                     float imageRatio = (float)texture.Width / texture.Height;
-                    GameService.GetService<RenderService>().DrawQuad(
+                    GameService.GetService<IRenderService>().DrawQuad(
                         texture,
                         new Rectangle(
                             RenderedX,
@@ -67,7 +67,7 @@ namespace WarnerEngine.Lib.UI
                     );
                     break;
                 case Scaling.Window:
-                    GameService.GetService<RenderService>().DrawQuad(
+                    GameService.GetService<IRenderService>().DrawQuad(
                         texture,
                         new Rectangle(RenderedX, RenderedY, RenderedWidth, RenderedHeight),
                         new Rectangle((int)windowOffset.X, (int)windowOffset.Y, RenderedWidth, RenderedHeight)

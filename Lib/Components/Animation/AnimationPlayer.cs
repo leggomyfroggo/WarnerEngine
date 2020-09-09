@@ -200,11 +200,11 @@ namespace WarnerEngine.Lib.Components
                     (Vector2 hotspotOffset, float hotspotDepth) = currentAnimation.GetHotspot2AndDepthAtFrame(animHotspot, CurrentFrame);
                     if (!hasDrawnMainAnim && hotspotDepth >= 0)
                     {
-                        currentAnimation.Draw(GameService.GetService<RenderService>(), position, CurrentFrame, Tint, Angle: Angle, TargetAlphaStack: TargetAlphaStack, DuplicateToAlphaStack: DuplicateToAlphaStack);
+                        currentAnimation.Draw(GameService.GetService<IRenderService>(), position, CurrentFrame, Tint, Angle: Angle, TargetAlphaStack: TargetAlphaStack, DuplicateToAlphaStack: DuplicateToAlphaStack);
                         hasDrawnMainAnim = true;
                     }
                     subAnim.Draw(
-                        GameService.GetService<RenderService>(),
+                        GameService.GetService<IRenderService>(),
                         position + hotspotOffset - currentAnimation.GetOriginAtFrame(CurrentFrame),
                         CurrentFrame,
                         Tint,
@@ -217,7 +217,7 @@ namespace WarnerEngine.Lib.Components
             if (!hasDrawnMainAnim)
             {
                 currentAnimation.Draw(
-                    GameService.GetService<RenderService>(), 
+                    GameService.GetService<IRenderService>(), 
                     position, 
                     CurrentFrame, 
                     Tint, 

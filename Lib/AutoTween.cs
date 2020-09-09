@@ -22,7 +22,7 @@ namespace WarnerEngine.Lib
 
         public AutoTween Start()
         {
-            startTime = GameService.GetService<StateService>().GetGlobalGameTime();
+            startTime = GameService.GetService<IStateService>().GetGlobalGameTime();
             IsRunning = true;
             return this;
         }
@@ -45,7 +45,7 @@ namespace WarnerEngine.Lib
             {
                 return end;
             }
-            float currentTime = GameService.GetService<StateService>().GetGlobalGameTime();
+            float currentTime = GameService.GetService<IStateService>().GetGlobalGameTime();
             float elapsedTime = currentTime - startTime;
             if (elapsedTime >= Duration)
             {
@@ -61,7 +61,7 @@ namespace WarnerEngine.Lib
             {
                 return 0;
             }
-            float currentTime = GameService.GetService<StateService>().GetGlobalGameTime();
+            float currentTime = GameService.GetService<IStateService>().GetGlobalGameTime();
             return currentTime - startTime;
         }
     }

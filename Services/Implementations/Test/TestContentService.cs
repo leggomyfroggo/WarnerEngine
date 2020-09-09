@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using WarnerEngine.Lib;
 
-namespace WarnerEngine.Services
+namespace WarnerEngine.Services.Implementations.Test
 {
     public class TestContentService : IContentService
     {
