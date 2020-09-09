@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-using WarnerEngine.Lib;
-
 namespace WarnerEngine.Lib.Entities
 {
     public interface IShadowCaster

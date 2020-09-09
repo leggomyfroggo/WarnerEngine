@@ -20,8 +20,14 @@ namespace WarnerEngine.Services
         public const int ATLAS_WIDTH = 2048;
         public const int ATLAS_HEIGHT = 2048;
 
+        public const string DEFAULT_ROOT_DIRECTORY = "Content/";
+        private const string ENGINE_ROOT_DIRECTORY = "__Content__/";
+
+        private const string WHITE_TILE_TEXTURE_KEY = "ENGINE_white_tile";
+
         private ContentManager contentManager;
         private GraphicsDevice graphicsDevice;
+        private string rootDirectory;
 
         private Dictionary<Type, Func<string, string, (string, object)[]>> assetLoaders;
         private Dictionary<string, Type> contentTypesToAssetTypes;
@@ -91,6 +97,22 @@ namespace WarnerEngine.Services
         {
             contentManager = CM;
             graphicsDevice = GD;
+
+            // Temporarily switch to the engine assets folder
+            SetRootDirectory(ENGINE_ROOT_DIRECTORY);
+
+            // Load content that's used by the engine
+            LoadKeyedAsset<Texture2D>(WHITE_TILE_TEXTURE_KEY, "whiteTile");
+
+            // Switch back to the default root
+            SetRootDirectory(DEFAULT_ROOT_DIRECTORY);
+
+            return this;
+        }
+
+        public IContentService SetRootDirectory(string RootDirectory)
+        {
+            rootDirectory = RootDirectory;
             return this;
         }
 
@@ -188,7 +210,7 @@ namespace WarnerEngine.Services
         private (string, object)[] LoadTexture(string Key, string Resource)
         {
             Texture2D texture;
-            using (Stream fs = TitleContainer.OpenStream("Content/" + Resource + ".png"))
+            using (Stream fs = TitleContainer.OpenStream(rootDirectory + Resource + ".png"))
             {
                 texture = Texture2D.FromStream(graphicsDevice, fs);
             }
@@ -199,7 +221,7 @@ namespace WarnerEngine.Services
         {
             XmlSerializer s = new XmlSerializer(typeof(Animation));
             Animation animation;
-            using (Stream fs = TitleContainer.OpenStream("Content/" + Path + ".xml"))
+            using (Stream fs = TitleContainer.OpenStream(rootDirectory + Path + ".xml"))
             {
                 animation = (Animation)s.Deserialize(fs);
             }
@@ -224,7 +246,7 @@ namespace WarnerEngine.Services
         private (string, object)[] LoadSoundEffect(string Key, string Path)
         {
             SoundEffect sound;
-            using (Stream fs = TitleContainer.OpenStream("Content/" + Path + ".wav"))
+            using (Stream fs = TitleContainer.OpenStream(rootDirectory + Path + ".wav"))
             {
                 sound = SoundEffect.FromStream(fs);
             }
@@ -235,7 +257,7 @@ namespace WarnerEngine.Services
         {
             XmlSerializer s = new XmlSerializer(typeof(DialogLink[]));
             List<(string, object)> dialogLinks = new List<(string, object)>();
-            using (Stream fs = TitleContainer.OpenStream("Content/" + Path + ".xml"))
+            using (Stream fs = TitleContainer.OpenStream(rootDirectory + Path + ".xml"))
             {
                 DialogLink[] loadedDialog = (DialogLink[])s.Deserialize(fs);
                 foreach (DialogLink d in loadedDialog)
@@ -315,6 +337,11 @@ namespace WarnerEngine.Services
         public Texture2D GetAtlasTexture()
         {
             return atlasTexture;
+        }
+
+        public Texture2D GetWhiteTileTexture()
+        {
+            return GetAsset<Texture2D>(WHITE_TILE_TEXTURE_KEY);
         }
 
         public Type GetBackingInterfaceType()

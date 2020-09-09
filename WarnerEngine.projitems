@@ -111,4 +111,9 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Prebuilts\Entities\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)__Content__\whiteTile.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

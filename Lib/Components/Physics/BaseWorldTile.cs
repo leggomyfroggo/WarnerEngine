@@ -176,12 +176,8 @@ namespace WarnerEngine.Lib.Components.Physics
                             {
 #if DEBUG
                                 isTiling = true;
-                                var maybeTex = GameService.GetService<IContentService>().GetxAsset<Texture2D>("blank_texture");
-                                if (maybeTex != null)
-                                {
-                                    tex = maybeTex;
-                                    appliedTint = (sx + sz) % 2 == 0 ? CHECK_COLOR_TOP_EVEN : CHECK_COLOR_TOP_ODD;
-                                }
+                                tex = GameService.GetService<IContentService>().GetWhiteTileTexture();
+                                appliedTint = (sx + sz) % 2 == 0 ? CHECK_COLOR_TOP_EVEN : CHECK_COLOR_TOP_ODD;
 #else
                                 continue;
 #endif
@@ -230,12 +226,8 @@ namespace WarnerEngine.Lib.Components.Physics
                             {
 #if DEBUG
                                 isTiling = true;
-                                var maybeTex = GameService.GetService<IContentService>().GetAsset<Texture2D>("blank_texture");
-                                if (maybeTex != null)
-                                {
-                                    tex = maybeTex;
-                                    appliedTint = (sx + sy) % 2 == 0 ? CHECK_COLOR_FRONT_EVEN : CHECK_COLOR_FRONT_ODD;
-                                }
+                                tex = GameService.GetService<IContentService>().GetWhiteTileTexture();
+                                appliedTint = (sx + sy) % 2 == 0 ? CHECK_COLOR_FRONT_EVEN : CHECK_COLOR_FRONT_ODD;
 #else
                                 continue;
 #endif

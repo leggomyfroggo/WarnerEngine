@@ -80,5 +80,15 @@ namespace WarnerEngine.Services
         {
             return null;
         }
+
+        public IContentService SetRootDirectory(string RootDirectory)
+        {
+            return this;
+        }
+
+        public Texture2D GetWhiteTileTexture()
+        {
+            return null;
+        }
     }
 }

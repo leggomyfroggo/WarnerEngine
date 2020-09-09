@@ -11,6 +11,8 @@ namespace WarnerEngine.Services
     {
         IContentService Bootstrap(ContentManager CM, GraphicsDevice GD);
 
+        IContentService SetRootDirectory(string RootDirectory);
+
         IContentService RegisterAssetLoader<TAsset>(Func<string, string, (string, object)[]> Loader, string ContentType);
 
         IContentService LoadAllContent();
@@ -25,5 +27,7 @@ namespace WarnerEngine.Services
         TAsset GetxAsset<TAsset>(string Key) where TAsset : class;
 
         Texture2D GetAtlasTexture();
+
+        Texture2D GetWhiteTileTexture();
     }
 }
