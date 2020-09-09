@@ -110,13 +110,13 @@ namespace WarnerEngine.Services
         public RenderService PushAlphaFragment(string Key, Texture2D Texture, Rectangle DestinationRectangle, Rectangle SourceRectangle, float Opacity = 1f, float Rotation = 0f, Vector2? Origin = null, Color? Tint = null, bool IsTiling = false)
         {
             alphaStacks[Key].PushFragment(
-                Texture, 
-                DestinationRectangle, 
-                SourceRectangle, 
-                Opacity, 
-                depth, 
-                Rotation: Rotation, 
-                Origin: Origin, 
+                Texture,
+                DestinationRectangle,
+                SourceRectangle,
+                Opacity,
+                depth,
+                Rotation: Rotation,
+                Origin: Origin,
                 Tint: Tint,
                 IsTiling: IsTiling
             );
@@ -143,7 +143,7 @@ namespace WarnerEngine.Services
         public RenderService DrawFullscreenWaterDistortion(Vector2 CameraPosition)
         {
             float gameTimeFactor = GameService.GetService<StateService>().GetGlobalGameTime() / 50;
-            int travelX = (int)(gameTimeFactor+ (int)CameraPosition.X) % 32;
+            int travelX = (int)(gameTimeFactor + (int)CameraPosition.X) % 32;
             int travelY = (int)(gameTimeFactor + (int)CameraPosition.Y) % 32;
             DrawQuad(
                 ProjectWarnerShared.Content.Constants.ENVIRONMENT_WATER_DISTORTION,
@@ -281,9 +281,9 @@ namespace WarnerEngine.Services
                 spriteBatch.Draw(
                     prevTarget,
                     new Rectangle(
-                        ResolutionX % prevTarget.Width / 2, 
-                        ResolutionY % prevTarget.Height / 2, 
-                        ResolutionX / prevTarget.Width * prevTarget.Width, 
+                        ResolutionX % prevTarget.Width / 2,
+                        ResolutionY % prevTarget.Height / 2,
+                        ResolutionX / prevTarget.Width * prevTarget.Width,
                         ResolutionY / prevTarget.Height * prevTarget.Height
                     ),
                     Color.White
@@ -366,7 +366,7 @@ namespace WarnerEngine.Services
                     SpriteEffects.None,
                     depth
                 );
-            } 
+            }
             else
             {
                 spriteBatch.Draw(
@@ -580,7 +580,8 @@ namespace WarnerEngine.Services
 
         public void ExportTargetToPNG(string TargetKey, string Path)
         {
-            using (FileStream stream = File.OpenWrite(Path)) {
+            using (FileStream stream = File.OpenWrite(Path))
+            {
                 var target = targets[TargetKey];
                 target.SaveAsPng(stream, target.Width, target.Height);
             }
