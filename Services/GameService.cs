@@ -5,8 +5,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectWarnerShared.Engine.Services;
-
 namespace WarnerEngine.Services
 {
     public class GameService
