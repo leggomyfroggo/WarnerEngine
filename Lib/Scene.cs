@@ -130,11 +130,14 @@ namespace WarnerEngine.Lib
             }
             List<T> sortedEntities = new List<T>(visibleEntities.Count);
             HashSet<T> sortedLookup = new HashSet<T>();
+            int visibleLower = 0;
+            int visibleUpper = visibleEntities.Count;
             while (sortedEntities.Count < visibleEntities.Count)
             {
                 bool didLoopInfinitely = true;
-                foreach (T entity in visibleEntities)
+                for (int i = visibleLower; i < visibleUpper; i++)
                 {
+                    var entity = visibleEntities[i];
                     if (sortedLookup.Contains(entity))
                     {
                         continue;
@@ -149,6 +152,11 @@ namespace WarnerEngine.Lib
                         }
                         sortedLookup.Add(entity);
                         sortedEntities.Add(entity);
+                        visibleLower = Math.Min(visibleLower, i);
+                        if (i == visibleUpper - 1)
+                        {
+                            visibleUpper = i;
+                        }
                         continue;
                     }
                 }
