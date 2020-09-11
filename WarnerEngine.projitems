@@ -70,8 +70,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Structure\ScreenSpacePartition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Structure\Shadows\AlphaFragment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Structure\Shadows\AlphaStack.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\Structure\Shadows\Shadow.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\Structure\Shadows\ShadowStack.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\TextureAtlas.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\TextureMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\IUIElement.cs" />

@@ -15,17 +15,6 @@ namespace WarnerEngine.Services.Implementations
 {
     public class RenderService : IRenderService
     {
-        public const string SHADOW_STACK = "overworld_ss";
-        public const int SHADOW_STACK_SIZE = 500;
-        public const string WATER_STACK = "overworld_ws";
-        public const int WATER_STACK_SIZE = 200;
-        public const string DYNAMIC_WATER_STACK = "overworld_dws";
-        public const int DYNAMIC_WATER_STACK_SIZE = 50;
-        public const string COVERED_ITEM_STACK = "overworld_cis";
-        public const int COVERED_ITEM_STACK_SIZE = 50;
-        public const string TRANSPARENT_ITEM_STACK = "overworld_tis";
-        public const int TRANSPARENT_ITEM_STACK_SIZE = 10000;
-
         public const string FINAL_TARGET_KEY = "real_final_composite_target";
 
         public int InternalResolutionX { get; private set; }
@@ -66,13 +55,6 @@ namespace WarnerEngine.Services.Implementations
             deferredCalls = new List<Action<SpriteBatch>>();
             worldLockedDeferredCalls = new List<Action>();
             alphaStacks = new Dictionary<string, AlphaStack>();
-
-            // Setup the water and shadow alpha stacks
-            BuildAlphaStack(SHADOW_STACK, SHADOW_STACK_SIZE);
-            BuildAlphaStack(WATER_STACK, WATER_STACK_SIZE);
-            BuildAlphaStack(DYNAMIC_WATER_STACK, DYNAMIC_WATER_STACK_SIZE);
-            BuildAlphaStack(COVERED_ITEM_STACK, COVERED_ITEM_STACK_SIZE);
-            BuildAlphaStack(TRANSPARENT_ITEM_STACK, TRANSPARENT_ITEM_STACK_SIZE);
         }
 
         public void PreDraw(float DT) { }

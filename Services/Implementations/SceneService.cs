@@ -10,17 +10,11 @@ namespace WarnerEngine.Services.Implementations
 {
     public class SceneService : ISceneService
     {
-        public const string DEPTH_TARGET_KEY = "scene_depth";
-        public const string BUFFER_TARGET_KEY = "scene_buffer";
-        public const string COMPOSITE_TARGET_KEY = "scene_composite";
-
-        private static readonly ServiceCompositionMetadata COMPOSITION_METADATA = new ServiceCompositionMetadata()
-        {
-            RenderTargetKey = COMPOSITE_TARGET_KEY,
-            Position = Vector2.Zero,
-            Priority = 0,
-            Tint = Color.White,
-        };
+        public static class RenderTargets {
+            public const string DepthPrimary = "scene_depth";
+            public const string CompositeSecondary = "scene_composite_secondary";
+            public const string CompositeTertiary = "scene_composite_tertiary";
+        }
 
         private Dictionary<string, Scene> scenes;
         private bool shouldReset;
@@ -40,19 +34,19 @@ namespace WarnerEngine.Services.Implementations
                     IRenderService renderService = GameService.GetService<IRenderService>();
                     renderService
                         .AddRenderTarget(
-                            DEPTH_TARGET_KEY,
+                            RenderTargets.DepthPrimary,
                             renderService.InternalResolutionX,
                             renderService.InternalResolutionY,
                             RenderTargetUsage.PreserveContents
                         )
                         .AddRenderTarget(
-                            BUFFER_TARGET_KEY,
+                            RenderTargets.CompositeSecondary,
                             renderService.InternalResolutionX,
                             renderService.InternalResolutionY,
                             RenderTargetUsage.PreserveContents
                         )
                         .AddRenderTarget(
-                            COMPOSITE_TARGET_KEY,
+                            RenderTargets.CompositeTertiary,
                             renderService.InternalResolutionX,
                             renderService.InternalResolutionY,
                             RenderTargetUsage.PreserveContents
@@ -110,7 +104,7 @@ namespace WarnerEngine.Services.Implementations
                 CurrentScene.Draw();
                 return new ServiceCompositionMetadata()
                 {
-                    RenderTargetKey = COMPOSITE_TARGET_KEY,
+                    RenderTargetKey = RenderTargets.CompositeTertiary,
                     Position = Vector2.Zero,
                     Priority = 0,
                     Tint = Color.White,
