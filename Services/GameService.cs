@@ -23,7 +23,7 @@ namespace WarnerEngine.Services
             RegisterService(new Implementations.InputService());
             RegisterService(new Implementations.TerminalService());
             RegisterService(new Implementations.SceneService());
-            RegisterService(new Implementations.ActionService());
+            RegisterService(new Implementations.InteractionService());
             RegisterService(new Implementations.RenderService());
             RegisterService(new Implementations.AudioService());
             RegisterService(new Implementations.ContentService());
@@ -38,7 +38,7 @@ namespace WarnerEngine.Services
             RegisterService(new Implementations.Test.TestInputService());
             RegisterService(new Implementations.TerminalService());
             RegisterService(new Implementations.SceneService());
-            RegisterService(new Implementations.ActionService());
+            RegisterService(new Implementations.InteractionService());
             RegisterService(new Implementations.RenderService());
             RegisterService(new Implementations.AudioService());
             RegisterService(new Implementations.Test.TestContentService());

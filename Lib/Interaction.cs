@@ -5,36 +5,36 @@ using WarnerEngine.Services;
 
 namespace WarnerEngine.Lib
 {
-    public abstract class Action<TActor, TReceiver> : BaseAction where TActor : class where TReceiver : class
+    public abstract class Interaction<TActor, TReceiver> : BaseInteraction where TActor : class where TReceiver : class
     {
         protected TActor actor;
         protected TReceiver receiver;
 
         protected override void ProcessActionsImplementation()
         {
-            List<TActor> actors = GameService.GetService<IActionService>().GetCachedEntities<TActor>();
+            List<TActor> actors = GameService.GetService<IInteractionService>().GetCachedEntities<TActor>();
             foreach (TActor actor in actors)
             {
-                if (!CanPerformActionImplementation(actor))
+                if (!CanPerformAction(actor))
                 {
                     continue;
                 }
                 // We don't need the list of receivers until at least one actor can perform the action
-                List<TReceiver> receivers = GameService.GetService<IActionService>().GetCachedEntities<TReceiver>();
+                List<TReceiver> receivers = GameService.GetService<IInteractionService>().GetCachedEntities<TReceiver>();
                 foreach (TReceiver receiver in receivers)
                 {
                     if (actor == receiver)
                     {
                         continue;
                     }
-                    PerformActionImplementation(actor, receiver);
+                    PerformAction(actor, receiver);
                 }
             }
         }
 
-        protected abstract void PerformActionImplementation(TActor Actor, TReceiver Receiver);
+        protected abstract void PerformAction(TActor Actor, TReceiver Receiver);
 
-        protected abstract bool CanPerformActionImplementation(TActor Actor);
+        protected abstract bool CanPerformAction(TActor Actor);
 
         public override Type GetActorType()
         {

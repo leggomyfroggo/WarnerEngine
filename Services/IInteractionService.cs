@@ -5,9 +5,9 @@ using WarnerEngine.Lib;
 
 namespace WarnerEngine.Services
 {
-    public interface IActionService : IService
+    public interface IInteractionService : IService
     {
         List<T> GetCachedEntities<T>();
-        IActionService RegisterAction(BaseAction Action);
+        IInteractionService RegisterAction(BaseInteraction Action);
     }
 }

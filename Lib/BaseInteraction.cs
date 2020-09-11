@@ -2,7 +2,8 @@
 
 namespace WarnerEngine.Lib
 {
-    public abstract class BaseAction
+    public abstract class BaseInteraction
+
     {
         public void ProcessActions()
         {

@@ -12,10 +12,10 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\Action.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Interaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\AutoIncrement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\AutoTween.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\BaseAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\BaseInteraction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Animation\AnimationPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\Animation\IAnimationPlayer.cs" />
@@ -90,12 +90,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UISize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Events.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\GameService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\IActionService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IInteractionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IAudioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IContentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IEventService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IInputService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\ActionService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\InteractionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\AudioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\ContentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\EventService.cs" />
@@ -113,9 +113,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\IStateService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ITerminalService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ServiceCompositionMetadata.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Prebuilts\Entities\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)__Content__\whiteTile.png">

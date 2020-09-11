@@ -5,9 +5,9 @@ using WarnerEngine.Lib;
 
 namespace WarnerEngine.Services.Implementations
 {
-    public class ActionService : IActionService
+    public class InteractionService : IInteractionService
     {
-        private List<BaseAction> actions;
+        private List<BaseInteraction> actions;
 
         private Dictionary<Type, IEnumerable<object>> cachedEntities;
 
@@ -18,11 +18,11 @@ namespace WarnerEngine.Services.Implementations
 
         public void Initialize()
         {
-            actions = new List<BaseAction>();
+            actions = new List<BaseInteraction>();
             cachedEntities = new Dictionary<Type, IEnumerable<object>>();
         }
 
-        public IActionService RegisterAction(BaseAction Action)
+        public IInteractionService RegisterAction(BaseInteraction Action)
         {
             actions.Add(Action);
             return this;
@@ -31,7 +31,7 @@ namespace WarnerEngine.Services.Implementations
         public void PreDraw(float DT)
         {
             cachedEntities.Clear();
-            foreach (BaseAction action in actions)
+            foreach (BaseInteraction action in actions)
             {
                 action.ProcessActions();
             }
@@ -51,7 +51,7 @@ namespace WarnerEngine.Services.Implementations
 
         public Type GetBackingInterfaceType()
         {
-            return typeof(IActionService);
+            return typeof(IInteractionService);
         }
     }
 }
