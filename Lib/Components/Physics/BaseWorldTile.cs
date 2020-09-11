@@ -8,8 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using WarnerEngine.Lib.Entities;
 using WarnerEngine.Lib.Helpers;
 using WarnerEngine.Services;
-
-using ProjectWarnerShared.Engine;
+using WarnerEngine.Services.Implementations;
 
 namespace WarnerEngine.Lib.Components.Physics
 {
@@ -329,7 +328,7 @@ namespace WarnerEngine.Lib.Components.Physics
                 if (!BackingBox.B.isRamp)
                 {
                     GameService.GetService<IRenderService>().PushAlphaFragment(
-                        Rendering.AlphaStacks.Shadows,
+                        RenderService.AlphaStacks.Shadows,
                         shadowTexture,
                         new Rectangle((int)Math.Round(shadowBox.Value.Left), (int)Math.Round(shadowBox.Value.Back - shadowBox.Value.Top), (int)Math.Round(shadowBox.Value.Width), (int)Math.Round(shadowBox.Value.Depth)),
                         new Rectangle(xIndex, yIndex, sourceWidth, sourceHeight),
@@ -339,7 +338,7 @@ namespace WarnerEngine.Lib.Components.Physics
                     if (shadowBox.Value.Front == BackingBox.B.Front)
                     {
                         GameService.GetService<IRenderService>().PushAlphaFragment(
-                            Rendering.AlphaStacks.Shadows,
+                            RenderService.AlphaStacks.Shadows,
                             shadowTexture,
                             new Rectangle((int)Math.Round(shadowBox.Value.Left), (int)Math.Round(shadowBox.Value.Front - shadowBox.Value.Top), (int)Math.Round(shadowBox.Value.Width), (int)Math.Round(shadowBox.Value.Height)),
                             new Rectangle(xIndex, yIndex + sourceHeight - 1, sourceWidth, 1),
@@ -351,7 +350,7 @@ namespace WarnerEngine.Lib.Components.Physics
                 else
                 {
                     GameService.GetService<IRenderService>().PushAlphaFragment(
-                        Rendering.AlphaStacks.Shadows,
+                        RenderService.AlphaStacks.Shadows,
                         shadowTexture,
                         new Rectangle((int)Math.Round(shadowBox.Value.Left), ((int)shadowBox.Value.Back - (int)BackingBox.Back) / 2 + (int)Math.Round(shadowBox.Value.Back - BackingBox.B.Top), (int)Math.Round(shadowBox.Value.Width), (int)Math.Round(shadowBox.Value.Depth * 1.5f)),
                         new Rectangle(xIndex, yIndex, sourceWidth, sourceHeight),

@@ -4,10 +4,8 @@ using System.Linq;
 
 using Microsoft.Xna.Framework.Graphics;
 
-using ProjectWarnerShared.Entities;
 using WarnerEngine.Lib.Components;
 using WarnerEngine.Lib.Entities;
-using WarnerEngine.Lib.Structure;
 using WarnerEngine.Services;
 
 namespace WarnerEngine.Lib

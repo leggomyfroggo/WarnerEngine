@@ -15,6 +15,24 @@ namespace WarnerEngine.Services.Implementations
 {
     public class RenderService : IRenderService
     {
+        public static class AlphaStacks
+        {
+            public const string Shadows = "overworld_ss";
+            public const string WaterStatic = "overworld_ws";
+            public const string WaterDynamic = "overworld_dws";
+            public const string CoveredItems = "overworld_cis";
+            public const string TransparentItems = "overworld_tis";
+        }
+
+        private static class AlphaStackSizes
+        {
+            public const int Shadows = 500;
+            public const int WaterStatic = 200;
+            public const int WaterDynamic = 50;
+            public const int CoveredItems = 50;
+            public const int TransparentItems = 10000;
+        }
+
         public const string FINAL_TARGET_KEY = "real_final_composite_target";
 
         public int InternalResolutionX { get; private set; }
@@ -55,6 +73,12 @@ namespace WarnerEngine.Services.Implementations
             deferredCalls = new List<Action<SpriteBatch>>();
             worldLockedDeferredCalls = new List<Action>();
             alphaStacks = new Dictionary<string, AlphaStack>();
+            this
+                .BuildAlphaStack(AlphaStacks.Shadows, AlphaStackSizes.Shadows)
+                .BuildAlphaStack(AlphaStacks.WaterStatic, AlphaStackSizes.WaterStatic)
+                .BuildAlphaStack(AlphaStacks.WaterDynamic, AlphaStackSizes.WaterDynamic)
+                .BuildAlphaStack(AlphaStacks.CoveredItems, AlphaStackSizes.CoveredItems)
+                .BuildAlphaStack(AlphaStacks.TransparentItems, AlphaStackSizes.TransparentItems);
         }
 
         public void PreDraw(float DT) { }
@@ -130,18 +154,6 @@ namespace WarnerEngine.Services.Implementations
         public int GetAlphaStackFragmentCount(string Key)
         {
             return alphaStacks[Key].TotalFragments;
-        }
-        public IRenderService DrawFullscreenWaterDistortion(Vector2 CameraPosition)
-        {
-            float gameTimeFactor = GameService.GetService<IStateService>().GetGlobalGameTime() / 50;
-            int travelX = (int)(gameTimeFactor + (int)CameraPosition.X) % 32;
-            int travelY = (int)(gameTimeFactor + (int)CameraPosition.Y) % 32;
-            DrawQuad(
-                ProjectWarnerShared.Content.Constants.ENVIRONMENT_WATER_DISTORTION,
-                new Rectangle((int)Math.Round(CameraPosition.X - InternalResolutionX / 2), (int)Math.Round(CameraPosition.Y - InternalResolutionY / 2), InternalResolutionX, InternalResolutionY),
-                new Rectangle(travelX, travelY, InternalResolutionX, InternalResolutionY)
-            );
-            return this;
         }
 
         public IRenderService SetSortMode(SpriteSortMode SortMode)

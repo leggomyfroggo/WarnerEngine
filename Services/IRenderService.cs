@@ -27,7 +27,6 @@ namespace WarnerEngine.Services
         Texture2D ConvertRenderTargetToTexture(string TargetKey);
         IRenderService DrawAlphaStack(string Key, Color? Tint = null);
         IRenderService DrawDialogLink(string SpriteFontKey, DialogLink Link, Vector2 Position, int MaxDisplayWidth, int MaxLength = -1, float Opacity = 1);
-        IRenderService DrawFullscreenWaterDistortion(Vector2 CameraPosition);
         IRenderService DrawNinePatch(string TextureKey, Rectangle DestRect, int TileWidth, int TileHeight, Color? Tint = null, Index2? Offset = null);
         IRenderService DrawQuad(string TextureKey, Rectangle DestRect, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0, bool IsTiling = false);
         IRenderService DrawQuad(string TextureKey, Vector2 Position, Rectangle SourceRect, Color? Tint = null, Vector2? Origin = null, float Rotation = 0, float Scale = 1, bool IsTiling = false);
