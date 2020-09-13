@@ -21,7 +21,7 @@ namespace WarnerEngine.Services
         IRenderService AddDeferredCall(Action<SpriteBatch> A);
         IRenderService AddRenderTarget(string Key, int Width, int Height, RenderTargetUsage? Usage = RenderTargetUsage.DiscardContents);
         IRenderService AddWorldLockedDeferredCall(Action A);
-        IRenderService BuildAlphaStack(string Key, int Size);
+        IRenderService BuildAlphaStack(string Key);
         void Cleanup();
         IRenderService ConditionallyRunPipelineBlock(Func<IRenderService, bool> ConditionFunction, Func<IRenderService, IRenderService> PipelineBlock);
         Texture2D ConvertRenderTargetToTexture(string TargetKey);

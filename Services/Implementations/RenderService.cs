@@ -24,15 +24,6 @@ namespace WarnerEngine.Services.Implementations
             public const string TransparentItems = "overworld_tis";
         }
 
-        private static class AlphaStackSizes
-        {
-            public const int Shadows = 500;
-            public const int WaterStatic = 500;
-            public const int WaterDynamic = 50;
-            public const int CoveredItems = 50;
-            public const int TransparentItems = 10000;
-        }
-
         public const string FINAL_TARGET_KEY = "real_final_composite_target";
 
         public int InternalResolutionX { get; private set; }
@@ -74,11 +65,11 @@ namespace WarnerEngine.Services.Implementations
             worldLockedDeferredCalls = new List<Action>();
             alphaStacks = new Dictionary<string, AlphaStack>();
             this
-                .BuildAlphaStack(AlphaStacks.Shadows, AlphaStackSizes.Shadows)
-                .BuildAlphaStack(AlphaStacks.WaterStatic, AlphaStackSizes.WaterStatic)
-                .BuildAlphaStack(AlphaStacks.WaterDynamic, AlphaStackSizes.WaterDynamic)
-                .BuildAlphaStack(AlphaStacks.CoveredItems, AlphaStackSizes.CoveredItems)
-                .BuildAlphaStack(AlphaStacks.TransparentItems, AlphaStackSizes.TransparentItems);
+                .BuildAlphaStack(AlphaStacks.Shadows)
+                .BuildAlphaStack(AlphaStacks.WaterStatic)
+                .BuildAlphaStack(AlphaStacks.WaterDynamic)
+                .BuildAlphaStack(AlphaStacks.CoveredItems)
+                .BuildAlphaStack(AlphaStacks.TransparentItems);
         }
 
         public void PreDraw(float DT) { }
@@ -116,9 +107,9 @@ namespace WarnerEngine.Services.Implementations
             return this;
         }
 
-        public IRenderService BuildAlphaStack(string Key, int Size)
+        public IRenderService BuildAlphaStack(string Key)
         {
-            alphaStacks[Key] = new AlphaStack(Size);
+            alphaStacks[Key] = new AlphaStack();
             return this;
         }
 

@@ -1,49 +1,51 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using System.Collections.Generic;
 
-using WarnerEngine.Services;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace WarnerEngine.Lib.Structure.Shadows
 {
     public class AlphaStack
     {
-        protected AlphaFragment[] fragments;
-        public int TotalFragments { get; private set; }
+        protected Stack<AlphaFragment> fragments;
+        public int TotalFragments 
+        { 
+            get 
+            {
+                return fragments.Count;
+            } 
+        }
 
-        public AlphaStack(int StackSize)
+        public AlphaStack()
         {
-            fragments = new AlphaFragment[StackSize];
-            TotalFragments = 0;
+            fragments = new Stack<AlphaFragment>(500);
         }
 
         public void ClearStack()
         {
-            TotalFragments = 0;
+            fragments.Clear();
         }
 
         public void PushFragment(Texture2D Texture, Rectangle DestinationRectangle, Rectangle SourceRectangle, float Opacity, float Depth, float Rotation = 0f, Vector2? Origin = null, Color? Tint = null, bool IsTiling = false)
         {
-            if (fragments.Length == TotalFragments)
-            {
-                return;
-            }
-            fragments[TotalFragments].Texture = Texture;
-            fragments[TotalFragments].DestinationRectangle = DestinationRectangle;
-            fragments[TotalFragments].SourceRectangle = SourceRectangle;
-            fragments[TotalFragments].Opacity = Opacity;
-            fragments[TotalFragments].Depth = Depth;
-            fragments[TotalFragments].Rotation = Rotation;
-            fragments[TotalFragments].Origin = Origin.HasValue ? Origin.Value : Vector2.Zero;
-            fragments[TotalFragments].Tint = Tint.HasValue ? Tint.Value : Color.White;
-            fragments[TotalFragments].IsTiling = IsTiling;
-            TotalFragments++;
+            fragments.Push(new AlphaFragment() {
+                Texture = Texture,
+                DestinationRectangle = DestinationRectangle,
+                SourceRectangle = SourceRectangle,
+                Opacity = Opacity,
+                Depth = Depth,
+                Rotation = Rotation,
+                Origin = Origin.HasValue ? Origin.Value : Vector2.Zero,
+                Tint = Tint.HasValue ? Tint.Value : Color.White,
+                IsTiling = IsTiling,
+            });
         }
 
         public void Draw(Color? Tint = null)
         {
-            for (int i = 0; i < TotalFragments; i++)
+            foreach (AlphaFragment fragment in fragments)
             {
-                fragments[i].Draw(Tint);
+                fragment.Draw(Tint);
             }
         }
     }
