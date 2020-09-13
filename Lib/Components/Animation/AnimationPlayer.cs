@@ -2,7 +2,7 @@
 using System.Linq;
 
 using Microsoft.Xna.Framework;
-
+using Microsoft.Xna.Framework.Graphics;
 using WarnerEngine.Lib.Components.Animation;
 using WarnerEngine.Services;
 
@@ -10,6 +10,8 @@ namespace WarnerEngine.Lib.Components
 {
     public class AnimationPlayer : IAnimationPlayer
     {
+        private static Dictionary<(string, Enums.Direction), string> cachedNormalizedAnimationNames;
+
         public BackingBox BackingPositionable { get; set; }
 
         private string currentAnimationName;
@@ -33,7 +35,11 @@ namespace WarnerEngine.Lib.Components
             {
                 if (normalizedAnimationName == null)
                 {
-                    normalizedAnimationName = CurrentAnimationName + "_" + Direction;
+                    if (!cachedNormalizedAnimationNames.ContainsKey((CurrentAnimationName, Direction)))
+                    {
+                        cachedNormalizedAnimationNames[(CurrentAnimationName, Direction)] = CurrentAnimationName + "_" + Enums.DirectionNameFromEnum(Direction);
+                    }
+                    normalizedAnimationName = cachedNormalizedAnimationNames[(CurrentAnimationName, Direction)];
                 }
                 return normalizedAnimationName;
             }
@@ -68,6 +74,11 @@ namespace WarnerEngine.Lib.Components
         public bool IsPlaying { get; protected set; }
 
         public Dictionary<string, List<(string, string)>> AnimToSubAnim { get; protected set; }
+
+        static AnimationPlayer()
+        {
+            cachedNormalizedAnimationNames = new Dictionary<(string, Enums.Direction), string>();
+        }
 
         public AnimationPlayer(BackingBox BackingPositionable) : this()
         {
