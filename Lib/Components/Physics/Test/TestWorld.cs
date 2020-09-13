@@ -31,7 +31,7 @@ namespace WarnerEngine.Lib.Components.Physics.Test
             return false;
         }
 
-        public bool IsDirectionClearAtDistance(BackingBox B, Enums.Direction Direction, float Distance)
+        public bool IsDirectionClearAtDistance(BackingBox B, Enums.Direction Direction, float Distance, bool ShouldTranslate = false)
         {
             return true;
         }

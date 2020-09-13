@@ -10,6 +10,6 @@ namespace WarnerEngine.Lib.Components.Physics
         bool IsBoxOnGround(BackingBox TargetBox);
         bool IsBoxPushingAgainstWall(BackingBox TargetBox, Vector2 Velocity);
         bool IsBoxHangingOverCliff(BackingBox TargetBox, Vector2 Velocity);
-        bool IsDirectionClearAtDistance(BackingBox B, Enums.Direction Direction, float Distance);
+        bool IsDirectionClearAtDistance(BackingBox B, Enums.Direction Direction, float Distance, bool ShouldTranslate = false);
     }
 }

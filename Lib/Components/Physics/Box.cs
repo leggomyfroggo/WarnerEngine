@@ -321,6 +321,11 @@ namespace WarnerEngine.Lib
             }
         }
 
+        public Box GetTranslation(Vector3 Translation)
+        {
+            return new Box(X + Translation.X, Y + Translation.Y, Z + Translation.Z, Width, Height, Depth);
+        }
+
         public Rectangle GetTopDownRectangle()
         {
             return new Rectangle(

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
-
+using WarnerEngine.Lib.Helpers;
 using WarnerEngine.Services;
 
 namespace WarnerEngine.Lib.Components.Physics
@@ -285,16 +285,25 @@ namespace WarnerEngine.Lib.Components.Physics
             return true;
         }
 
-        public bool IsDirectionClearAtDistance(BackingBox B, Enums.Direction Direction, float Distance)
+        public bool IsDirectionClearAtDistance(BackingBox B, Enums.Direction Direction, float Distance, bool ShouldTranslate = false)
         {
-            Box expandedBox = B.B.GetDirectionalExpansion(Direction, Distance, -2, -4);
+            Box adjustedBox;
+            if (ShouldTranslate)
+            {
+                adjustedBox = B.B;
+                adjustedBox.GetTranslation(GraphicsHelper.GetVector3FromDirection(Direction) * Distance);
+            }
+            else
+            {
+                adjustedBox = B.B.GetDirectionalExpansion(Direction, Distance, -2, -4);
+            }
             foreach (BackingBox b in boxes)
             {
                 if (b == B || b.InteractionType != BackingBox.IType.Static)
                 {
                     continue;
                 }
-                if (b.B.DoesIntersect(expandedBox))
+                if (b.B.DoesIntersect(adjustedBox))
                 {
                     return false;
                 }
