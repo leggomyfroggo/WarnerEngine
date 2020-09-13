@@ -27,7 +27,7 @@ namespace WarnerEngine.Services.Implementations
         private static class AlphaStackSizes
         {
             public const int Shadows = 500;
-            public const int WaterStatic = 200;
+            public const int WaterStatic = 500;
             public const int WaterDynamic = 50;
             public const int CoveredItems = 50;
             public const int TransparentItems = 10000;
