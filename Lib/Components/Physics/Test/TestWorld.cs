@@ -26,6 +26,11 @@ namespace WarnerEngine.Lib.Components.Physics.Test
             return Vector3.One;
         }
 
+        public bool IsBoxHangingOverCliff(BackingBox TargetBox, Vector2 Velocity)
+        {
+            return false;
+        }
+
         public bool IsDirectionClearAtDistance(BackingBox B, Enums.Direction Direction, float Distance)
         {
             return true;
