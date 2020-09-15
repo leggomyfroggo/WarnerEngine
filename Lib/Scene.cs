@@ -335,7 +335,7 @@ namespace WarnerEngine.Lib
 
         public virtual bool SceneContainsDrawableEntity<T>(T Entity) where T : ISceneEntity, IDraw
         {
-            return entities.Contains(Entity);
+            return entities.Contains(Entity) && Camera.ContainsBox(Entity.GetBackingBox().B);
         }
 
         public virtual Effect GetCompositeEffect()
