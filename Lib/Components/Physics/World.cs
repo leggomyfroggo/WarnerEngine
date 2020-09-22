@@ -162,11 +162,11 @@ namespace WarnerEngine.Lib.Components.Physics
                         {
                             if (PositionDelta.Z > 0)
                             {
-                                velocityAdjustments.Z = 1.25f;
+                                velocityAdjustments.Z = 1f;
                             }
                             else if (PositionDelta.Z < 0)
                             {
-                                velocityAdjustments.Z = 0.75f;
+                                velocityAdjustments.Z = 0.4f;
                             }
                         }
 
