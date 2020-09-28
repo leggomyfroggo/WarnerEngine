@@ -41,6 +41,11 @@ namespace WarnerEngine.Services.Implementations.Test
             throw new System.NotImplementedException();
         }
 
+        public IContentService SetLocale(Enums.LocaleCode Locale)
+        {
+            throw new System.NotImplementedException(); ;
+        }
+
         public IContentService LoadAllContent()
         {
             throw new System.NotImplementedException();

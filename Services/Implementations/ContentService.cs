@@ -37,6 +37,8 @@ namespace WarnerEngine.Services.Implementations
         private bool hasBakedTextureAtlas;
         private Texture2D atlasTexture;
 
+        private Enums.LocaleCode localeCode;
+
         public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>()
@@ -60,6 +62,8 @@ namespace WarnerEngine.Services.Implementations
 
             textureAtlas = new TextureAtlas(0, 0, ATLAS_WIDTH, ATLAS_HEIGHT);
             hasBakedTextureAtlas = false;
+
+            localeCode = Enums.LocaleCode.en_US;
 
             GameService.GetService<IEventService>().Subscribe(
                 Events.GRAPHICS_DEVICE_INITIALIZED,
@@ -107,6 +111,12 @@ namespace WarnerEngine.Services.Implementations
             // Switch back to the default root
             SetRootDirectory(DEFAULT_ROOT_DIRECTORY);
 
+            return this;
+        }
+
+        public IContentService SetLocale(Enums.LocaleCode Locale)
+        {
+            localeCode = Locale;
             return this;
         }
 
@@ -257,7 +267,7 @@ namespace WarnerEngine.Services.Implementations
         {
             XmlSerializer s = new XmlSerializer(typeof(DialogLink[]));
             List<(string, object)> dialogLinks = new List<(string, object)>();
-            using (Stream fs = TitleContainer.OpenStream(rootDirectory + Path + ".xml"))
+            using (Stream fs = TitleContainer.OpenStream(rootDirectory + Path + "." + localeCode + ".xml"))
             {
                 DialogLink[] loadedDialog = (DialogLink[])s.Deserialize(fs);
                 foreach (DialogLink d in loadedDialog)

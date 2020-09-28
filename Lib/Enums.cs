@@ -11,5 +11,7 @@ namespace WarnerEngine.Lib
         {
             return directionNames[(int)Dir];
         }
+
+        public enum LocaleCode { en_US, ja_JP };
     }
 }

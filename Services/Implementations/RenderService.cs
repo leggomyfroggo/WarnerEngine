@@ -511,7 +511,7 @@ namespace WarnerEngine.Services.Implementations
                     }
                     DrawString(SpriteFontKey, sb.ToString(), new Vector2(Position.X + offsetX, Position.Y + offsetY), segment.GetRealColor() * Opacity);
                     offsetX = 0;
-                    offsetY += size.Y;
+                    offsetY += size.Y + 2;
                     i--;
                     lengthCounter--;
                     sb.Clear();

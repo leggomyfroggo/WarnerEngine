@@ -11,6 +11,8 @@ namespace WarnerEngine.Services
     {
         IContentService Bootstrap(ContentManager CM, GraphicsDevice GD);
 
+        IContentService SetLocale(Enums.LocaleCode Locale);
+
         IContentService SetRootDirectory(string RootDirectory);
 
         IContentService RegisterAssetLoader<TAsset>(Func<string, string, (string, object)[]> Loader, string ContentType);
