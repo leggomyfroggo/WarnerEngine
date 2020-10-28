@@ -14,7 +14,7 @@ namespace WarnerEngine.Lib.Helpers
     {
         public const float GLOBAL_SHADOW_DEPTH = 50f;
 
-        public const float GLOBAL_SHADOW_OPACITY = 0.4f;
+        public const float GLOBAL_SHADOW_OPACITY = 0.5f;
 
         public static readonly SpatialMaximaMap SpatialShadowMap = new SpatialMaximaMap(8, 8, 8);
 
