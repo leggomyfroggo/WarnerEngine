@@ -51,5 +51,7 @@
         LE_MakeWarner,
         LE_MakeFrogBandit,
         LE_Clone,
+        LE_EnableShadows,
+        LE_DisableShadows,
     }
 }

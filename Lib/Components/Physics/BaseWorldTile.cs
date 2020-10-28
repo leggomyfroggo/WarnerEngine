@@ -108,14 +108,12 @@ namespace WarnerEngine.Lib.Components.Physics
         {
             shadowReceiverMode = ShadowReceiverMode.Exact;
             interactionType = BackingBox.IType.Static;
-            //topTiles = DataStructureHelper.CreateFilledArray(w * d, -1);
-            //frontTiles = DataStructureHelper.CreateFilledArray(w * h, -1);
             topFaceTiles = DataStructureHelper.CreateFilledArray(w * d, WorldTileFace.Empty);
             frontFaceTiles = DataStructureHelper.CreateFilledArray(w * d, WorldTileFace.Empty);
             PostSerialize();
         }
 
-        public BaseWorldTile(string TextureKey, int X, int Y, int Z, int W, int H, int D, int SourceTileWidth, int SourceTileHeight, int SourceTileDepth, BackingBox.IType InteractionType = BackingBox.IType.Static)
+        public BaseWorldTile(string TextureKey, int X, int Y, int Z, int W, int H, int D, int SourceTileWidth, int SourceTileHeight, int SourceTileDepth, BackingBox.IType InteractionType = BackingBox.IType.Static, WorldTileFace[] TopFaceTiles = null, WorldTileFace[] FrontFaceTiles = null)
         {
             textureKey = TextureKey;
             x = X;
@@ -129,10 +127,8 @@ namespace WarnerEngine.Lib.Components.Physics
             sourceTileDepth = SourceTileDepth;
             shadowReceiverMode = ShadowReceiverMode.Exact;
             interactionType = InteractionType;
-            //topTiles = DataStructureHelper.CreateFilledArray(w * d, -1);
-            //frontTiles = DataStructureHelper.CreateFilledArray(w * h, -1);
-            topFaceTiles = DataStructureHelper.CreateFilledArray(w * d, WorldTileFace.Empty);
-            frontFaceTiles = DataStructureHelper.CreateFilledArray(w * d, WorldTileFace.Empty);
+            topFaceTiles = TopFaceTiles ?? DataStructureHelper.CreateFilledArray(w * d, WorldTileFace.Empty);
+            frontFaceTiles = FrontFaceTiles ?? DataStructureHelper.CreateFilledArray(w * d, WorldTileFace.Empty);
             PostSerialize();
         }
 
