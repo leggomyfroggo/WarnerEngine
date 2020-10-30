@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Buffers;
-using System.Collections.Generic;
 
 namespace WarnerEngine.Lib
 {
-    public class DisposableArray<T> : IDisposable
+    public class DisposableList<T> : IDisposable
     {
-        public static ObjectPool<DisposableArray<T>> Shared;
+        public static ObjectPool<DisposableList<T>> Shared;
 
         private T[] backingArray;
 
@@ -24,22 +23,22 @@ namespace WarnerEngine.Lib
             get { return backingArray[i]; }
         }
 
-        static DisposableArray()
+        static DisposableList()
         {
-            Shared = new ObjectPool<DisposableArray<T>>();
+            Shared = new ObjectPool<DisposableList<T>>();
         }
 
-        public DisposableArray()
+        public DisposableList()
         {
             count = -1;
         }
 
-        public DisposableArray(int MaxSize) 
+        public DisposableList(int MaxSize) 
         {
             Initialize(MaxSize);
         }
 
-        public DisposableArray<T> Initialize(int MaxSize)
+        public DisposableList<T> Initialize(int MaxSize)
         {
             backingArray = ArrayPool<T>.Shared.Rent(MaxSize);
             count = 0;

@@ -44,7 +44,7 @@ namespace WarnerEngine.Services.Implementations
 
         public void PostDraw() { }
 
-        public DisposableArray<T> GetCachedEntities<T>()
+        public DisposableList<T> GetCachedEntities<T>()
         {
             return GameService.GetService<ISceneService>().CurrentScene.GetEntitiesOfType<T>();
         }

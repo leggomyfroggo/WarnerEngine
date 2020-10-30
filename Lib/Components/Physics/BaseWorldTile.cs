@@ -292,7 +292,7 @@ namespace WarnerEngine.Lib.Components.Physics
                 return;
             }
 
-            DisposableArray<IShadowCaster> shadowCasters = ShadowCasterHelper.VisibleShadowCasters;
+            DisposableList<IShadowCaster> shadowCasters = ShadowCasterHelper.VisibleShadowCasters;
             for (int i = 0; i < shadowCasters.Count; i++)
             {
                 IShadowCaster shadowCaster = shadowCasters[i];

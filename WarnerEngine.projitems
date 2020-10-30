@@ -12,6 +12,7 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\DisposableArray.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\DisposableList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Interaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\AutoIncrement.cs" />

@@ -76,28 +76,30 @@ namespace WarnerEngine.Lib
 
         public virtual void Draw()
         {
-            IDraw[] sortedEntities = GetSortedEntities<IDraw>(true);
-            int currentIndex = 0;
-            float totalEntities = sortedEntities.Length;
-            foreach (IDraw entity in sortedEntities)
+            using (DisposableArray<IDraw> sortedEntities = GetSortedEntities<IDraw>(true))
             {
-                if (entity == null)
+                int currentIndex = 0;
+                float totalEntities = sortedEntities.Length;
+                for (int i = 0; i < sortedEntities.Length; i++)
                 {
-                    break;
+                    var entity = sortedEntities[i];
+                    if (entity == null)
+                    {
+                        break;
+                    }
+                    float depth = (currentIndex++) / totalEntities;
+                    GameService.GetService<IRenderService>().SetDepth(depth);
+                    entity.Draw();
                 }
-                float depth = (currentIndex++) / totalEntities;
-                GameService.GetService<IRenderService>().SetDepth(depth);
-                entity.Draw();
             }
-            ArrayPool<IDraw>.Shared.Return(sortedEntities);
         }
 
-        public T[] GetSortedEntities<T>(bool ShouldReverse = false) where T : class, IDraw
+        public DisposableArray<T> GetSortedEntities<T>(bool ShouldReverse = false) where T : class, IDraw
         {
-            DisposableArray<T> visibleSortableEntities = GetEntitiesOfType<T>(
+            DisposableList<T> visibleSortableEntities = GetEntitiesOfType<T>(
                 e => e.IsVisible() && e.GetBackingBox() != BackingBox.Dummy && Camera.ContainsBox(e.GetBackingBox().B)
             );
-            DisposableArray<T> visibleDummyEntities = GetEntitiesOfType<T>(
+            DisposableList<T> visibleDummyEntities = GetEntitiesOfType<T>(
                 e => e.IsVisible() && e.GetBackingBox() == BackingBox.Dummy
             );
             for (int i = 0; i < visibleSortableEntities.Count; i++)
@@ -142,7 +144,7 @@ namespace WarnerEngine.Lib
 
             int totalEntityCount = visibleDummyEntities.Count + visibleSortableEntities.Count;
             int insertIndex = 0;
-            T[] sortedEntities = ArrayPool<T>.Shared.Rent(totalEntityCount);
+            DisposableArray<T> sortedEntities = DisposableArray<T>.Shared.Rent().Initialize(totalEntityCount);
             HashSet<IDraw> sortedLookup = hashSetPool.Rent();
             int visibleLower = 0;
             int visibleUpper = visibleSortableEntities.Count;
@@ -185,7 +187,7 @@ namespace WarnerEngine.Lib
                             continue;
                         }
                         if (
-                            minTop == null || 
+                            minTop == null ||
                             outerEntity.GetBackingBox().Top < minTop.GetBackingBox().Top ||
                             (outerEntity.GetBackingBox().Top == minTop.GetBackingBox().Top && outerEntity.GetBackingBox().Front < minTop.GetBackingBox().Front)
                         )
@@ -198,13 +200,13 @@ namespace WarnerEngine.Lib
             }
             if (ShouldReverse)
             {
-                for (int i = 0; i < Math.Floor(totalEntityCount / 2f); i++)
+                for (int i = 0; i < Math.Ceiling(totalEntityCount / 2f); i++)
                 {
                     var swap = sortedEntities[totalEntityCount - 1 - i];
                     sortedEntities[totalEntityCount - 1 - i] = sortedEntities[i];
                     sortedEntities[i] = swap;
                 }
-                for (int i = 0; i < visibleDummyEntities.Count; i++) 
+                for (int i = 0; i < visibleDummyEntities.Count; i++)
                 {
                     sortedEntities[i] = visibleDummyEntities[i];
                 }
@@ -291,9 +293,9 @@ namespace WarnerEngine.Lib
             return (TValue)localStore[Key];
         }
 
-        public DisposableArray<TActor> GetEntitiesOfType<TActor>()
+        public DisposableList<TActor> GetEntitiesOfType<TActor>()
         {
-            DisposableArray<TActor> filteredEntities = DisposableArray<TActor>.Shared.Rent().Initialize(entities.Count);
+            DisposableList<TActor> filteredEntities = DisposableList<TActor>.Shared.Rent().Initialize(entities.Count);
             foreach (var entity in entities)
             {
                 if (entity is TActor actor)
@@ -304,9 +306,9 @@ namespace WarnerEngine.Lib
             return filteredEntities;
         }
 
-        public DisposableArray<TActor> GetEntitiesOfType<TActor>(Func<TActor, bool> Predicate)
+        public DisposableList<TActor> GetEntitiesOfType<TActor>(Func<TActor, bool> Predicate)
         {
-            DisposableArray<TActor> filteredEntities = DisposableArray<TActor>.Shared.Rent().Initialize(entities.Count);
+            DisposableList<TActor> filteredEntities = DisposableList<TActor>.Shared.Rent().Initialize(entities.Count);
             foreach (var entity in entities)
             {
                 if (entity is TActor actor && Predicate(actor))
@@ -344,10 +346,16 @@ namespace WarnerEngine.Lib
                 entities.Remove(entity);
                 if (entity is IDraw drawable)
                 {
-                    hashSetPool.Return(outboundEdges[drawable]);
-                    outboundEdges.Remove(drawable);
-                    hashSetPool.Return(inboundEdges[drawable]);
-                    inboundEdges.Remove(drawable);
+                    if (outboundEdges.ContainsKey(drawable))
+                    {
+                        hashSetPool.Return(outboundEdges[drawable]);
+                        outboundEdges.Remove(drawable);
+                    }
+                    if (inboundEdges.ContainsKey(drawable))
+                    {
+                        hashSetPool.Return(inboundEdges[drawable]);
+                        inboundEdges.Remove(drawable);
+                    }
                 }
             }
             removedEntities.Clear();

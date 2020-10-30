@@ -12,7 +12,7 @@ namespace WarnerEngine.Lib
 
         protected override void ProcessActionsImplementation()
         {
-            using (DisposableArray<TActor> actors = GameService.GetService<IInteractionService>().GetCachedEntities<TActor>())
+            using (DisposableList<TActor> actors = GameService.GetService<IInteractionService>().GetCachedEntities<TActor>())
             {
                 for (int a = 0; a < actors.Count; a++)
                 {
@@ -22,7 +22,7 @@ namespace WarnerEngine.Lib
                         continue;
                     }
                     // We don't need the list of receivers until at least one actor can perform the action
-                    using (DisposableArray<TReceiver> receivers = GameService.GetService<IInteractionService>().GetCachedEntities<TReceiver>())
+                    using (DisposableList<TReceiver> receivers = GameService.GetService<IInteractionService>().GetCachedEntities<TReceiver>())
                     {
                         for (int r = 0; r < receivers.Count; r++)
                         {

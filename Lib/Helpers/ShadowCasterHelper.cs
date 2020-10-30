@@ -30,13 +30,13 @@ namespace WarnerEngine.Lib.Helpers
         private static Dictionary<Texture2D, byte[]> cachedTextureData;
         private static Dictionary<Texture2D, float[]> cachedTextureSumData;
 
-        public static DisposableArray<IShadowCaster> VisibleShadowCasters { get; private set; }
+        public static DisposableList<IShadowCaster> VisibleShadowCasters { get; private set; }
 
         static ShadowCasterHelper()
         {
             cachedTextureData = new Dictionary<Texture2D, byte[]>();
             cachedTextureSumData = new Dictionary<Texture2D, float[]>();
-            VisibleShadowCasters = new DisposableArray<IShadowCaster>(0);
+            VisibleShadowCasters = new DisposableList<IShadowCaster>(0);
         }
 
         public static void CacheVisibleShadowCasters()
