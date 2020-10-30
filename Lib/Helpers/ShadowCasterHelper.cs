@@ -43,7 +43,7 @@ namespace WarnerEngine.Lib.Helpers
         {
             Scene currentScene = GameService.GetService<ISceneService>().CurrentScene;
             VisibleShadowCasters = currentScene
-                .GetEntitiesOfType<IShadowCaster>()
+                .GetEntitiesOfTypeSLOW<IShadowCaster>()
                 .Where(caster => currentScene.Camera.ContainsBox(caster.GetShadowVolume()))
                 .ToList();
         }

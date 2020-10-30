@@ -358,7 +358,7 @@ namespace WarnerEngine.Services.Implementations
         public Vector3 GetMouseInWorldSpace3()
         {
             Vector2 worldPosition2 = GetMouseInWorldSpace2();
-            List<BaseWorldTile> worldTiles = GameService.GetService<ISceneService>().CurrentScene.GetEntitiesOfType<BaseWorldTile>();
+            List<BaseWorldTile> worldTiles = GameService.GetService<ISceneService>().CurrentScene.GetEntitiesOfTypeSLOW<BaseWorldTile>();
             IEnumerable<BaseWorldTile> orderedWorldTiles = worldTiles.OrderByDescending(wt => wt.BackingBox.Top);
             foreach (BaseWorldTile wt in orderedWorldTiles)
             {

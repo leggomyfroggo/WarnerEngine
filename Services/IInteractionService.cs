@@ -7,7 +7,7 @@ namespace WarnerEngine.Services
 {
     public interface IInteractionService : IService
     {
-        List<T> GetCachedEntities<T>();
+        DisposableArray<T> GetCachedEntities<T>();
         IInteractionService RegisterAction(BaseInteraction Action);
     }
 }

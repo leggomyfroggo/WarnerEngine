@@ -12,6 +12,7 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\DisposableList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Interaction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\AutoIncrement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\AutoTween.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\IPositionableElement2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\IPositionableElement3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\IWorldSerializable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ObjectPool.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Scene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\SpatialMaximaMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\State\IStateBase.cs" />

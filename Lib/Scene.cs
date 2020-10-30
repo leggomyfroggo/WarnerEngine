@@ -2,7 +2,7 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Xml.Resolvers;
 using Microsoft.Xna.Framework.Graphics;
 
 using WarnerEngine.Lib.Components;
@@ -21,9 +21,6 @@ namespace WarnerEngine.Lib
         protected Dictionary<IDraw, HashSet<IDraw>> inboundEdges;
 
         protected Dictionary<string, object> localStore;
-
-        protected Dictionary<Type, object> cachedTypeToEntities;
-        protected HashSet<Type> invalidCacheKeys;
 
         public Camera Camera { get; protected set; }
 
@@ -46,8 +43,6 @@ namespace WarnerEngine.Lib
             inboundEdges = new Dictionary<IDraw, HashSet<IDraw>>();
 
             localStore = new Dictionary<string, object>();
-            cachedTypeToEntities = new Dictionary<Type, object>();
-            invalidCacheKeys = new HashSet<Type>();
 
             IsPaused = false;
             pauseCount = 0;
@@ -63,10 +58,12 @@ namespace WarnerEngine.Lib
                     PauseTimer--;
                 }
                 UpdateActiveEntities();
-                List<IPreDraw> preDrawableEntities = GetEntitiesOfType<IPreDraw>();
-                foreach (IPreDraw entity in preDrawableEntities)
+                using (var preDrawableEntities = GetEntitiesOfType<IPreDraw>())
                 {
-                    entity.PreDraw(DT);
+                    for (int i = 0; i < preDrawableEntities.Count; i++)
+                    {
+                        preDrawableEntities[i].PreDraw(DT);
+                    }
                 }
             }
         }
@@ -91,22 +88,23 @@ namespace WarnerEngine.Lib
 
         public T[] GetSortedEntities<T>(bool ShouldReverse = false) where T : class, IDraw
         {
-            T[] visibleSortableEntities = GetEntitiesOfType<T>()
-                .Where(e => e.IsVisible() && e.GetBackingBox() != BackingBox.Dummy && Camera.ContainsBox(e.GetBackingBox().B))
-                .ToArray();
-            T[] visibleDummyEntities = GetEntitiesOfType<T>()
-                    .Where(e => e.IsVisible() && e.GetBackingBox() == BackingBox.Dummy)
-                    .ToArray();
-            foreach (T entity in visibleSortableEntities)
+            DisposableArray<T> visibleSortableEntities = GetEntitiesOfType<T>(
+                e => e.IsVisible() && e.GetBackingBox() != BackingBox.Dummy && Camera.ContainsBox(e.GetBackingBox().B)
+            );
+            DisposableArray<T> visibleDummyEntities = GetEntitiesOfType<T>(
+                e => e.IsVisible() && e.GetBackingBox() == BackingBox.Dummy
+            );
+            for (int i = 0; i < visibleSortableEntities.Count; i++)
             {
+                T entity = visibleSortableEntities[i];
                 outboundEdges[entity].Clear();
                 inboundEdges[entity].Clear();
             }
-            for (int i = 0; i < visibleSortableEntities.Length; i++)
+            for (int i = 0; i < visibleSortableEntities.Count; i++)
             {
                 var ie = visibleSortableEntities[i];
                 var ib = ie.GetBackingBox();
-                for (int j = i + 1; j < visibleSortableEntities.Length; j++)
+                for (int j = i + 1; j < visibleSortableEntities.Count; j++)
                 {
                     var je = visibleSortableEntities[j];
                     var jb = je.GetBackingBox();
@@ -136,13 +134,13 @@ namespace WarnerEngine.Lib
                 }
             }
 
-            int totalEntityCount = visibleDummyEntities.Length + visibleSortableEntities.Length;
+            int totalEntityCount = visibleDummyEntities.Count + visibleSortableEntities.Count;
             int insertIndex = 0;
             T[] sortedEntities = ArrayPool<T>.Shared.Rent(totalEntityCount);
             HashSet<T> sortedLookup = new HashSet<T>();
             int visibleLower = 0;
-            int visibleUpper = visibleSortableEntities.Length;
-            while (insertIndex < visibleSortableEntities.Length)
+            int visibleUpper = visibleSortableEntities.Count;
+            while (insertIndex < visibleSortableEntities.Count)
             {
                 bool didLoopInfinitely = true;
                 for (int i = visibleLower; i < visibleUpper; i++)
@@ -173,8 +171,9 @@ namespace WarnerEngine.Lib
                 if (didLoopInfinitely)
                 {
                     T minTop = null;
-                    foreach (T outerEntity in visibleSortableEntities)
+                    for (int i = 0; i < visibleSortableEntities.Count; i++)
                     {
+                        T outerEntity = visibleSortableEntities[i];
                         if (sortedLookup.Contains(outerEntity))
                         {
                             continue;
@@ -199,28 +198,32 @@ namespace WarnerEngine.Lib
                     sortedEntities[totalEntityCount - 1 - i] = sortedEntities[i];
                     sortedEntities[i] = swap;
                 }
-                for (int i = 0; i < visibleDummyEntities.Length; i++) 
+                for (int i = 0; i < visibleDummyEntities.Count; i++) 
                 {
                     sortedEntities[i] = visibleDummyEntities[i];
                 }
             }
             else
             {
-                for (int i = 0; i < visibleDummyEntities.Length; i++)
+                for (int i = 0; i < visibleDummyEntities.Count; i++)
                 {
-                    sortedEntities[visibleSortableEntities.Length + i] = visibleDummyEntities[i];
+                    sortedEntities[visibleSortableEntities.Count + i] = visibleDummyEntities[i];
                 }
             }
+            visibleSortableEntities.Dispose();
+            visibleDummyEntities.Dispose();
             return sortedEntities;
         }
 
         public void PostDraw()
         {
             UpdateActiveEntities();
-            List<IPostDraw> postDrawableEntities = GetEntitiesOfType<IPostDraw>();
-            foreach (IPostDraw entity in postDrawableEntities)
+            using (var postDrawableEntities = GetEntitiesOfType<IPostDraw>())
             {
-                entity.PostDraw();
+                for (int i = 0; i < postDrawableEntities.Count; i++)
+                {
+                    postDrawableEntities[i].PostDraw();
+                }
             }
         }
 
@@ -281,20 +284,47 @@ namespace WarnerEngine.Lib
             return (TValue)localStore[Key];
         }
 
-        public List<TActor> GetEntitiesOfType<TActor>()
+        public DisposableArray<TActor> GetEntitiesOfType<TActor>()
         {
-            Type genericType = typeof(TActor);
-            if (!cachedTypeToEntities.ContainsKey(genericType))
+            DisposableArray<TActor> filteredEntities = DisposableArray<TActor>.Shared.Rent().Initialize(entities.Count);
+            foreach (var entity in entities)
             {
-                cachedTypeToEntities[genericType] = entities.OfType<TActor>().ToList();
+                if (entity is TActor actor)
+                {
+                    filteredEntities.Add(actor);
+                }
             }
-            return (List<TActor>)cachedTypeToEntities[genericType];
+            return filteredEntities;
+        }
+
+        public DisposableArray<TActor> GetEntitiesOfType<TActor>(Func<TActor, bool> Predicate)
+        {
+            DisposableArray<TActor> filteredEntities = DisposableArray<TActor>.Shared.Rent().Initialize(entities.Count);
+            foreach (var entity in entities)
+            {
+                if (entity is TActor actor && Predicate(actor))
+                {
+                    filteredEntities.Add(actor);
+                }
+            }
+            return filteredEntities;
+        }
+
+        public List<TActor> GetEntitiesOfTypeSLOW<TActor>()
+        {
+            return entities.OfType<TActor>().ToList();
         }
 
         public TActor GetFirstEntityOfType<TActor>()
         {
-            List<TActor> entities = GetEntitiesOfType<TActor>();
-            return GetEntitiesOfType<TActor>().First();
+            foreach (var entity in entities)
+            {
+                if (entity is TActor actor)
+                {
+                    return actor;
+                }
+            }
+            return default;
         }
 
         public abstract void OnSceneStart();
@@ -304,45 +334,28 @@ namespace WarnerEngine.Lib
         {
             foreach (ISceneEntity entity in removedEntities)
             {
-                invalidCacheKeys.Add(entity.GetType());
                 entities.Remove(entity);
-                if (typeof(IDraw).IsAssignableFrom(entity.GetType()))
+                if (entity is IDraw drawable)
                 {
-                    outboundEdges.Remove((IDraw)entity);
-                    inboundEdges.Remove((IDraw)entity);
+                    outboundEdges.Remove(drawable);
+                    inboundEdges.Remove(drawable);
                 }
             }
             removedEntities.Clear();
             foreach (ISceneEntity entity in pendingEntities)
             {
-                invalidCacheKeys.Add(entity.GetType());
                 if (entities.Contains(entity))
                 {
                     continue;
                 }
                 entities.Add(entity);
-                if (typeof(IDraw).IsAssignableFrom(entity.GetType()))
+                if (entity is IDraw drawable)
                 {
-                    outboundEdges[(IDraw)entity] = new HashSet<IDraw>();
-                    inboundEdges[(IDraw)entity] = new HashSet<IDraw>();
+                    outboundEdges[drawable] = new HashSet<IDraw>();
+                    inboundEdges[drawable] = new HashSet<IDraw>();
                 }
             }
             pendingEntities.Clear();
-
-            cachedTypeToEntities = cachedTypeToEntities
-                .Where(kvp =>
-                {
-                    foreach (Type t in invalidCacheKeys)
-                    {
-                        if (kvp.Key.IsAssignableFrom(t))
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                })
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            invalidCacheKeys.Clear();
         }
 
         public void FlushAllPending()

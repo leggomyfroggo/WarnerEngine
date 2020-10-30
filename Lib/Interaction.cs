@@ -12,22 +12,28 @@ namespace WarnerEngine.Lib
 
         protected override void ProcessActionsImplementation()
         {
-            List<TActor> actors = GameService.GetService<IInteractionService>().GetCachedEntities<TActor>();
-            foreach (TActor actor in actors)
+            using (DisposableArray<TActor> actors = GameService.GetService<IInteractionService>().GetCachedEntities<TActor>())
             {
-                if (!CanPerformAction(actor))
+                for (int a = 0; a < actors.Count; a++)
                 {
-                    continue;
-                }
-                // We don't need the list of receivers until at least one actor can perform the action
-                List<TReceiver> receivers = GameService.GetService<IInteractionService>().GetCachedEntities<TReceiver>();
-                foreach (TReceiver receiver in receivers)
-                {
-                    if (actor == receiver)
+                    TActor actor = actors[a];
+                    if (!CanPerformAction(actor))
                     {
                         continue;
                     }
-                    PerformAction(actor, receiver);
+                    // We don't need the list of receivers until at least one actor can perform the action
+                    using (DisposableArray<TReceiver> receivers = GameService.GetService<IInteractionService>().GetCachedEntities<TReceiver>())
+                    {
+                        for (int r = 0; r < receivers.Count; r++)
+                        {
+                            TReceiver receiver = receivers[r];
+                            if (actor == receiver)
+                            {
+                                continue;
+                            }
+                            PerformAction(actor, receiver);
+                        }
+                    }
                 }
             }
         }
