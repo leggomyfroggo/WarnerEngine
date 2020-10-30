@@ -292,9 +292,10 @@ namespace WarnerEngine.Lib.Components.Physics
                 return;
             }
 
-            List<IShadowCaster> shadowCasters = ShadowCasterHelper.VisibleShadowCasters;
-            foreach (IShadowCaster shadowCaster in shadowCasters)
+            DisposableArray<IShadowCaster> shadowCasters = ShadowCasterHelper.VisibleShadowCasters;
+            for (int i = 0; i < shadowCasters.Count; i++)
             {
+                IShadowCaster shadowCaster = shadowCasters[i];
                 Box shadowVolume = shadowCaster.GetShadowVolume();
                 Box? shadowBox = shadowVolume.GetIntersectionVolume(BackingBox.B);
                 if (shadowBox == null || (!BackingBox.B.isRamp && shadowBox.Value.Top < BackingBox.Top))

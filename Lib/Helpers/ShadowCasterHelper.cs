@@ -30,30 +30,30 @@ namespace WarnerEngine.Lib.Helpers
         private static Dictionary<Texture2D, byte[]> cachedTextureData;
         private static Dictionary<Texture2D, float[]> cachedTextureSumData;
 
-        public static List<IShadowCaster> VisibleShadowCasters { get; private set; }
+        public static DisposableArray<IShadowCaster> VisibleShadowCasters { get; private set; }
 
         static ShadowCasterHelper()
         {
             cachedTextureData = new Dictionary<Texture2D, byte[]>();
             cachedTextureSumData = new Dictionary<Texture2D, float[]>();
-            VisibleShadowCasters = new List<IShadowCaster>();
+            VisibleShadowCasters = new DisposableArray<IShadowCaster>(0);
         }
 
         public static void CacheVisibleShadowCasters()
         {
             Scene currentScene = GameService.GetService<ISceneService>().CurrentScene;
-            VisibleShadowCasters = currentScene
-                .GetEntitiesOfTypeSLOW<IShadowCaster>()
-                .Where(caster => currentScene.Camera.ContainsBox(caster.GetShadowVolume()))
-                .ToList();
+            VisibleShadowCasters.Dispose();
+            VisibleShadowCasters = currentScene.GetEntitiesOfType<IShadowCaster>(
+                caster => currentScene.Camera.ContainsBox(caster.GetShadowVolume())
+            );
         }
 
         public static Color GetShadowTintForBox(Box B, IShadowCaster CallingShadowCaster = null)
         {
-            List<IShadowCaster> shadowCasters = VisibleShadowCasters;
             float darkestTint = 1f;
-            foreach (IShadowCaster shadowCaster in shadowCasters)
+            for (int i = 0; i < VisibleShadowCasters.Count; i++)
             {
+                IShadowCaster shadowCaster = VisibleShadowCasters[i];
                 if (shadowCaster == CallingShadowCaster)
                 {
                     continue;
@@ -105,19 +105,17 @@ namespace WarnerEngine.Lib.Helpers
             );
         }
 
-        private static float GetShadowFactorForPoint(Vector3 P, IShadowCaster CallingShadowCaster, List<IShadowCaster> PreFilteredShadowCasters)
+        private static float GetShadowFactorForPoint(Vector3 P, IShadowCaster CallingShadowCaster)
         {
             float? cachedValue = SpatialShadowMap.Get(P);
             if (cachedValue.HasValue)
             {
                 return cachedValue.Value;
             }
-            List<IShadowCaster> shadowCasters = PreFilteredShadowCasters == null 
-                ? VisibleShadowCasters 
-                : PreFilteredShadowCasters;
             byte darkestTint = 0;
-            foreach (IShadowCaster shadowCaster in shadowCasters)
+            for (int i = 0; i < VisibleShadowCasters.Count; i++)
             {
+                IShadowCaster shadowCaster = VisibleShadowCasters[i];
                 if (shadowCaster == CallingShadowCaster)
                 {
                     continue;
@@ -155,9 +153,9 @@ namespace WarnerEngine.Lib.Helpers
             return darkestTint / 255f;
         }
 
-        public static Color GetShadowTintForPoint(Vector3 P, IShadowCaster CallingShadowCaster = null, List<IShadowCaster> PreFilteredShadowCasters = null)
+        public static Color GetShadowTintForPoint(Vector3 P, IShadowCaster CallingShadowCaster = null)
         {
-            float shadowFactor = GetShadowFactorForPoint(P, CallingShadowCaster, PreFilteredShadowCasters);
+            float shadowFactor = GetShadowFactorForPoint(P, CallingShadowCaster);
             if (shadowFactor == 0)
             {
                 return Color.White;
@@ -170,11 +168,11 @@ namespace WarnerEngine.Lib.Helpers
             );
         }
 
-        public static Color Get2SampledShadowTintForPoint(Vector3 P, float Radius, IShadowCaster CallingShadowCaster = null, List<IShadowCaster> PreFilteredShadowCasters = null)
+        public static Color Get2SampledShadowTintForPoint(Vector3 P, float Radius, IShadowCaster CallingShadowCaster = null)
         {
             float sampledShadowFactor = (
-                GetShadowFactorForPoint(P + SHADOW_2_SAMPLE_1 * Radius, CallingShadowCaster, PreFilteredShadowCasters) +
-                GetShadowFactorForPoint(P + SHADOW_2_SAMPLE_2 * Radius, CallingShadowCaster, PreFilteredShadowCasters)
+                GetShadowFactorForPoint(P + SHADOW_2_SAMPLE_1 * Radius, CallingShadowCaster) +
+                GetShadowFactorForPoint(P + SHADOW_2_SAMPLE_2 * Radius, CallingShadowCaster)
             ) / 2f;
             if (sampledShadowFactor == 0)
             {
@@ -188,12 +186,12 @@ namespace WarnerEngine.Lib.Helpers
             );
         }
 
-        public static Color Get3SampledShadowTintForPoint(Vector3 P, float Radius, IShadowCaster CallingShadowCaster = null, List<IShadowCaster> PreFilteredShadowCasters = null)
+        public static Color Get3SampledShadowTintForPoint(Vector3 P, float Radius, IShadowCaster CallingShadowCaster = null)
         {
             float sampledShadowFactor = (
-                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_1 * Radius, CallingShadowCaster, PreFilteredShadowCasters) +
-                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_2 * Radius, CallingShadowCaster, PreFilteredShadowCasters) +
-                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_3 * Radius, CallingShadowCaster, PreFilteredShadowCasters)
+                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_1 * Radius, CallingShadowCaster) +
+                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_2 * Radius, CallingShadowCaster) +
+                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_3 * Radius, CallingShadowCaster)
             ) / 3f;
             if (sampledShadowFactor == 0)
             {
