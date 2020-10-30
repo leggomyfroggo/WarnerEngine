@@ -7,11 +7,13 @@ namespace WarnerEngine.Lib
     {
         private Stack<T> pool;
         private int poolSize;
+        private Action<T> returnAction;
 
-        public ObjectPool(int PoolSize = 100)
+        public ObjectPool(int PoolSize = 100, Action<T> ReturnAction = null)
         {
             poolSize = PoolSize;
             pool = new Stack<T>(poolSize);
+            returnAction = ReturnAction;
             for (int i = 0; i < PoolSize; i++)
             {
                 pool.Push(new T());
@@ -31,6 +33,10 @@ namespace WarnerEngine.Lib
         {
             if (pool.Count < poolSize)
             {
+                if (returnAction != null)
+                {
+                    returnAction(ReturnedObject);
+                }
                 pool.Push(ReturnedObject);
             }
         }

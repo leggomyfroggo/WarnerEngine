@@ -2,7 +2,6 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Resolvers;
 using Microsoft.Xna.Framework.Graphics;
 
 using WarnerEngine.Lib.Components;
@@ -13,6 +12,8 @@ namespace WarnerEngine.Lib
 {
     public abstract class Scene
     {
+        private static ObjectPool<HashSet<IDraw>> hashSetPool;
+
         protected List<ISceneEntity> entities;
         protected List<ISceneEntity> pendingEntities;
         protected List<ISceneEntity> removedEntities;
@@ -27,6 +28,11 @@ namespace WarnerEngine.Lib
         public int PauseTimer { get; set; }
         public bool IsPaused { get; private set; }
         private int pauseCount;
+
+        static Scene()
+        {
+            hashSetPool = new ObjectPool<HashSet<IDraw>>(ReturnAction: set => set.Clear());
+        }
 
         public Scene()
         {
@@ -137,7 +143,7 @@ namespace WarnerEngine.Lib
             int totalEntityCount = visibleDummyEntities.Count + visibleSortableEntities.Count;
             int insertIndex = 0;
             T[] sortedEntities = ArrayPool<T>.Shared.Rent(totalEntityCount);
-            HashSet<T> sortedLookup = new HashSet<T>();
+            HashSet<IDraw> sortedLookup = hashSetPool.Rent();
             int visibleLower = 0;
             int visibleUpper = visibleSortableEntities.Count;
             while (insertIndex < visibleSortableEntities.Count)
@@ -210,6 +216,7 @@ namespace WarnerEngine.Lib
                     sortedEntities[visibleSortableEntities.Count + i] = visibleDummyEntities[i];
                 }
             }
+            hashSetPool.Return(sortedLookup);
             visibleSortableEntities.Dispose();
             visibleDummyEntities.Dispose();
             return sortedEntities;
@@ -337,7 +344,9 @@ namespace WarnerEngine.Lib
                 entities.Remove(entity);
                 if (entity is IDraw drawable)
                 {
+                    hashSetPool.Return(outboundEdges[drawable]);
                     outboundEdges.Remove(drawable);
+                    hashSetPool.Return(inboundEdges[drawable]);
                     inboundEdges.Remove(drawable);
                 }
             }
@@ -351,8 +360,8 @@ namespace WarnerEngine.Lib
                 entities.Add(entity);
                 if (entity is IDraw drawable)
                 {
-                    outboundEdges[drawable] = new HashSet<IDraw>();
-                    inboundEdges[drawable] = new HashSet<IDraw>();
+                    outboundEdges[drawable] = hashSetPool.Rent();
+                    inboundEdges[drawable] = hashSetPool.Rent();
                 }
             }
             pendingEntities.Clear();
