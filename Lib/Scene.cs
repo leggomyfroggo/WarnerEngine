@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -72,34 +73,42 @@ namespace WarnerEngine.Lib
 
         public virtual void Draw()
         {
-            List<IDraw> sortedEntities = GetSortedEntities<IDraw>(true);
+            IDraw[] sortedEntities = GetSortedEntities<IDraw>(true);
             int currentIndex = 0;
-            float totalEntities = sortedEntities.Count;
+            float totalEntities = sortedEntities.Length;
             foreach (IDraw entity in sortedEntities)
             {
+                if (entity == null)
+                {
+                    break;
+                }
                 float depth = (currentIndex++) / totalEntities;
                 GameService.GetService<IRenderService>().SetDepth(depth);
                 entity.Draw();
             }
+            ArrayPool<IDraw>.Shared.Return(sortedEntities);
         }
 
-        public List<T> GetSortedEntities<T>(bool ShouldReverse = false) where T : class, IDraw
+        public T[] GetSortedEntities<T>(bool ShouldReverse = false) where T : class, IDraw
         {
-            List<T> visibleEntities = GetEntitiesOfType<T>()
+            T[] visibleSortableEntities = GetEntitiesOfType<T>()
                 .Where(e => e.IsVisible() && e.GetBackingBox() != BackingBox.Dummy && Camera.ContainsBox(e.GetBackingBox().B))
-                .ToList();
-            foreach (T entity in visibleEntities)
+                .ToArray();
+            T[] visibleDummyEntities = GetEntitiesOfType<T>()
+                    .Where(e => e.IsVisible() && e.GetBackingBox() == BackingBox.Dummy)
+                    .ToArray();
+            foreach (T entity in visibleSortableEntities)
             {
                 outboundEdges[entity].Clear();
                 inboundEdges[entity].Clear();
             }
-            for (int i = 0; i < visibleEntities.Count; i++)
+            for (int i = 0; i < visibleSortableEntities.Length; i++)
             {
-                var ie = visibleEntities[i];
+                var ie = visibleSortableEntities[i];
                 var ib = ie.GetBackingBox();
-                for (int j = i + 1; j < visibleEntities.Count; j++)
+                for (int j = i + 1; j < visibleSortableEntities.Length; j++)
                 {
-                    var je = visibleEntities[j];
+                    var je = visibleSortableEntities[j];
                     var jb = je.GetBackingBox();
                     if (ib.DoesProjectionOverlapOther(jb)) {
                         int comparison = ib.Compare(jb);
@@ -126,16 +135,19 @@ namespace WarnerEngine.Lib
                     }
                 }
             }
-            List<T> sortedEntities = new List<T>(visibleEntities.Count);
+
+            int totalEntityCount = visibleDummyEntities.Length + visibleSortableEntities.Length;
+            int insertIndex = 0;
+            T[] sortedEntities = ArrayPool<T>.Shared.Rent(totalEntityCount);
             HashSet<T> sortedLookup = new HashSet<T>();
             int visibleLower = 0;
-            int visibleUpper = visibleEntities.Count;
-            while (sortedEntities.Count < visibleEntities.Count)
+            int visibleUpper = visibleSortableEntities.Length;
+            while (insertIndex < visibleSortableEntities.Length)
             {
                 bool didLoopInfinitely = true;
                 for (int i = visibleLower; i < visibleUpper; i++)
                 {
-                    var entity = visibleEntities[i];
+                    var entity = visibleSortableEntities[i];
                     if (sortedLookup.Contains(entity))
                     {
                         continue;
@@ -149,7 +161,7 @@ namespace WarnerEngine.Lib
                             outboundEdges[inboundEntity].Remove(entity);
                         }
                         sortedLookup.Add(entity);
-                        sortedEntities.Add(entity);
+                        sortedEntities[insertIndex++] = entity;
                         visibleLower = Math.Min(visibleLower, i);
                         if (i == visibleUpper - 1)
                         {
@@ -161,7 +173,7 @@ namespace WarnerEngine.Lib
                 if (didLoopInfinitely)
                 {
                     T minTop = null;
-                    foreach (T outerEntity in visibleEntities)
+                    foreach (T outerEntity in visibleSortableEntities)
                     {
                         if (sortedLookup.Contains(outerEntity))
                         {
@@ -181,18 +193,23 @@ namespace WarnerEngine.Lib
             }
             if (ShouldReverse)
             {
-                sortedEntities.Reverse();
-                sortedEntities = GetEntitiesOfType<T>()
-                    .Where(e => e.IsVisible() && e.GetBackingBox() == BackingBox.Dummy)
-                    .Concat(sortedEntities)
-                    .ToList();
+                for (int i = 0; i < Math.Floor(totalEntityCount / 2f); i++)
+                {
+                    var swap = sortedEntities[totalEntityCount - 1 - i];
+                    sortedEntities[totalEntityCount - 1 - i] = sortedEntities[i];
+                    sortedEntities[i] = swap;
+                }
+                for (int i = 0; i < visibleDummyEntities.Length; i++) 
+                {
+                    sortedEntities[i] = visibleDummyEntities[i];
+                }
             }
             else
             {
-                sortedEntities = sortedEntities
-                .Concat(GetEntitiesOfType<T>()
-                    .Where(e => e.IsVisible() && e.GetBackingBox() == BackingBox.Dummy))
-                .ToList();
+                for (int i = 0; i < visibleDummyEntities.Length; i++)
+                {
+                    sortedEntities[visibleSortableEntities.Length + i] = visibleDummyEntities[i];
+                }
             }
             return sortedEntities;
         }
