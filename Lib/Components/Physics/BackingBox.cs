@@ -7,6 +7,8 @@ namespace WarnerEngine.Lib.Components
     [Serializable]
     public class BackingBox : IPositionableElement3, IComponent
     {
+        private static ObjectPool<BackingBox> boxPool;
+
         public static readonly BackingBox Dummy = new BackingBox(IType.None, 0, 0, 0, 0, 0, 0);
         public enum IType { Static, Free, Sticky, None }
         public enum Face { Left, Right, Top, Bottom, Back, Front };
@@ -36,6 +38,36 @@ namespace WarnerEngine.Lib.Components
         public float MidX => B.MidX;
         public float MidY => B.MidY;
         public float MidZ => B.MidZ;
+
+        static BackingBox()
+        {
+            boxPool = new ObjectPool<BackingBox>(500);
+        }
+
+        public BackingBox() { }
+
+        public static BackingBox Build(IType InteractionType, float X, float Y, float Z, float Width, float Height, float Depth, bool IsTriangle = false, bool IsRamp = false, SortingMode SortMode = SortingMode.Front)
+        {
+            BackingBox b = boxPool.Rent();
+            b.InteractionType = InteractionType;
+            b.B = new Box(X, Y, Z, Width, Height, Depth, IsTriangle, IsRamp);
+            b.SortMode = SortMode;
+            return b;
+        }
+
+        public static BackingBox Build(IType InteractionType, Box B, SortingMode SortMode = SortingMode.Box)
+        {
+            BackingBox b = boxPool.Rent();
+            b.InteractionType = InteractionType;
+            b.B = B;
+            b.SortMode = SortMode;
+            return b;
+        }
+
+        public static void Return(BackingBox B)
+        {
+            boxPool.Return(B);
+        }
 
         public BackingBox(IType InteractionType, float X, float Y, float Z, float Width, float Height, float Depth, bool IsTriangle = false, bool IsRamp = false, SortingMode SortMode = SortingMode.Front)
         {

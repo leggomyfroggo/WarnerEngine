@@ -224,7 +224,7 @@ namespace WarnerEngine.Lib.Components.Physics
 
         public bool IsBoxPushingAgainstWall(BackingBox TargetBox, Vector2 Velocity)
         {
-            BackingBox offsetTargetBox = new BackingBox(
+            BackingBox offsetTargetBox = BackingBox.Build(
                 BackingBox.IType.None,
                 TargetBox.Left + Velocity.X,
                 TargetBox.Bottom,
@@ -237,15 +237,17 @@ namespace WarnerEngine.Lib.Components.Physics
             {
                 if (TargetBox != box && box.IsInteractive() && offsetTargetBox.B.DoesIntersect(box.B))
                 {
+                    BackingBox.Return(offsetTargetBox);
                     return true;
                 }
             }
+            BackingBox.Return(offsetTargetBox);
             return false;
         }
 
         public bool IsBoxHangingOverCliff(BackingBox TargetBox, Vector2 Velocity)
         {
-            BackingBox offsetTargetBox = new BackingBox(
+            BackingBox offsetTargetBox = BackingBox.Build(
                 BackingBox.IType.None,
                 TargetBox.Left + Velocity.X,
                 TargetBox.Bottom,
@@ -279,9 +281,11 @@ namespace WarnerEngine.Lib.Components.Physics
                 }
                 if (corners.Count == 0)
                 {
+                    BackingBox.Return(offsetTargetBox);
                     return false;
                 }
             }
+            BackingBox.Return(offsetTargetBox);
             return true;
         }
 
