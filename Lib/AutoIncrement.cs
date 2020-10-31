@@ -5,7 +5,19 @@ namespace WarnerEngine.Lib
     public class AutoIncrement
     {
         private int stepSize;
-        public int InternalValue { get; private set; }
+        private int internalValue;
+        public int InternalValue { 
+            get
+            {
+                return internalValue;
+            }
+            private set
+            {
+                internalValue = value;
+                StringRepresentation = internalValue.ToString();
+            }
+        }
+        public string StringRepresentation { get; private set; }
 
         public AutoIncrement(int StepSize, int InitialValue)
         {

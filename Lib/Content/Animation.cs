@@ -13,6 +13,8 @@ namespace WarnerEngine.Lib.Content
     [XmlRoot("Animation")]
     public class Animation
     {
+        private static Dictionary<(string, Enums.Direction), string> cachedAnimationNames;
+
         [XmlElement("AnimationKey")]
         public string animationKey;
 
@@ -35,6 +37,22 @@ namespace WarnerEngine.Lib.Content
 
         [XmlArray("PerFrameOrigins")]
         public Vector2[] perFrameOrigins;
+
+        static Animation()
+        {
+            cachedAnimationNames = new Dictionary<(string, Enums.Direction), string>();
+        }
+
+        public static string BuildName(string Prefix, Enums.Direction Direction)
+        {
+            cachedAnimationNames.TryGetValue((Prefix, Direction), out var result);
+            if (result == null)
+            {
+                result = Prefix + "_" + Direction.ToString();
+                cachedAnimationNames[(Prefix, Direction)] = result;
+            }
+            return result;
+        }
 
         private Dictionary<string, Vector3[]> hotspots;
         [XmlIgnore]

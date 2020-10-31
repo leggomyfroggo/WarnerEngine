@@ -2,7 +2,6 @@
 using System.Linq;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using WarnerEngine.Lib.Components.Animation;
 using WarnerEngine.Services;
 
@@ -11,6 +10,7 @@ namespace WarnerEngine.Lib.Components
     public class AnimationPlayer : IAnimationPlayer
     {
         private static Dictionary<(string, Enums.Direction), string> cachedNormalizedAnimationNames;
+        private static Dictionary<(string, Enums.Direction, string), (string, string)> cachedNormalizedSubAnimationDetails;
 
         public BackingBox BackingPositionable { get; set; }
 
@@ -78,6 +78,7 @@ namespace WarnerEngine.Lib.Components
         static AnimationPlayer()
         {
             cachedNormalizedAnimationNames = new Dictionary<(string, Enums.Direction), string>();
+            cachedNormalizedSubAnimationDetails = new Dictionary<(string, Enums.Direction, string), (string, string)>();
         }
 
         public AnimationPlayer(BackingBox BackingPositionable) : this()
@@ -246,12 +247,16 @@ namespace WarnerEngine.Lib.Components
 
         protected (string, string) GetNormalizedSubAnimationDetails(string SubAnimation)
         {
-            if (CurrentAnimationName == null || !AnimToSubAnim.ContainsKey(CurrentAnimationName))
+            if (!cachedNormalizedSubAnimationDetails.ContainsKey((SubAnimation, Direction, currentAnimationName))) 
             {
-                return (null, null);
+                if (CurrentAnimationName == null || !AnimToSubAnim.ContainsKey(CurrentAnimationName))
+                {
+                    return (null, null);
+                }
+                (string subAnimName, string animHotspot) = AnimToSubAnim[CurrentAnimationName].Find(l => l.Item1 == SubAnimation);
+                cachedNormalizedSubAnimationDetails[(SubAnimation, Direction, currentAnimationName)] = (subAnimName + "_" + Direction, animHotspot);
             }
-            (string subAnimName, string animHotspot) = AnimToSubAnim[CurrentAnimationName].Find(l => l.Item1 == SubAnimation);
-            return (subAnimName + "_" + Direction, animHotspot);
+            return cachedNormalizedSubAnimationDetails[(SubAnimation, Direction, currentAnimationName)];
         }
 
 
