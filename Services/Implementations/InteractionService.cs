@@ -9,8 +9,6 @@ namespace WarnerEngine.Services.Implementations
     {
         private List<BaseInteraction> actions;
 
-        private Dictionary<Type, IEnumerable<object>> cachedEntities;
-
         public HashSet<Type> GetDependencies()
         {
             return new HashSet<Type>() { };
@@ -19,7 +17,6 @@ namespace WarnerEngine.Services.Implementations
         public void Initialize()
         {
             actions = new List<BaseInteraction>();
-            cachedEntities = new Dictionary<Type, IEnumerable<object>>();
         }
 
         public IInteractionService RegisterAction(BaseInteraction Action)
@@ -30,7 +27,6 @@ namespace WarnerEngine.Services.Implementations
 
         public void PreDraw(float DT)
         {
-            cachedEntities.Clear();
             foreach (BaseInteraction action in actions)
             {
                 action.ProcessActions();

@@ -12,27 +12,25 @@ namespace WarnerEngine.Lib
 
         protected override void ProcessActionsImplementation()
         {
-            using (DisposableList<TActor> actors = GameService.GetService<IInteractionService>().GetCachedEntities<TActor>())
+            DisposableList<TActor> actors = GameService.GetService<IInteractionService>().GetCachedEntities<TActor>();
+            for (int a = 0; a < actors.Count; a++)
             {
-                for (int a = 0; a < actors.Count; a++)
+                TActor actor = actors[a];
+                if (!CanPerformAction(actor))
                 {
-                    TActor actor = actors[a];
-                    if (!CanPerformAction(actor))
+                    continue;
+                }
+                // We don't need the list of receivers until at least one actor can perform the action
+                using (DisposableList<TReceiver> receivers = GameService.GetService<IInteractionService>().GetCachedEntities<TReceiver>())
+                {
+                    for (int r = 0; r < receivers.Count; r++)
                     {
-                        continue;
-                    }
-                    // We don't need the list of receivers until at least one actor can perform the action
-                    using (DisposableList<TReceiver> receivers = GameService.GetService<IInteractionService>().GetCachedEntities<TReceiver>())
-                    {
-                        for (int r = 0; r < receivers.Count; r++)
+                        TReceiver receiver = receivers[r];
+                        if (actor == receiver)
                         {
-                            TReceiver receiver = receivers[r];
-                            if (actor == receiver)
-                            {
-                                continue;
-                            }
-                            PerformAction(actor, receiver);
+                            continue;
                         }
+                        PerformAction(actor, receiver);
                     }
                 }
             }

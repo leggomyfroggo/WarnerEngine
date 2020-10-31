@@ -18,6 +18,8 @@ namespace WarnerEngine.Lib
             }
         }
 
+        public bool IsDisposed { get; private set; }
+
         public T this[int i]
         {
             get { return backingArray[i]; }
@@ -31,6 +33,7 @@ namespace WarnerEngine.Lib
         public DisposableList()
         {
             count = -1;
+            IsDisposed = true;
         }
 
         public DisposableList(int MaxSize) 
@@ -40,6 +43,7 @@ namespace WarnerEngine.Lib
 
         public DisposableList<T> Initialize(int MaxSize)
         {
+            IsDisposed = false;
             backingArray = ArrayPool<T>.Shared.Rent(MaxSize);
             count = 0;
             return this;
@@ -52,6 +56,7 @@ namespace WarnerEngine.Lib
 
         public void Dispose()
         {
+            IsDisposed = true;
             ArrayPool<T>.Shared.Return(backingArray);
             Shared.Return(this);
         }

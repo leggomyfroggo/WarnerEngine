@@ -18,6 +18,9 @@ namespace WarnerEngine.Lib
         protected List<ISceneEntity> pendingEntities;
         protected List<ISceneEntity> removedEntities;
 
+        protected HashSet<Type> invalidCacheKeys;
+        protected Dictionary<Type, object> cachedTypeToEntities;
+
         protected Dictionary<IDraw, HashSet<IDraw>> outboundEdges;
         protected Dictionary<IDraw, HashSet<IDraw>> inboundEdges;
 
@@ -45,6 +48,9 @@ namespace WarnerEngine.Lib
             pendingEntities = new List<ISceneEntity>();
             removedEntities = new List<ISceneEntity>();
 
+            invalidCacheKeys = new HashSet<Type>();
+            cachedTypeToEntities = new Dictionary<Type, object>();
+
             outboundEdges = new Dictionary<IDraw, HashSet<IDraw>>();
             inboundEdges = new Dictionary<IDraw, HashSet<IDraw>>();
 
@@ -64,12 +70,10 @@ namespace WarnerEngine.Lib
                     PauseTimer--;
                 }
                 UpdateActiveEntities();
-                using (var preDrawableEntities = GetEntitiesOfType<IPreDraw>())
+                var preDrawableEntities = GetEntitiesOfType<IPreDraw>();
+                for (int i = 0; i < preDrawableEntities.Count; i++)
                 {
-                    for (int i = 0; i < preDrawableEntities.Count; i++)
-                    {
-                        preDrawableEntities[i].PreDraw(DT);
-                    }
+                    preDrawableEntities[i].PreDraw(DT);
                 }
             }
         }
@@ -227,12 +231,10 @@ namespace WarnerEngine.Lib
         public void PostDraw()
         {
             UpdateActiveEntities();
-            using (var postDrawableEntities = GetEntitiesOfType<IPostDraw>())
+            var postDrawableEntities = GetEntitiesOfType<IPostDraw>();
+            for (int i = 0; i < postDrawableEntities.Count; i++)
             {
-                for (int i = 0; i < postDrawableEntities.Count; i++)
-                {
-                    postDrawableEntities[i].PostDraw();
-                }
+                postDrawableEntities[i].PostDraw();
             }
         }
 
@@ -295,6 +297,12 @@ namespace WarnerEngine.Lib
 
         public DisposableList<TActor> GetEntitiesOfType<TActor>()
         {
+            cachedTypeToEntities.TryGetValue(typeof(TActor), out object maybeList);
+            if (maybeList is DisposableList<TActor> cachedList && !cachedList.IsDisposed)
+            {
+                return cachedList;
+            }
+
             DisposableList<TActor> filteredEntities = DisposableList<TActor>.Shared.Rent().Initialize(entities.Count);
             foreach (var entity in entities)
             {
@@ -303,6 +311,7 @@ namespace WarnerEngine.Lib
                     filteredEntities.Add(actor);
                 }
             }
+            cachedTypeToEntities[typeof(TActor)] = filteredEntities;
             return filteredEntities;
         }
 
@@ -343,6 +352,7 @@ namespace WarnerEngine.Lib
         {
             foreach (ISceneEntity entity in removedEntities)
             {
+                invalidCacheKeys.Add(entity.GetType());
                 entities.Remove(entity);
                 if (entity is IDraw drawable)
                 {
@@ -365,6 +375,7 @@ namespace WarnerEngine.Lib
                 {
                     continue;
                 }
+                invalidCacheKeys.Add(entity.GetType());
                 entities.Add(entity);
                 if (entity is IDraw drawable)
                 {
@@ -373,6 +384,17 @@ namespace WarnerEngine.Lib
                 }
             }
             pendingEntities.Clear();
+            foreach (Type invalidKey in invalidCacheKeys)
+            {
+                foreach (var Entry in cachedTypeToEntities)
+                {
+                    if (Entry.Key.IsAssignableFrom(invalidKey))
+                    {
+                        ((IDisposable)Entry.Value).Dispose();
+                    }
+                }
+            }
+            invalidCacheKeys.Clear();
         }
 
         public void FlushAllPending()
