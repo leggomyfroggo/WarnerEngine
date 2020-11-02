@@ -9,6 +9,18 @@ namespace WarnerEngine.Services
 {
     public class GameService
     {
+        public static class ServiceEvents
+        {
+            public const string PreDrawStart = "gse_pre_draw_start";
+            public const string PreDrawEnd = "gse_pre_draw_end";
+
+            public const string DrawStart = "gse_draw_start";
+            public const string DrawEnd = "gse_draw_end";
+
+            public const string PostDrawStart = "gse_post_draw_start";
+            public const string PostDrawEnd = "gse_post_draw_end";
+        }
+
         private static Dictionary<Type, IService> services;
         private static List<IService> orderedServices;
 
@@ -122,14 +134,17 @@ namespace WarnerEngine.Services
 
         public static void PreDraw(float DT)
         {
+            GetService<IEventService>().Notify(ServiceEvents.PreDrawStart);
             foreach (IService service in orderedServices)
             {
                 service.PreDraw(DT);
             }
+            GetService<IEventService>().Notify(ServiceEvents.PreDrawEnd);
         }
 
         public static void Draw()
         {
+            GetService<IEventService>().Notify(ServiceEvents.DrawStart);
             IRenderService rs = GetService<IRenderService>();
             List<ServiceCompositionMetadata> outputs = new List<ServiceCompositionMetadata>();
             foreach (IService service in orderedServices)
@@ -168,14 +183,17 @@ namespace WarnerEngine.Services
                 .Start()
                 .StretchCurrentTargetToBackBuffer(ShouldLetterbox: true)
                 .End();
+            GetService<IEventService>().Notify(ServiceEvents.DrawEnd);
         }
 
         public static void PostDraw()
         {
+            GetService<IEventService>().Notify(ServiceEvents.PostDrawStart);
             foreach (IService service in orderedServices)
             {
                 service.PostDraw();
             }
+            GetService<IEventService>().Notify(ServiceEvents.PostDrawEnd);
         }
     }
 }

@@ -26,22 +26,24 @@ namespace WarnerEngine.Services.Implementations
 
         public void PostDraw() { }
 
-        public void Subscribe(string EventKey, Action<object> EventCallback)
+        public IEventService Subscribe(string EventKey, Action<object> EventCallback)
         {
             if (!events.ContainsKey(EventKey))
             {
                 events[EventKey] = new List<Action<object>>();
             }
             events[EventKey].Add(EventCallback);
+            return this;
         }
 
-        public void Unsubscribe(string EventKey, Action<object> EventCallback)
+        public IEventService Unsubscribe(string EventKey, Action<object> EventCallback)
         {
             if (!events.ContainsKey(EventKey))
             {
-                return;
+                return this;
             }
             events[EventKey].Remove(EventCallback);
+            return this;
         }
 
         public void Notify(string EventKey, object EventPayload = null)
