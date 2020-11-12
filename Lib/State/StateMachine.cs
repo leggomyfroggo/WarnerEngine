@@ -21,7 +21,7 @@ namespace WarnerEngine.Lib.State
             if (stateUpdate != CurrentState)
             {
                 var prevState = CurrentState;
-                CurrentState.Exit(Target);
+                CurrentState.Exit(Target, stateUpdate);
                 CurrentState = stateUpdate;
                 CurrentState.Enter(Target, prevState);
             }
@@ -33,7 +33,7 @@ namespace WarnerEngine.Lib.State
             if (stateUpdate != CurrentState)
             {
                 var prevState = CurrentState;
-                CurrentState.Exit(Target);
+                CurrentState.Exit(Target, stateUpdate);
                 CurrentState = stateUpdate;
                 CurrentState.Enter(Target, prevState);
             }

@@ -6,7 +6,7 @@
 
         public abstract void Enter(T Target, S PreviousState);
 
-        public abstract void Exit(T Target);
+        public abstract void Exit(T Target, S IncomingState);
 
         public abstract E GetStateType();
 
