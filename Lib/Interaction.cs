@@ -5,18 +5,21 @@ using WarnerEngine.Services;
 
 namespace WarnerEngine.Lib
 {
-    public abstract class Interaction<TActor, TReceiver> : BaseInteraction where TActor : class where TReceiver : class
+    public abstract class Interaction<TActor, TReceiver, TAccumulator> : BaseInteraction where TActor : class where TReceiver : class
     {
         protected TActor actor;
         protected TReceiver receiver;
 
+        protected abstract TAccumulator InitialAccumulatorValue { get; }
+
         protected override void ProcessActionsImplementation()
         {
+            TAccumulator accumulator = InitialAccumulatorValue;
             DisposableList<TActor> actors = GameService.GetService<IInteractionService>().GetCachedEntities<TActor>();
             for (int a = 0; a < actors.Count; a++)
             {
                 TActor actor = actors[a];
-                if (!CanPerformAction(actor))
+                if (!CanPerformAction(actor, accumulator))
                 {
                     continue;
                 }
@@ -29,14 +32,14 @@ namespace WarnerEngine.Lib
                     {
                         continue;
                     }
-                    PerformAction(actor, receiver);
+                    accumulator = PerformAction(actor, receiver, accumulator);
                 }
             }
         }
 
-        protected abstract void PerformAction(TActor Actor, TReceiver Receiver);
+        protected abstract TAccumulator PerformAction(TActor Actor, TReceiver Receiver, TAccumulator Accumulator);
 
-        protected abstract bool CanPerformAction(TActor Actor);
+        protected abstract bool CanPerformAction(TActor Actor, TAccumulator Accumulator);
 
         public override Type GetActorType()
         {
