@@ -48,13 +48,19 @@ namespace WarnerEngine.Lib.Helpers
             );
         }
 
-        public static Color GetShadowTintForBox(Box B, IShadowCaster CallingShadowCaster = null)
+        public static Color GetShadowTintForBox(Box B, IShadowCaster CallingShadowCaster = null, Enums.ShadowCasterClass ExcludedClasses = Enums.ShadowCasterClass.None)
         {
             float darkestTint = 1f;
             for (int i = 0; i < VisibleShadowCasters.Count; i++)
             {
                 IShadowCaster shadowCaster = VisibleShadowCasters[i];
-                if (shadowCaster == CallingShadowCaster)
+                if (
+                    shadowCaster == CallingShadowCaster ||
+                    (
+                        ExcludedClasses != Enums.ShadowCasterClass.None &&
+                        (shadowCaster.ShadowCasterClass() & ExcludedClasses) != Enums.ShadowCasterClass.None
+                    )
+                )
                 {
                     continue;
                 }
@@ -105,7 +111,7 @@ namespace WarnerEngine.Lib.Helpers
             );
         }
 
-        private static float GetShadowFactorForPoint(Vector3 P, IShadowCaster CallingShadowCaster)
+        private static float GetShadowFactorForPoint(Vector3 P, IShadowCaster CallingShadowCaster, Enums.ShadowCasterClass ExcludedClasses = Enums.ShadowCasterClass.None)
         {
             float? cachedValue = SpatialShadowMap.Get(P);
             if (cachedValue.HasValue)
@@ -116,7 +122,13 @@ namespace WarnerEngine.Lib.Helpers
             for (int i = 0; i < VisibleShadowCasters.Count; i++)
             {
                 IShadowCaster shadowCaster = VisibleShadowCasters[i];
-                if (shadowCaster == CallingShadowCaster)
+                if (
+                    shadowCaster == CallingShadowCaster ||
+                    (
+                        ExcludedClasses != Enums.ShadowCasterClass.None && 
+                        (shadowCaster.ShadowCasterClass() & ExcludedClasses) != Enums.ShadowCasterClass.None
+                    )
+                )
                 {
                     continue;
                 }
@@ -153,9 +165,9 @@ namespace WarnerEngine.Lib.Helpers
             return darkestTint / 255f;
         }
 
-        public static Color GetShadowTintForPoint(Vector3 P, IShadowCaster CallingShadowCaster = null)
+        public static Color GetShadowTintForPoint(Vector3 P, IShadowCaster CallingShadowCaster = null, Enums.ShadowCasterClass ExcludedClasses = Enums.ShadowCasterClass.None)
         {
-            float shadowFactor = GetShadowFactorForPoint(P, CallingShadowCaster);
+            float shadowFactor = GetShadowFactorForPoint(P, CallingShadowCaster, ExcludedClasses);
             if (shadowFactor == 0)
             {
                 return Color.White;
@@ -168,11 +180,11 @@ namespace WarnerEngine.Lib.Helpers
             );
         }
 
-        public static Color Get2SampledShadowTintForPoint(Vector3 P, float Radius, IShadowCaster CallingShadowCaster = null)
+        public static Color Get2SampledShadowTintForPoint(Vector3 P, float Radius, IShadowCaster CallingShadowCaster = null, Enums.ShadowCasterClass ExcludedClasses = Enums.ShadowCasterClass.None)
         {
             float sampledShadowFactor = (
-                GetShadowFactorForPoint(P + SHADOW_2_SAMPLE_1 * Radius, CallingShadowCaster) +
-                GetShadowFactorForPoint(P + SHADOW_2_SAMPLE_2 * Radius, CallingShadowCaster)
+                GetShadowFactorForPoint(P + SHADOW_2_SAMPLE_1 * Radius, CallingShadowCaster, ExcludedClasses) +
+                GetShadowFactorForPoint(P + SHADOW_2_SAMPLE_2 * Radius, CallingShadowCaster, ExcludedClasses)
             ) / 2f;
             if (sampledShadowFactor == 0)
             {
@@ -186,12 +198,12 @@ namespace WarnerEngine.Lib.Helpers
             );
         }
 
-        public static Color Get3SampledShadowTintForPoint(Vector3 P, float Radius, IShadowCaster CallingShadowCaster = null)
+        public static Color Get3SampledShadowTintForPoint(Vector3 P, float Radius, IShadowCaster CallingShadowCaster = null, Enums.ShadowCasterClass ExcludedClasses = Enums.ShadowCasterClass.None)
         {
             float sampledShadowFactor = (
-                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_1 * Radius, CallingShadowCaster) +
-                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_2 * Radius, CallingShadowCaster) +
-                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_3 * Radius, CallingShadowCaster)
+                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_1 * Radius, CallingShadowCaster, ExcludedClasses) +
+                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_2 * Radius, CallingShadowCaster, ExcludedClasses) +
+                GetShadowFactorForPoint(P + SHADOW_3_SAMPLE_3 * Radius, CallingShadowCaster, ExcludedClasses)
             ) / 3f;
             if (sampledShadowFactor == 0)
             {

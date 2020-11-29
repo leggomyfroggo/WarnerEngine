@@ -8,5 +8,6 @@ namespace WarnerEngine.Lib.Entities
         Texture2D GetShadowTexture();
         float GetShadowOpacity();
         bool ShouldTile();
+        Enums.ShadowCasterClass ShadowCasterClass();
     }
 }
