@@ -22,20 +22,20 @@ namespace WarnerEngine.Lib.UI
 
         public void Draw()
         {
+            Vector2 cursorPosition = GameService.GetService<IInputService>().GetMouseInScreenSpace();
             if (shouldDrawDeferred)
             {
-                GameService.GetService<IRenderService>().AddDeferredCall(_ => DrawImplementation());
+                GameService.GetService<IRenderService>().AddDeferredCall(_ => DrawCursor(cursorPosition));
             } 
             else
             {
-                DrawImplementation();
+                DrawCursor(cursorPosition);
             }
         }
 
-        private void DrawImplementation()
+        protected virtual void DrawCursor(Vector2 CursorPosition)
         {
-            Vector2 cursorPosition = GameService.GetService<IInputService>().GetMouseInScreenSpace();
-            GraphicsHelper.DrawSquare((int)cursorPosition.X, (int)cursorPosition.Y, 2, 2, Color.White, true);
+            GraphicsHelper.DrawSquare((int)CursorPosition.X, (int)CursorPosition.Y, 2, 2, Color.White, true);
         }
 
         public BackingBox GetBackingBox()
