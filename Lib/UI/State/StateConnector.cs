@@ -9,6 +9,8 @@ namespace WarnerEngine.Lib.UI.State
         private Dictionary<string, object> state;
         private Dictionary<string, List<System.Action<object, object>>> connections;
 
+        private UIRenderer uiRendererInstance;
+
         public StateConnector()
         {
             state = new Dictionary<string, object>();            
@@ -40,6 +42,10 @@ namespace WarnerEngine.Lib.UI.State
                     keyConnection(oldState, Value);
                 }
             }
+            if (uiRendererInstance != null)
+            {
+                uiRendererInstance.ForceUpdate();
+            }
         }
 
         public void AddConnection<TState>(string Key, System.Action<TState, TState> Connection)
@@ -49,6 +55,11 @@ namespace WarnerEngine.Lib.UI.State
                 connections[Key] = new List<System.Action<object, object>>();
             }
             connections[Key].Add((object oldValue, object newValue) => Connection((TState)oldValue, (TState)newValue));
+        }
+
+        public void ConnectUIRendererInstance(UIRenderer UIRendererInstance)
+        {
+            uiRendererInstance = UIRendererInstance;
         }
 
         // TODO: Make it easy to remove a connection

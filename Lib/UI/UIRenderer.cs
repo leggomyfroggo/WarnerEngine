@@ -118,5 +118,10 @@ namespace WarnerEngine.Lib.UI
                 wasUpdated = true;
             }
         }
+
+        public void ForceUpdate()
+        {
+            wasUpdated = true;
+        }
     }
 }
