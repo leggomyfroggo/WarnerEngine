@@ -28,6 +28,7 @@ namespace WarnerEngine.Lib.UI
         private IUIElement[] children;
 
         protected Action<Vector2> onClick;
+        protected Action<Vector2> onRightClick;
         protected Action<Vector2> onEnter;
         protected Action<Vector2> onMove;
         protected Action<Vector2> onExit;
@@ -142,6 +143,13 @@ namespace WarnerEngine.Lib.UI
         {
             CheckCanModify();
             onClick = OnClick;
+            return (TElement)this;
+        }
+
+        public TElement SetOnRightClick(Action<Vector2> OnRightClick)
+        {
+            CheckCanModify();
+            onRightClick = OnRightClick;
             return (TElement)this;
         }
 
@@ -268,6 +276,11 @@ namespace WarnerEngine.Lib.UI
                     else if (inputService.IsMiddleMouseButtonHeld())
                     {
                         onPressMiddle?.Invoke(interiorPosition);
+                    }
+
+                    if (inputService.WasRightMouseButtonClicked())
+                    {
+                        onRightClick?.Invoke(interiorPosition);
                     }
                 }
                 if (inputService.GetCurrentMouseState().Position != inputService.GetRolledbackMouseState(1).Position)
