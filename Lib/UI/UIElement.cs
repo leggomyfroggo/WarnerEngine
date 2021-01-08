@@ -377,7 +377,7 @@ namespace WarnerEngine.Lib.UI
                     }
                     else if (child.GetWidth().Sizing == UIEnums.Sizing.Relative)
                     {
-                        tempFixedSpaceNeeds += (int)(child.GetWidth().Size / 100f * RenderedWidth);
+                        tempFixedSpaceNeeds += (int)(child.GetWidth().Size / 100f * RenderedWidth) - child.GetWidth().FullMargin;
                     }
                     else if (child.GetWidth().Sizing == UIEnums.Sizing.Rest)
                     {
@@ -470,13 +470,13 @@ namespace WarnerEngine.Lib.UI
                 }
                 else if (childOrdering == UIEnums.ChildOrdering.Column)
                 {
-                    if (child.GetHeight().Sizing == UIEnums.Sizing.Fixed)
+                    if (child.GetHeight().Sizing == UIEnums. Sizing.Fixed)
                     {
                         tempFixedSpaceNeeds += child.GetHeight().Size;
                     }
                     else if (child.GetHeight().Sizing == UIEnums.Sizing.Relative)
                     {
-                        tempFixedSpaceNeeds += (int)(child.GetHeight().Size / 100f * RenderedHeight);
+                        tempFixedSpaceNeeds += (int)(child.GetHeight().Size / 100f * RenderedHeight) - child.GetHeight().FullMargin;
                     }
                     else if (child.GetHeight().Sizing == UIEnums.Sizing.Rest)
                     {
