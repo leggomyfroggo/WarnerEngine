@@ -36,6 +36,7 @@ namespace WarnerEngine.Lib.UI
         protected Action<Vector2> onRelease;
         protected Action<Vector2> onPressMiddle;
         protected Action<Vector2> onReleaseMiddle;
+        protected bool shouldBlockMouseEvents;
 
         protected bool isLocked;
 
@@ -202,6 +203,12 @@ namespace WarnerEngine.Lib.UI
             return (TElement)this;
         }
 
+        public TElement SetShouldBlockMouseEvents(bool ShouldBlockMouseEvents)
+        {
+            shouldBlockMouseEvents = ShouldBlockMouseEvents;
+            return (TElement)this;
+        }
+
         public TElement Finalize()
         {
             CheckCanModify();
@@ -231,13 +238,13 @@ namespace WarnerEngine.Lib.UI
             return Render(width.Size, height.Size, x, y);
         }
 
-        public void PreDrawBase(float DT, UIDrawCall DrawCall)
+        public bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked)
         {
             IInputService inputService = GameService.GetService<IInputService>();
             Vector2 cursorPosition = inputService.GetMouseInScreenSpace();
             bool isMouseInside = GetEventState<bool>("isMouseInside");
             Vector2 interiorPosition = new Vector2(cursorPosition.X - DrawCall.X, cursorPosition.Y - DrawCall.Y);
-            if (DrawCall.ContainsPoint(cursorPosition))
+            if (!AreMouseEventsBlocked && DrawCall.ContainsPoint(cursorPosition))
             {
                 if (!isMouseInside)
                 {
@@ -287,6 +294,10 @@ namespace WarnerEngine.Lib.UI
                 {
                     onMove?.Invoke(interiorPosition);
                 }
+                if (HasMouseClickHandler() || shouldBlockMouseEvents)
+                {
+                    AreMouseEventsBlocked = true;
+                }
             }
             else
             {
@@ -297,6 +308,7 @@ namespace WarnerEngine.Lib.UI
                 }
             }
             PreDraw(DT);
+            return AreMouseEventsBlocked;
         }
 
         public virtual void PreDraw(float DT) { }
@@ -608,6 +620,15 @@ namespace WarnerEngine.Lib.UI
         public void SetState<TState>(string StateKey, TState StateValue)
         {
             uiRendererInstance.SetComponentState(key, StateKey, StateValue);
+        }
+
+        public bool HasMouseClickHandler()
+        {
+            return
+                onClick != null ||
+                onRightClick != null ||
+                onPress != null ||
+                onPressMiddle != null;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WarnerEngine.Lib.UI
         int GetY();
         UIEnums.Positioning GetPositioning();
         UIEnums.ChildOrdering GetChildOrdering();
-        void PreDrawBase(float DT, UIDrawCall DrawCall);
+        bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked);
         List<UIDrawCall> RenderAsRoot();
         List<UIDrawCall> Render(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY);
         void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY);

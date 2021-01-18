@@ -45,10 +45,11 @@ namespace WarnerEngine.Lib.UI
             }
 
             // Update the different elements in reverse draw order
+            bool areMouseEventsBlocked = false;
             for (int i = drawCalls.Count - 1; i >= 0; i--)
             {
                 UIDrawCall drawCall = drawCalls[i];
-                drawCall.Element.PreDrawBase(DT, drawCall);
+                areMouseEventsBlocked = drawCall.Element.PreDrawBase(DT, drawCall, areMouseEventsBlocked);
             }
         }
 

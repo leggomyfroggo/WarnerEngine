@@ -23,7 +23,7 @@ namespace WarnerEngine.Lib.UI
 
         public void PreDraw(float DT)
         {
-            Element.PreDrawBase(DT, this);
+            Element.PreDrawBase(DT, this, false);
         }
 
         public void Draw()

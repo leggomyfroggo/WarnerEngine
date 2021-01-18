@@ -4,6 +4,8 @@ namespace WarnerEngine.Lib.UI
 {
     public struct UIIconInfo
     {
+        public static readonly UIIconInfo Empty = new UIIconInfo(null, Index2.Zero, 0, 0);
+
         public readonly string IconTextureKey;
         public readonly Index2 IconIndex;
         public readonly int IconWidth;
