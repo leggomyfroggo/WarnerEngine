@@ -40,7 +40,7 @@ namespace WarnerEngine.Lib.UI
             return this;
         }
 
-        public override void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY)
+        public override void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY, bool IsFocused)
         {
             Texture2D texture = GameService.GetService<IContentService>().GetxAsset<Texture2D>(textureKey);
             switch (scaling)

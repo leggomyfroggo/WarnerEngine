@@ -37,6 +37,6 @@ namespace WarnerEngine.Lib.UI
             );
         }
 
-        public override void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY) { }
+        public override void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY, bool IsFocused) { }
     }
 }

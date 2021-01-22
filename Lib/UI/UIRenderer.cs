@@ -10,6 +10,9 @@ namespace WarnerEngine.Lib.UI
     public class UIRenderer : ISceneEntity, IPreDraw, IDraw
     {
         public Func<IUIElement> Builder;
+
+        private string focusedElementKey;
+
         private bool shouldDrawDeferred;
 
         private Dictionary<string, Dictionary<string, object>> componentEventStates;
@@ -49,7 +52,12 @@ namespace WarnerEngine.Lib.UI
             for (int i = drawCalls.Count - 1; i >= 0; i--)
             {
                 UIDrawCall drawCall = drawCalls[i];
-                areMouseEventsBlocked = drawCall.Element.PreDrawBase(DT, drawCall, areMouseEventsBlocked);
+                areMouseEventsBlocked = drawCall.Element.PreDrawBase(
+                    DT, 
+                    drawCall, 
+                    areMouseEventsBlocked, 
+                    drawCall.Element.GetKey() == focusedElementKey
+                );
             }
         }
 
@@ -69,7 +77,7 @@ namespace WarnerEngine.Lib.UI
         {
             foreach (UIDrawCall drawCall in drawCalls)
             {
-                drawCall.Draw();
+                drawCall.Draw(drawCall.Element.GetKey() == focusedElementKey);
             }
         }
 
@@ -123,6 +131,11 @@ namespace WarnerEngine.Lib.UI
         public void ForceUpdate()
         {
             wasUpdated = true;
+        }
+
+        public void SetFocusedElement(string Key)
+        {
+            focusedElementKey = Key;
         }
     }
 }

@@ -79,7 +79,7 @@ namespace WarnerEngine.Lib.UI
             return Color.Transparent;
         }
 
-        public override void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY)
+        public override void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY, bool IsFocused)
         {
         }
 

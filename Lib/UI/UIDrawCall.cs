@@ -4,7 +4,7 @@ using WarnerEngine.Lib.Entities;
 
 namespace WarnerEngine.Lib.UI
 {
-    public struct UIDrawCall : IPreDraw
+    public struct UIDrawCall
     {
         public readonly IUIElement Element;
         public readonly int Width;
@@ -21,14 +21,9 @@ namespace WarnerEngine.Lib.UI
             this.Y = Y;
         }
 
-        public void PreDraw(float DT)
+        public void Draw(bool IsFocused)
         {
-            Element.PreDrawBase(DT, this, false);
-        }
-
-        public void Draw()
-        {
-            Element.Draw(Width, Height, X, Y);
+            Element.Draw(Width, Height, X, Y, IsFocused);
         }
 
         public bool ContainsPoint(Vector2 P) 

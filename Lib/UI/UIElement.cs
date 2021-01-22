@@ -238,7 +238,7 @@ namespace WarnerEngine.Lib.UI
             return Render(width.Size, height.Size, x, y);
         }
 
-        public bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked)
+        public bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked, bool IsFocused)
         {
             IInputService inputService = GameService.GetService<IInputService>();
             Vector2 cursorPosition = inputService.GetMouseInScreenSpace();
@@ -266,6 +266,7 @@ namespace WarnerEngine.Lib.UI
                 {
                     if (inputService.WasLeftMouseButtonClicked())
                     {
+                        uiRendererInstance.SetFocusedElement(key);   
                         onClick?.Invoke(interiorPosition);
                         onRelease?.Invoke(interiorPosition);
                         onEnter?.Invoke(interiorPosition);
@@ -307,11 +308,11 @@ namespace WarnerEngine.Lib.UI
                     SetEventState("isMouseInside", false);
                 }
             }
-            PreDraw(DT);
+            PreDraw(DT, IsFocused);
             return AreMouseEventsBlocked;
         }
 
-        public virtual void PreDraw(float DT) { }
+        public virtual void PreDraw(float DT, bool IsFocused) { }
 
         public List<UIDrawCall> Render(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY)
         {
@@ -590,7 +591,7 @@ namespace WarnerEngine.Lib.UI
             return ownDrawCalls;
         }
 
-        public abstract void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY);
+        public virtual void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY, bool IsFocused) { }
 
         public void SetUIRendererInstance(UIRenderer Renderer)
         {
