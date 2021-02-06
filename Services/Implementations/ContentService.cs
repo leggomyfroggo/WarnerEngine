@@ -181,7 +181,7 @@ namespace WarnerEngine.Services.Implementations
                     ContentItem[] contentItems = (ContentItem[])s.Deserialize(fs);
                     foreach (ContentItem item in contentItems)
                     {
-                        string filePath = manifestPath + item.Path;
+                        string filePath = Path.Combine(manifestPath, item.Path);
                         switch (item.Type)
                         {
                             case "Animation":
@@ -220,7 +220,7 @@ namespace WarnerEngine.Services.Implementations
         private (string, object)[] LoadTexture(string Key, string Resource)
         {
             Texture2D texture;
-            using (Stream fs = TitleContainer.OpenStream(rootDirectory + Resource + ".png"))
+            using (Stream fs = TitleContainer.OpenStream(Path.ChangeExtension(Path.Combine(rootDirectory, Resource), ".png")))
             {
                 texture = Texture2D.FromStream(graphicsDevice, fs);
             }
