@@ -229,7 +229,7 @@ namespace WarnerEngine.Lib.UI
             throw new Exception("Trying to modify finalized UIElement");
         }
 
-        public List<UIDrawCall> RenderAsRoot()
+        public UIDrawCall RenderAsRoot()
         {
             if (width.Sizing != UIEnums.Sizing.Fixed || height.Sizing != UIEnums.Sizing.Fixed || positioning != UIEnums.Positioning.Absolute)
             {
@@ -314,11 +314,10 @@ namespace WarnerEngine.Lib.UI
 
         public virtual void PreDraw(float DT, bool IsFocused) { }
 
-        public List<UIDrawCall> Render(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY)
+        public UIDrawCall Render(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY)
         {
             // Insert own draw call
-            List<UIDrawCall> ownDrawCalls = new List<UIDrawCall>();
-            ownDrawCalls.Add(new UIDrawCall(this, RenderedWidth, RenderedHeight, RenderedX, RenderedY));
+            List<UIDrawCall> childDrawCalls = new List<UIDrawCall>();
 
             // Find out how much space the fixed elements need, and what the total sum of relative sizes are
             int fixedSpaceNeeds = 0;
@@ -334,7 +333,7 @@ namespace WarnerEngine.Lib.UI
 
                 if (child.GetPositioning() == UIEnums.Positioning.Absolute)
                 {
-                    ownDrawCalls.AddRange(
+                    childDrawCalls.Add(
                         child.Render(
                             child.GetWidth().Sizing == UIEnums.Sizing.Fixed ? child.GetWidth().Size : (int)(RenderedWidth * (child.GetWidth().Size / 100f)),
                             child.GetHeight().Sizing == UIEnums.Sizing.Fixed ? child.GetHeight().Size : (int)(RenderedHeight * (child.GetHeight().Size / 100f)),
@@ -347,7 +346,7 @@ namespace WarnerEngine.Lib.UI
                 }
                 else if (child.GetPositioning() == UIEnums.Positioning.Fixed)
                 {
-                    ownDrawCalls.AddRange(
+                    childDrawCalls.Add(
                         child.Render(
                             child.GetWidth().Sizing == UIEnums.Sizing.Fixed ? child.GetWidth().Size : (int)(RenderedWidth * (child.GetWidth().Size / 100f)),
                             child.GetHeight().Sizing == UIEnums.Sizing.Fixed ? child.GetHeight().Size : (int)(RenderedHeight * (child.GetHeight().Size / 100f)),
@@ -463,7 +462,7 @@ namespace WarnerEngine.Lib.UI
                                 default:
                                     throw new Exception("Unsupported height sizing on cross direction");
                             }
-                            ownDrawCalls.AddRange(renderedChild.Render(childWidth, childHeight, realCursorX + renderedChild.GetWidth().MarginStart, cursorY + renderedChild.GetHeight().MarginStart));
+                            childDrawCalls.Add(renderedChild.Render(childWidth, childHeight, realCursorX + renderedChild.GetWidth().MarginStart, cursorY + renderedChild.GetHeight().MarginStart));
                             realCursorX += childWidth + renderedChild.GetWidth().FullMargin;
                         }
                         if (!wasCapacityReached && isLastChild)
@@ -563,7 +562,7 @@ namespace WarnerEngine.Lib.UI
                                 default:
                                     throw new Exception("Unsupported height sizing");
                             }
-                            ownDrawCalls.AddRange(renderedChild.Render(childWidth, childHeight, cursorX + renderedChild.GetWidth().MarginStart, realCursorY + renderedChild.GetHeight().MarginStart));
+                            childDrawCalls.Add(renderedChild.Render(childWidth, childHeight, cursorX + renderedChild.GetWidth().MarginStart, realCursorY + renderedChild.GetHeight().MarginStart));
                             realCursorY += childHeight + renderedChild.GetHeight().FullMargin;
                         }
                         if (!wasCapacityReached && isLastChild)
@@ -588,7 +587,7 @@ namespace WarnerEngine.Lib.UI
                 i++;
             }
 
-            return ownDrawCalls;
+            return new UIDrawCall(childDrawCalls.ToArray(), this, RenderedWidth, RenderedHeight, RenderedX, RenderedY);
         }
 
         public virtual void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY, bool IsFocused) { }

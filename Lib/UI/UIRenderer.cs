@@ -18,8 +18,7 @@ namespace WarnerEngine.Lib.UI
         private Dictionary<string, Dictionary<string, object>> componentEventStates;
         private Dictionary<string, Dictionary<string, object>> componentStates;
 
-        private List<UIDrawCall> drawCalls;
-
+        private UIDrawCall rootDrawCall;
         private bool wasUpdated;
 
         public UIRenderer(Func<IUIElement> Builder, bool ShouldDrawDeferred = false)
@@ -28,7 +27,7 @@ namespace WarnerEngine.Lib.UI
             shouldDrawDeferred = ShouldDrawDeferred;
             componentEventStates = new Dictionary<string, Dictionary<string, object>>();
             componentStates = new Dictionary<string, Dictionary<string, object>>();
-            drawCalls = new List<UIDrawCall>();
+            rootDrawCall = new UIDrawCall();
             wasUpdated = true;
         }
 
@@ -40,25 +39,13 @@ namespace WarnerEngine.Lib.UI
         {
             if (wasUpdated)
             {
-                drawCalls = Builder().RenderAsRoot();
+                rootDrawCall = Builder().RenderAsRoot();
+                wasUpdated = false;
 
                 // TODO: Clear states for components that were removed
-
-                wasUpdated = false;
             }
 
-            // Update the different elements in reverse draw order
-            bool areMouseEventsBlocked = false;
-            for (int i = drawCalls.Count - 1; i >= 0; i--)
-            {
-                UIDrawCall drawCall = drawCalls[i];
-                areMouseEventsBlocked = drawCall.Element.PreDrawBase(
-                    DT, 
-                    drawCall, 
-                    areMouseEventsBlocked, 
-                    drawCall.Element.GetKey() == focusedElementKey
-                );
-            }
+            rootDrawCall.PreDraw(DT, false, focusedElementKey);
         }
 
         public void Draw()
@@ -75,10 +62,7 @@ namespace WarnerEngine.Lib.UI
 
         public void DrawImplementation()
         {
-            foreach (UIDrawCall drawCall in drawCalls)
-            {
-                drawCall.Draw(drawCall.Element.GetKey() == focusedElementKey);
-            }
+            rootDrawCall.Draw(focusedElementKey);
         }
 
         public BackingBox GetBackingBox()
