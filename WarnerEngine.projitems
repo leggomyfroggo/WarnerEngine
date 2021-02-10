@@ -90,6 +90,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UIImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UILeftRight.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UIRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UIScrollableArea.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UISize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Events.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\GameService.cs" />

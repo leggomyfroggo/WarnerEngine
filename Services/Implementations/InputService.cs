@@ -375,6 +375,11 @@ namespace WarnerEngine.Services.Implementations
             return new Vector3(worldPosition2.X, 0, worldPosition2.Y);
         }
 
+        public int GetMouseScroll()
+        {
+            return (GetCurrentMouseState().ScrollWheelValue - GetLastFrameMouseState().ScrollWheelValue) / 10;
+        }
+
         public bool IsLeftMouseButtonHeld()
         {
             if (isClickPropagationPaused)

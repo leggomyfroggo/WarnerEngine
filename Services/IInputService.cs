@@ -41,6 +41,7 @@ namespace WarnerEngine.Services
         Vector2 GetMouseInScreenSpace(int Rollback = 0);
         Vector2 GetMouseInWorldSpace2();
         Vector3 GetMouseInWorldSpace3();
+        int GetMouseScroll();
         bool IsLeftMouseButtonHeld();
         bool IsMiddleMouseButtonHeld();
         bool IsRightMouseButtonHeld();

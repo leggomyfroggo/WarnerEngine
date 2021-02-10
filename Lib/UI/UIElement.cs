@@ -25,6 +25,7 @@ namespace WarnerEngine.Lib.UI
         private UISize height;
         private int x;
         private int y;
+        private bool isScrollingEnabled;
         private IUIElement[] children;
 
         protected Action<Vector2> onClick;
@@ -100,6 +101,28 @@ namespace WarnerEngine.Lib.UI
             CheckCanModify();
             y = Y;
             return (TElement)this;
+        }
+
+        public bool IsScrollingEnabled() 
+        {
+            return isScrollingEnabled;
+        }
+
+        public TElement SetIsScrollingEnabled(bool IsScrollingEnabled)
+        {
+            CheckCanModify();
+            isScrollingEnabled = IsScrollingEnabled;
+            return (TElement)this;
+        }
+
+        public int GetScroll()
+        {
+            return GetEventState<int>("scroll");
+        }
+
+        public void SetScroll(int Scroll)
+        {
+            SetEventState("scroll", Scroll);
         }
 
         public TElement SetChildren(params IUIElement[] Children)
@@ -244,60 +267,64 @@ namespace WarnerEngine.Lib.UI
             Vector2 cursorPosition = inputService.GetMouseInScreenSpace();
             bool isMouseInside = GetEventState<bool>("isMouseInside");
             Vector2 interiorPosition = new Vector2(cursorPosition.X - DrawCall.X, cursorPosition.Y - DrawCall.Y);
-            if (!AreMouseEventsBlocked && DrawCall.ContainsPoint(cursorPosition))
+            if (DrawCall.ContainsPoint(cursorPosition))
             {
-                if (!isMouseInside)
+                SetEventState("scroll", GetEventState<int>("scroll") - inputService.GetMouseScroll());
+                if (!AreMouseEventsBlocked)
                 {
-                    onEnter?.Invoke(interiorPosition);
-
-                    if (inputService.IsLeftMouseButtonHeld())
+                    if (!isMouseInside)
                     {
-                        onPress?.Invoke(interiorPosition);
-                    }
-
-                    if (inputService.IsMiddleMouseButtonHeld())
-                    {
-                        onPressMiddle?.Invoke(interiorPosition);
-                    }
-
-                    SetEventState("isMouseInside", true);
-                }
-                else
-                {
-                    if (inputService.WasLeftMouseButtonClicked())
-                    {
-                        uiRendererInstance.SetFocusedElement(key);   
-                        onClick?.Invoke(interiorPosition);
-                        onRelease?.Invoke(interiorPosition);
                         onEnter?.Invoke(interiorPosition);
-                    }
-                    else if (inputService.IsLeftMouseButtonHeld())
-                    {
-                        onPress?.Invoke(interiorPosition);
-                    }
 
-                    if (inputService.WasMiddleMouseButtonClicked())
-                    {
-                        //onClick?.Invoke();
-                        onReleaseMiddle?.Invoke(interiorPosition);
-                    }
-                    else if (inputService.IsMiddleMouseButtonHeld())
-                    {
-                        onPressMiddle?.Invoke(interiorPosition);
-                    }
+                        if (inputService.IsLeftMouseButtonHeld())
+                        {
+                            onPress?.Invoke(interiorPosition);
+                        }
 
-                    if (inputService.WasRightMouseButtonClicked())
-                    {
-                        onRightClick?.Invoke(interiorPosition);
+                        if (inputService.IsMiddleMouseButtonHeld())
+                        {
+                            onPressMiddle?.Invoke(interiorPosition);
+                        }
+
+                        SetEventState("isMouseInside", true);
                     }
-                }
-                if (inputService.GetCurrentMouseState().Position != inputService.GetRolledbackMouseState(1).Position)
-                {
-                    onMove?.Invoke(interiorPosition);
-                }
-                if (HasMouseClickHandler() || shouldBlockMouseEvents)
-                {
-                    AreMouseEventsBlocked = true;
+                    else
+                    {
+                        if (inputService.WasLeftMouseButtonClicked())
+                        {
+                            uiRendererInstance.SetFocusedElement(key);
+                            onClick?.Invoke(interiorPosition);
+                            onRelease?.Invoke(interiorPosition);
+                            onEnter?.Invoke(interiorPosition);
+                        }
+                        else if (inputService.IsLeftMouseButtonHeld())
+                        {
+                            onPress?.Invoke(interiorPosition);
+                        }
+
+                        if (inputService.WasMiddleMouseButtonClicked())
+                        {
+                            //onClick?.Invoke();
+                            onReleaseMiddle?.Invoke(interiorPosition);
+                        }
+                        else if (inputService.IsMiddleMouseButtonHeld())
+                        {
+                            onPressMiddle?.Invoke(interiorPosition);
+                        }
+
+                        if (inputService.WasRightMouseButtonClicked())
+                        {
+                            onRightClick?.Invoke(interiorPosition);
+                        }
+                    }
+                    if (inputService.GetCurrentMouseState().Position != inputService.GetRolledbackMouseState(1).Position)
+                    {
+                        onMove?.Invoke(interiorPosition);
+                    }
+                    if (HasMouseClickHandler() || shouldBlockMouseEvents)
+                    {
+                        AreMouseEventsBlocked = true;
+                    }
                 }
             }
             else
@@ -412,7 +439,7 @@ namespace WarnerEngine.Lib.UI
                     }
 
                     // Check if we're over capacity
-                    bool wasCapacityReached = tempFixedSpaceNeeds + tempRestSpaceMinimumNeeds > RenderedWidth;
+                    bool wasCapacityReached = !isScrollingEnabled && (tempFixedSpaceNeeds + tempRestSpaceMinimumNeeds > RenderedWidth);
                     if (wasCapacityReached || isLastChild)
                     {
                         if (!wasCapacityReached && isLastChild)
@@ -511,7 +538,7 @@ namespace WarnerEngine.Lib.UI
                     }
 
                     // Check if we're over capacity
-                    bool wasCapacityReached = tempFixedSpaceNeeds + tempRestSpaceMinimumNeeds > RenderedHeight;
+                    bool wasCapacityReached = !isScrollingEnabled && (tempFixedSpaceNeeds + tempRestSpaceMinimumNeeds > RenderedHeight);
                     if (wasCapacityReached || isLastChild)
                     {
                         if (!wasCapacityReached && isLastChild)
@@ -587,7 +614,7 @@ namespace WarnerEngine.Lib.UI
                 i++;
             }
 
-            return new UIDrawCall(childDrawCalls.ToArray(), this, RenderedWidth, RenderedHeight, RenderedX, RenderedY);
+            return new UIDrawCall(childDrawCalls.ToArray(), this, RenderedWidth, RenderedHeight, RenderedX, RenderedY, isScrollingEnabled);
         }
 
         public virtual void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY, bool IsFocused) { }

@@ -62,7 +62,7 @@ namespace WarnerEngine.Services
         IRenderService SetRenderTarget(string Key, float Depth);
         IRenderService SetSamplerState(SamplerState SS);
         IRenderService SetSortMode(SpriteSortMode SortMode);
-        IRenderService Start(Vector2? Scroll = null);
+        IRenderService Start(Vector2? Scroll = null, Enums.ScrollReference ScrollReference = Enums.ScrollReference.Center);
         IRenderService StretchCurrentTargetToBackBuffer(bool ShouldLetterbox = false, Color? Tint = null);
     }
 }

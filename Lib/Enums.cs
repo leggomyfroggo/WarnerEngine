@@ -22,5 +22,7 @@ namespace WarnerEngine.Lib
             DynamicLarge = 2, 
             DynamicSmall = 4
         }
+
+        public enum ScrollReference { Center, TopLeft }
     }
 }

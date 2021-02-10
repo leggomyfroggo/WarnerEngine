@@ -172,13 +172,21 @@ namespace WarnerEngine.Services.Implementations
         }
 
 
-        public IRenderService Start(Vector2? Scroll = null)
+        public IRenderService Start(Vector2? Scroll = null, Enums.ScrollReference ScrollReference = Enums.ScrollReference.Center)
         {
             Matrix scrollMatrix = Matrix.Identity;
             if (Scroll != null)
             {
                 scroll = Scroll.Value * -1;
-                scrollMatrix = Matrix.CreateTranslation((int)Math.Round(scroll.X) + currentTarget.Width / 2, (int)Math.Round(scroll.Y) + currentTarget.Height / 2, 0);
+                switch (ScrollReference)
+                {
+                    case Enums.ScrollReference.Center:
+                        scrollMatrix = Matrix.CreateTranslation((int)Math.Round(scroll.X) + currentTarget.Width / 2, (int)Math.Round(scroll.Y) + currentTarget.Height / 2, 0);
+                        break;
+                    case Enums.ScrollReference.TopLeft:
+                        scrollMatrix = Matrix.CreateTranslation((int)Math.Round(scroll.X), (int)Math.Round(scroll.Y), 0);
+                        break;
+                }
             }
             IsDrawing = true;
             spriteBatch.Begin(sortMode: sortMode, blendState: blendState, samplerState: samplerState, transformMatrix: scrollMatrix, depthStencilState: depthStencilState, effect: currentEffect);

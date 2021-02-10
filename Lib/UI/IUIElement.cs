@@ -10,6 +10,9 @@ namespace WarnerEngine.Lib.UI
         UISize GetHeight();
         int GetX();
         int GetY();
+        bool IsScrollingEnabled();
+        int GetScroll();
+        void SetScroll(int Scroll);
         UIEnums.Positioning GetPositioning();
         UIEnums.ChildOrdering GetChildOrdering();
         bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked, bool IsFocused);

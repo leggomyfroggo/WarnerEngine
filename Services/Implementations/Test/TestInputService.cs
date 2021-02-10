@@ -156,6 +156,11 @@ namespace WarnerEngine.Services.Implementations.Test
             throw new NotImplementedException();
         }
 
+        public int GetMouseScroll()
+        {
+            return 0;
+        }
+
         public bool IsLeftMouseButtonHeld()
         {
             throw new NotImplementedException();

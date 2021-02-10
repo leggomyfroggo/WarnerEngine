@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Microsoft.Xna.Framework;
+
 using WarnerEngine.Lib.Components;
 using WarnerEngine.Lib.Entities;
 using WarnerEngine.Services;
@@ -21,7 +23,9 @@ namespace WarnerEngine.Lib.UI
         private UIDrawCall rootDrawCall;
         private bool wasUpdated;
 
-        public UIRenderer(Func<IUIElement> Builder, bool ShouldDrawDeferred = false)
+        private string scrollingTargetKey;
+
+        public UIRenderer(Func<IUIElement> Builder, bool ShouldDrawDeferred = false, string ScrollingTargetKey = null)
         {
             this.Builder = Builder;
             shouldDrawDeferred = ShouldDrawDeferred;
@@ -29,6 +33,7 @@ namespace WarnerEngine.Lib.UI
             componentStates = new Dictionary<string, Dictionary<string, object>>();
             rootDrawCall = new UIDrawCall();
             wasUpdated = true;
+            scrollingTargetKey = ScrollingTargetKey;
         }
 
         public void OnAdd(Scene ParentScene) { }
@@ -62,7 +67,7 @@ namespace WarnerEngine.Lib.UI
 
         public void DrawImplementation()
         {
-            rootDrawCall.Draw(focusedElementKey);
+            rootDrawCall.Draw(focusedElementKey, this);
         }
 
         public BackingBox GetBackingBox()
@@ -82,6 +87,7 @@ namespace WarnerEngine.Lib.UI
                 componentEventStates[Element.GetKey()] = new Dictionary<string, object>()
                 {
                     { "isMouseInside", false },
+                    { "scroll", 0 },
                 };
                 componentStates[Element.GetKey()] = Element.GetDefaultState();
             }
@@ -120,6 +126,27 @@ namespace WarnerEngine.Lib.UI
         public void SetFocusedElement(string Key)
         {
             focusedElementKey = Key;
+        }
+
+        public void EnableScrollingTarget(UIDrawCall DrawCall, int Scroll)
+        {
+            GameService.GetService<IRenderService>()
+                .End()
+                .SetRenderTarget(scrollingTargetKey, Color.Transparent)
+                .Start(new Vector2(DrawCall.X, DrawCall.Y + Scroll), Enums.ScrollReference.TopLeft);
+        }
+
+        public void FlipScrollingTarget(UIDrawCall DrawCall)
+        {
+            GameService.GetService<IRenderService>()
+                .End()
+                .SetRenderTarget(Services.Implementations.SceneService.RenderTargets.CompositeTertiary)
+                .Start()
+                .DrawTargetAtPosition(
+                    scrollingTargetKey, 
+                    new Vector2(DrawCall.X, DrawCall.Y),
+                    SourceRect: new Rectangle(0, 0, DrawCall.Width, DrawCall.Height)
+                );
         }
     }
 }
