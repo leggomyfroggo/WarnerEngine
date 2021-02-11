@@ -2,6 +2,8 @@
 {
     public struct UISize
     {
+        public static readonly UISize Empty = new UISize();
+
         public readonly UIEnums.Sizing Sizing;
         public readonly int Size;
         public readonly int Minimum;
