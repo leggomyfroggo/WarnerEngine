@@ -50,7 +50,12 @@ namespace WarnerEngine.Lib.UI
                 // TODO: Clear states for components that were removed
             }
 
-            rootDrawCall.PreDraw(DT, false, focusedElementKey);
+            rootDrawCall.PreDraw(
+                DT, 
+                false, 
+                focusedElementKey, 
+                GameService.GetService<IInputService>().GetMouseInScreenSpace()
+            );
         }
 
         public void Draw()
@@ -100,7 +105,12 @@ namespace WarnerEngine.Lib.UI
 
         public void SetComponentEventState<TState>(string ComponentKey, string StateKey, TState StateValue)
         {
-            componentEventStates[ComponentKey][StateKey] = StateValue;
+            TState oldState = (TState)componentEventStates[ComponentKey][StateKey];
+            if ((oldState == null && StateValue != null) || (oldState != null && !oldState.Equals(StateValue)))
+            {
+                componentEventStates[ComponentKey][StateKey] = StateValue;
+                wasUpdated = true;
+            }
         }
 
         public TState GetComponentState<TState>(string ComponentKey, string StateKey)
@@ -128,12 +138,12 @@ namespace WarnerEngine.Lib.UI
             focusedElementKey = Key;
         }
 
-        public void EnableScrollingTarget(UIDrawCall DrawCall, int Scroll)
+        public void EnableScrollingTarget(UIDrawCall DrawCall)
         {
             GameService.GetService<IRenderService>()
                 .End()
                 .SetRenderTarget(scrollingTargetKey, Color.Transparent)
-                .Start(new Vector2(DrawCall.X, DrawCall.Y + Scroll), Enums.ScrollReference.TopLeft);
+                .Start(new Vector2(DrawCall.X, DrawCall.Y), Enums.ScrollReference.TopLeft);
         }
 
         public void FlipScrollingTarget(UIDrawCall DrawCall)

@@ -117,7 +117,7 @@ namespace WarnerEngine.Lib.UI
 
         public int GetScroll()
         {
-            return GetEventState<int>("scroll");
+            return isScrollingEnabled ? GetEventState<int>("scroll") : 0;
         }
 
         public void SetScroll(int Scroll)
@@ -261,14 +261,15 @@ namespace WarnerEngine.Lib.UI
             return Render(width.Size, height.Size, x, y);
         }
 
-        public bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked, bool IsFocused)
+        public bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked, bool IsFocused, Vector2? MaybeCursorPosition)
         {
-            IInputService inputService = GameService.GetService<IInputService>();
-            Vector2 cursorPosition = inputService.GetMouseInScreenSpace();
             bool isMouseInside = GetEventState<bool>("isMouseInside");
-            Vector2 interiorPosition = new Vector2(cursorPosition.X - DrawCall.X, cursorPosition.Y - DrawCall.Y);
-            if (DrawCall.ContainsPoint(cursorPosition))
+            if (DrawCall.ContainsPoint(MaybeCursorPosition))
             {
+                Vector2 cursorPosition = MaybeCursorPosition.Value;
+                IInputService inputService = GameService.GetService<IInputService>();
+                Vector2 interiorPosition = new Vector2(cursorPosition.X - DrawCall.X, cursorPosition.Y - DrawCall.Y);
+
                 SetEventState("scroll", GetEventState<int>("scroll") - inputService.GetMouseScroll());
                 if (!AreMouseEventsBlocked)
                 {
@@ -331,7 +332,7 @@ namespace WarnerEngine.Lib.UI
             {
                 if (isMouseInside)
                 {
-                    onExit?.Invoke(interiorPosition);
+                    onExit?.Invoke(Vector2.Zero);
                     SetEventState("isMouseInside", false);
                 }
             }
@@ -352,7 +353,7 @@ namespace WarnerEngine.Lib.UI
             int restSpaceMinimumNeeds = 0;
             int maxCrossDirectionSize = 0;
             int cursorX = RenderedX;
-            int cursorY = RenderedY;
+            int cursorY = RenderedY - GetScroll();
             int runBeginIndex = 0;
             for (int i = 0; i < children.Length; )
             {
@@ -598,7 +599,7 @@ namespace WarnerEngine.Lib.UI
                             continue;
                         }
                         cursorX += maxCrossDirectionSize;
-                        cursorY = RenderedY;
+                        cursorY = RenderedY - GetScroll();
                         fixedSpaceNeeds = 0;
                         restSpaceSums = 0;
                         restSpaceMinimumNeeds = 0;

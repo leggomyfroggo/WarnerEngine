@@ -1,5 +1,6 @@
-﻿using WarnerEngine.Lib.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using Microsoft.Xna.Framework;
 
 namespace WarnerEngine.Lib.UI
 {
@@ -15,7 +16,7 @@ namespace WarnerEngine.Lib.UI
         void SetScroll(int Scroll);
         UIEnums.Positioning GetPositioning();
         UIEnums.ChildOrdering GetChildOrdering();
-        bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked, bool IsFocused);
+        bool PreDrawBase(float DT, UIDrawCall DrawCall, bool AreMouseEventsBlocked, bool IsFocused, Vector2? MaybeCursorPosition);
         UIDrawCall RenderAsRoot();
         UIDrawCall Render(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY);
         void Draw(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY, bool IsFocused);

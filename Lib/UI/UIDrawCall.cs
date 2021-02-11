@@ -25,14 +25,25 @@ namespace WarnerEngine.Lib.UI
             this.IsScrollable = IsScrollable;
         }
 
-        public bool PreDraw(float DT, bool AreMouseEventsBlocked, string FocusedElementKey)
+        public bool PreDraw(float DT, bool AreMouseEventsBlocked, string FocusedElementKey, Vector2? MaybeCursorPosition)
         {
             for (int i = ChildDrawCalls.Length - 1; i >= 0; i--)
             {
                 UIDrawCall child = ChildDrawCalls[i];
-                AreMouseEventsBlocked = child.PreDraw(DT, AreMouseEventsBlocked, FocusedElementKey);
+                AreMouseEventsBlocked = child.PreDraw(
+                    DT, 
+                    AreMouseEventsBlocked, 
+                    FocusedElementKey,
+                    ContainsPoint(MaybeCursorPosition) ? MaybeCursorPosition : null
+                );
             }
-            return Element.PreDrawBase(DT, this, AreMouseEventsBlocked, FocusedElementKey == Element.GetKey());
+            return Element.PreDrawBase(
+                DT, 
+                this, 
+                AreMouseEventsBlocked, 
+                FocusedElementKey == Element.GetKey(), 
+                MaybeCursorPosition
+            );
         }
 
         public void Draw(string FocusedElementKey, UIRenderer UIRendererInstance)
@@ -49,7 +60,7 @@ namespace WarnerEngine.Lib.UI
                 {
                     Element.SetScroll(scroll);
                 }
-                UIRendererInstance.EnableScrollingTarget(this, scroll);
+                UIRendererInstance.EnableScrollingTarget(this);
             }
             Element.Draw(Width, Height, X, Y, Element.GetKey() == FocusedElementKey);
             foreach (UIDrawCall child in ChildDrawCalls)
@@ -62,8 +73,13 @@ namespace WarnerEngine.Lib.UI
             }
         }
 
-        public bool ContainsPoint(Vector2 P) 
+        public bool ContainsPoint(Vector2? MaybePoint) 
         {
+            if (MaybePoint == null)
+            {
+                return false;
+            }
+            Vector2 P = MaybePoint.Value;
             return P.X >= X && P.X <= X + Width && P.Y >= Y && P.Y <= Y + Height;
         }
     }
