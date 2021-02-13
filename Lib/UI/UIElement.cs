@@ -428,16 +428,17 @@ namespace WarnerEngine.Lib.UI
 
                     if (child.GetHeight().Sizing == UIEnums.Sizing.Fixed)
                     {
-                        tempMaxCrossDirectionSize = Math.Max(tempMaxCrossDirectionSize, child.GetHeight().Size + child.GetHeight().FullMargin);
+                        tempMaxCrossDirectionSize = Math.Max(tempMaxCrossDirectionSize, child.GetHeight().Size);
                     }
                     else if (child.GetHeight().Sizing == UIEnums.Sizing.Relative)
                     {
-                        tempMaxCrossDirectionSize += Math.Max(tempMaxCrossDirectionSize, (int)(child.GetHeight().Size / 100f * RenderedHeight) + child.GetHeight().FullMargin);
+                        tempMaxCrossDirectionSize += Math.Max(tempMaxCrossDirectionSize, (int)(child.GetHeight().Size / 100f * RenderedHeight));
                     }
                     else
                     {
                         throw new Exception("Rest sizing is not allowed in a child's cross direction");
                     }
+                    tempMaxCrossDirectionSize += child.GetHeight().FullMargin;
 
                     // Check if we're over capacity
                     bool wasCapacityReached = !isScrollingEnabled && (tempFixedSpaceNeeds + tempRestSpaceMinimumNeeds > RenderedWidth);
@@ -490,7 +491,14 @@ namespace WarnerEngine.Lib.UI
                                 default:
                                     throw new Exception("Unsupported height sizing on cross direction");
                             }
-                            childDrawCalls.Add(renderedChild.Render(childWidth, childHeight, realCursorX + renderedChild.GetWidth().MarginStart, cursorY + renderedChild.GetHeight().MarginStart));
+                            childDrawCalls.Add(
+                                renderedChild.Render(
+                                    childWidth - renderedChild.GetWidth().FullPadding, 
+                                    childHeight - renderedChild.GetHeight().FullPadding, 
+                                    realCursorX + renderedChild.GetWidth().MarginStart + renderedChild.GetWidth().PaddingStart, 
+                                    cursorY + renderedChild.GetHeight().MarginStart + renderedChild.GetHeight().PaddingStart
+                                )
+                            );
                             realCursorX += childWidth + renderedChild.GetWidth().FullMargin;
                         }
                         if (!wasCapacityReached && isLastChild)
@@ -527,16 +535,17 @@ namespace WarnerEngine.Lib.UI
 
                     if (child.GetWidth().Sizing == UIEnums.Sizing.Fixed)
                     {
-                        tempMaxCrossDirectionSize = Math.Max(tempMaxCrossDirectionSize, child.GetWidth().Size + child.GetWidth().FullMargin);
+                        tempMaxCrossDirectionSize = Math.Max(tempMaxCrossDirectionSize, child.GetWidth().Size);
                     }
                     else if (child.GetWidth().Sizing == UIEnums.Sizing.Relative)
                     {
-                        tempMaxCrossDirectionSize = Math.Max(tempMaxCrossDirectionSize, (int)(child.GetWidth().Size / 100f * RenderedWidth + child.GetWidth().FullMargin));
+                        tempMaxCrossDirectionSize = Math.Max(tempMaxCrossDirectionSize, (int)(child.GetWidth().Size / 100f * RenderedWidth));
                     }
                     else
                     {
                         throw new System.Exception("Rest sizing is not allowed in a child's cross direction");
                     }
+                    tempMaxCrossDirectionSize += child.GetWidth().FullMargin;
 
                     // Check if we're over capacity
                     bool wasCapacityReached = !isScrollingEnabled && (tempFixedSpaceNeeds + tempRestSpaceMinimumNeeds > RenderedHeight);
@@ -590,7 +599,14 @@ namespace WarnerEngine.Lib.UI
                                 default:
                                     throw new Exception("Unsupported height sizing");
                             }
-                            childDrawCalls.Add(renderedChild.Render(childWidth, childHeight, cursorX + renderedChild.GetWidth().MarginStart, realCursorY + renderedChild.GetHeight().MarginStart));
+                            childDrawCalls.Add(
+                                renderedChild.Render(
+                                    childWidth - renderedChild.GetWidth().FullPadding, 
+                                    childHeight - renderedChild.GetHeight().FullPadding, 
+                                    cursorX + renderedChild.GetWidth().MarginStart + renderedChild.GetWidth().PaddingStart, 
+                                    realCursorY + renderedChild.GetHeight().MarginStart + renderedChild.GetHeight().PaddingStart
+                                )
+                            );
                             realCursorY += childHeight + renderedChild.GetHeight().FullMargin;
                         }
                         if (!wasCapacityReached && isLastChild)
