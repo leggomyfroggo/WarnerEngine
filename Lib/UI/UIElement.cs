@@ -344,6 +344,9 @@ namespace WarnerEngine.Lib.UI
 
         public UIDrawCall Render(int RenderedWidth, int RenderedHeight, int RenderedX, int RenderedY)
         {
+            // Let the renderer know this component was seen
+            uiRendererInstance.MarkElementAsSeen(key);
+
             // Insert own draw call
             List<UIDrawCall> childDrawCalls = new List<UIDrawCall>();
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Xna.Framework;
 
@@ -21,6 +22,7 @@ namespace WarnerEngine.Lib.UI
         private Dictionary<string, Dictionary<string, object>> componentStates;
 
         private UIDrawCall rootDrawCall;
+        private HashSet<string> seenElementKeys;
         private bool wasUpdated;
 
         private string scrollingTargetKey;
@@ -32,6 +34,7 @@ namespace WarnerEngine.Lib.UI
             componentEventStates = new Dictionary<string, Dictionary<string, object>>();
             componentStates = new Dictionary<string, Dictionary<string, object>>();
             rootDrawCall = new UIDrawCall();
+            seenElementKeys = new HashSet<string>();
             wasUpdated = true;
             scrollingTargetKey = ScrollingTargetKey;
         }
@@ -42,12 +45,18 @@ namespace WarnerEngine.Lib.UI
 
         public void PreDraw(float DT)
         {
+            seenElementKeys.Clear();
             if (wasUpdated)
             {
                 rootDrawCall = Builder().RenderAsRoot();
                 wasUpdated = false;
 
-                // TODO: Clear states for components that were removed
+                componentStates = componentStates
+                    .Where(entry => seenElementKeys.Contains(entry.Key))
+                    .ToDictionary(entry => entry.Key, entry => entry.Value);
+                componentEventStates = componentEventStates
+                    .Where(entry => seenElementKeys.Contains(entry.Key))
+                    .ToDictionary(entry => entry.Key, entry => entry.Value);
             }
 
             rootDrawCall.PreDraw(
@@ -83,6 +92,11 @@ namespace WarnerEngine.Lib.UI
         public bool IsVisible()
         {
             return true;
+        }
+
+        public void MarkElementAsSeen(string Key)
+        {
+            seenElementKeys.Add(Key);
         }
 
         public void RegisterComponent(IUIElement Element)
