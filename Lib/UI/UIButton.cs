@@ -8,12 +8,23 @@ namespace WarnerEngine.Lib.UI
     {
         private enum State { Neutral, Hover, Pressed };
 
+        private Color borderColor;
         private Color color;
         private Color hoverColor;
         private Color pressColor;
         private UIIconInfo iconInfo;
 
-        public UIButton(string Key, UIRenderer UIRendererInstance) : base(Key, UIRendererInstance) { }
+        public UIButton(string Key, UIRenderer UIRendererInstance) : base(Key, UIRendererInstance) 
+        {
+            borderColor = Color.Transparent;
+        }
+
+        public UIButton SetBorderColor(Color C)
+        {
+            CheckCanModify();
+            borderColor = C;
+            return this;
+        }
 
         public UIButton SetColor(Color C)
         {
@@ -60,7 +71,16 @@ namespace WarnerEngine.Lib.UI
                             .SetIcon(iconInfo)
                             .Finalize()
                     )
-                    .Finalize()
+                    .Finalize(),
+                borderColor == Color.Transparent
+                    ? null
+                    : new UIBox(key + "_border_box", uiRendererInstance)
+                        .SetPositioning(UIEnums.Positioning.Absolute)
+                        .SetWidth(new UISize(GetWidth().Sizing, GetWidth().Size))
+                        .SetHeight(new UISize(GetHeight().Sizing, GetHeight().Size))
+                        .SetColor(borderColor)
+                        .SetIsFilled(false)
+                        .Finalize()
             );
         }
 
