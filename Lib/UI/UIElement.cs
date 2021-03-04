@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.Xna.Framework;
 
@@ -67,6 +68,13 @@ namespace WarnerEngine.Lib.UI
             return (TElement)this;
         }
 
+        public TElement SetWidth(string CodedWidth)
+        {
+            CheckCanModify();
+            width = DecodeCodedSize(CodedWidth);
+            return (TElement)this;
+        }
+
         public UISize GetHeight()
         {
             return height;
@@ -76,6 +84,13 @@ namespace WarnerEngine.Lib.UI
         {
             CheckCanModify();
             height = Height;
+            return (TElement)this;
+        }
+
+        public TElement SetHeight(string CodedHeight)
+        {
+            CheckCanModify();
+            height = DecodeCodedSize(CodedHeight);
             return (TElement)this;
         }
 
@@ -676,6 +691,101 @@ namespace WarnerEngine.Lib.UI
                 onRightClick != null ||
                 onPress != null ||
                 onPressMiddle != null;
+        }
+
+        private UISize DecodeCodedSize(string CodedSize)
+        {
+            Queue<string> tokens = new Queue<string>();
+            StringBuilder currentToken = new StringBuilder();
+            foreach (char c in CodedSize)
+            {
+                if (char.IsNumber(c)) 
+                { 
+                    if (currentToken.Length > 0 && !char.IsNumber(currentToken[currentToken.Length - 1]))
+                    {
+                        tokens.Enqueue(currentToken.ToString());
+                        currentToken.Clear();
+                    }
+                }
+                else if (char.IsLetter(c))
+                {
+                    if (currentToken.Length > 0 && !char.IsLetter(currentToken[currentToken.Length - 1]))
+                    {
+                        tokens.Enqueue(currentToken.ToString());
+                        currentToken.Clear();
+                    }
+                }
+                else if (c == '<' || c == '>' || c == '%' || c == '[' || c == ']')
+                {
+                    tokens.Enqueue(currentToken.ToString());
+                    currentToken.Clear();
+                }
+                else if (char.IsWhiteSpace(c))
+                {
+                    if (currentToken.Length > 0)
+                    {
+                        tokens.Enqueue(currentToken.ToString());
+                        currentToken.Clear();
+                    }
+                    continue;
+                }
+                currentToken.Append(c);
+            }
+            if (currentToken.Length > 0)
+            {
+                tokens.Enqueue(currentToken.ToString());
+            }
+            int size = 0;
+            UIEnums.Sizing sizing = UIEnums.Sizing.Fixed;
+            int marginStart = 0;
+            int marginEnd = 0;
+            int paddingStart = 0;
+            int paddingEnd = 0;
+            while (tokens.Count > 0)
+            {
+                string token = tokens.Dequeue();
+                if (int.TryParse(token, out int possibleInt))
+                {
+                    size = possibleInt;
+                    string unit = tokens.Dequeue();
+                    switch (unit)
+                    {
+                        case "px":
+                            sizing = UIEnums.Sizing.Fixed;
+                            break;
+                        case "%":
+                            sizing = UIEnums.Sizing.Relative;
+                            break;
+                        case "r":
+                            sizing = UIEnums.Sizing.Rest;
+                            break;
+                    }
+                }
+                else if (token == "[")
+                {
+                    paddingStart = int.Parse(tokens.Dequeue());
+                }
+                else if (token == "]")
+                {
+                    paddingEnd = int.Parse(tokens.Dequeue());
+                }
+                else if (token == "<")
+                {
+                    marginStart = int.Parse(tokens.Dequeue());
+                }
+                else if (token == ">")
+                {
+                    marginEnd = int.Parse(tokens.Dequeue());
+                }
+            }
+            return new UISize(
+                sizing,
+                size,
+                MarginStart: marginStart,
+                MarginEnd: marginEnd,
+                PaddingStart: paddingStart,
+                PaddingEnd: paddingEnd
+            );
         }
     }
 }
