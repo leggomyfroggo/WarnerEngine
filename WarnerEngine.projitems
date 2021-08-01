@@ -66,6 +66,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\IPositionableElement3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\IWorldSerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ObjectPool.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\IRandomRange.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\RandomRangeFloat.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\RandomRangeCone.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Scene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\SpatialMaximaMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\State\IStateBase.cs" />
