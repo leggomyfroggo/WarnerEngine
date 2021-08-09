@@ -1,11 +1,8 @@
-﻿using WarnerEngine.Lib.Components;
-
-namespace WarnerEngine.Lib.Entities
+﻿namespace WarnerEngine.Lib.Entities
 {
-    public interface IDraw
+    public interface IDraw : IPositionable
     {
         void Draw();
-        BackingBox GetBackingBox();
         bool IsVisible();
     }
 }

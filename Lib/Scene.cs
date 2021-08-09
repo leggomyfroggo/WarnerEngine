@@ -272,6 +272,7 @@ namespace WarnerEngine.Lib
         {
             Entity.OnRemove(this);
             removedEntities.Add(Entity);
+            //GameService.GetService<IBindingService>().RemoveBindingsForEntity(Entity);
             return this;
         }
 

@@ -12,8 +12,14 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\ABinding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\BindingPin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\BindingRemoval.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\IBinding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\Block.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\BlockFace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IPinnable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IPositionable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Index3.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\InteractionWOContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\DisposableArray.cs" />
@@ -99,11 +105,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\UI\UISize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Events.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\GameService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IBindingService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IInteractionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IAudioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IContentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IEventService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IInputService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\BindingService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\InteractionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\AudioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\ContentService.cs" />

@@ -40,6 +40,7 @@ namespace WarnerEngine.Services
             RegisterService(new Implementations.AudioService());
             RegisterService(new Implementations.ContentService());
             RegisterService(new Implementations.StateService());
+            RegisterService(new Implementations.BindingService());
             orderedServices = DetermineTopologicalOrdering();
             InitializeRegisteredServices();
         }
@@ -55,6 +56,7 @@ namespace WarnerEngine.Services
             RegisterService(new Implementations.AudioService());
             RegisterService(new Implementations.Test.TestContentService());
             RegisterService(new Implementations.StateService());
+            RegisterService(new Implementations.BindingService());
             orderedServices = DetermineTopologicalOrdering();
             InitializeRegisteredServices();
         }
