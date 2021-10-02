@@ -12,12 +12,17 @@
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Behaviors\ABehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Behaviors\IBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Behaviors\PinBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\ABinding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\BindingPin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\BindingRemoval.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\IBinding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\Block.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\BlockFace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\ASceneEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\EntityEdge.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IPinnable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IPositionable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Index3.cs" />
