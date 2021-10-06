@@ -21,6 +21,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Bindings\IBinding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\Block.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\BlockFace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\AComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\AEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\IComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\IEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\ASceneEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\EntityEdge.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IPinnable.cs" />
@@ -111,12 +115,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Events.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\GameService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IBindingService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\IECSService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IInteractionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IAudioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IContentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IEventService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IInputService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\BindingService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\ECSService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\InteractionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\AudioService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\ContentService.cs" />
