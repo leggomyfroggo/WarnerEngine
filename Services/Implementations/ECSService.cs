@@ -7,6 +7,8 @@ namespace WarnerEngine.Services.Implementations
 {
     public class ECSService : IECSService
     {
+        public const UInt64 NULL_ID = 0;
+
         private UInt64 _nextID;
 
         private Dictionary<UInt64, IEntity> _entities;
@@ -20,11 +22,12 @@ namespace WarnerEngine.Services.Implementations
 
         public HashSet<Type> GetDependencies()
         {
-            return new HashSet<Type>();
+            return new HashSet<Type>() { typeof(IEventService) };
         }
 
         public void Initialize()
         {
+            _nextID = 1;
             _entities = new Dictionary<UInt64, IEntity>();
             _components = new Dictionary<Type, Dictionary<UInt64, IComponent>>();
             _systems = new List<ISystem>();
@@ -72,6 +75,12 @@ namespace WarnerEngine.Services.Implementations
         }
 
         public IEntity GetEntity(UInt64 ID)
+        {
+            _entities.TryGetValue(ID, out IEntity entity);
+            return entity;
+        }
+
+        public IEntity GetxEntity(UInt64 ID)
         {
             return _entities[ID];
         }

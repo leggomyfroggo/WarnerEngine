@@ -13,6 +13,7 @@ namespace WarnerEngine.Services
         IECSService DeregisterEntity(IEntity Entity);
         IECSService DeregisterEntity(UInt64 ID);
         IEntity GetEntity(UInt64 ID);
+        IEntity GetxEntity(UInt64 ID);
 
         IECSService RegisterComponent(UInt64 EntityID, IComponent Component);
         IECSService DeregisterComponent<TComponent>(UInt64 EntityID);

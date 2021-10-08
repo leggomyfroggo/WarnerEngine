@@ -22,9 +22,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\Block.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\BlockFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\AComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\AEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\ASystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\IComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\IEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\ISystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\ASceneEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\EntityEdge.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Entities\IPinnable.cs" />
@@ -85,6 +87,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\RandomRangeFloat.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\RandomRangeCone.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Scene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\SceneGraph\INode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\SceneGraph\IScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\SceneGraph\Node.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\SceneGraph\Scene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\SpatialMaximaMap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\State\IStateBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\State\StateBase.cs" />
@@ -128,6 +134,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\ContentService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\EventService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\InputService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\NewSceneService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\RenderService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\SceneService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Implementations\StateService.cs" />
@@ -140,6 +147,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\IService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\IStateService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ITerminalService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\INewSceneService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ServiceCompositionMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
