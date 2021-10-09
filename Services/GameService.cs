@@ -32,8 +32,8 @@ namespace WarnerEngine.Services
         public static void Initialize()
         {
             RegisterService(new Implementations.EventService());
-            RegisterService(new Implementations.ECSService());
             RegisterService(new Implementations.InputService());
+            RegisterService(new Implementations.ECSService());
             RegisterService(new Implementations.TerminalService());
             RegisterService(new Implementations.SceneService());
             RegisterService(new Implementations.NewSceneService());

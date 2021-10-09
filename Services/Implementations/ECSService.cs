@@ -88,7 +88,10 @@ namespace WarnerEngine.Services.Implementations
         public IECSService RegisterComponent(UInt64 EntityID, IComponent Component)
         {
             Type t = Component.GetType();
-            _components[t] = _components[t] ?? new Dictionary<UInt64, IComponent>();
+            if (!_components.ContainsKey(t))
+            {
+                _components[t] = new Dictionary<UInt64, IComponent>();
+            }
             _components[t].Add(EntityID, Component);
             return this;
         }
@@ -112,7 +115,12 @@ namespace WarnerEngine.Services.Implementations
 
         public IEnumerable<UInt64> GetEntitiesWithComponent<TComponent>() where TComponent : IComponent
         {
-            return _components[typeof(TComponent)].Keys;
+            _components.TryGetValue(typeof(TComponent), out var entityIDs);
+            if (entityIDs?.Keys == null)
+            {
+                return new HashSet<UInt64>();
+            }
+            return entityIDs.Keys;
         }
 
         public IECSService RegisterSystem(ISystem System)
