@@ -22,7 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\Block.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\BlockFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\AComponent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\ASystem.cs" />
+    <Compile Include="..\WarnerEngine\Lib\ECS\APollingSystem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\Entity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\IComponent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\IEntity.cs" />
