@@ -5,7 +5,8 @@ using WarnerEngine.Services;
 
 namespace WarnerEngine.Lib.ECS
 {
-    public abstract class ASystem<TC1> : ISystem where TC1 : IComponent
+    public abstract class ASystem
+<TC1> : ISystem where TC1 : IComponent
     {
         public void Process()
         {
