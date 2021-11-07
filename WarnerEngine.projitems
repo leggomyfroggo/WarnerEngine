@@ -22,6 +22,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\Block.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Components\GameWorld\BlockFace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\AComponent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\Components\State\AState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\Components\State\IState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\Components\State\Stateful.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\IEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\IEventfulSystem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lib\ECS\Systems\State\AStateMachine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Graphics\AGraphicsPipelineNode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Graphics\DrawCall.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lib\Graphics\DrawStack.cs" />

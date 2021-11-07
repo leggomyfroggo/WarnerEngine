@@ -21,5 +21,8 @@ namespace WarnerEngine.Services
         IEnumerable<UInt64> GetEntitiesWithComponent<TComponent>() where TComponent : IComponent;
 
         IECSService RegisterSystem(ISystem System);
+
+        IECSService SubscribeToEventType(Type EventType, IEventfulSystem System);
+        IECSService RaiseEvent<TEvent>(TEvent Event) where TEvent : IEvent;
     }
 }

@@ -2,6 +2,7 @@
 {
     public interface ISystem
     {
+        void Initialize();
         void Process();
     }
 }

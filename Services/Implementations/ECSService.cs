@@ -15,6 +15,8 @@ namespace WarnerEngine.Services.Implementations
         private Dictionary<Type, Dictionary<UInt64, IComponent>> _components;
         private List<ISystem> _systems;
 
+        private Dictionary<Type, List<IEventfulSystem>> _eventSubscriptions;
+
         public Type GetBackingInterfaceType()
         {
             return typeof(IECSService);
@@ -31,6 +33,7 @@ namespace WarnerEngine.Services.Implementations
             _entities = new Dictionary<UInt64, IEntity>();
             _components = new Dictionary<Type, Dictionary<UInt64, IComponent>>();
             _systems = new List<ISystem>();
+            _eventSubscriptions = new Dictionary<Type, List<IEventfulSystem>>();
         }
 
         public void PreDraw(float DT)
@@ -125,7 +128,32 @@ namespace WarnerEngine.Services.Implementations
 
         public IECSService RegisterSystem(ISystem System)
         {
+            System.Initialize();
             _systems.Add(System);
+            return this;
+        }
+
+        public IECSService SubscribeToEventType(Type EventType, IEventfulSystem System)
+        {
+            if (!_eventSubscriptions.ContainsKey(EventType))
+            {
+                _eventSubscriptions[EventType] = new List<IEventfulSystem>();
+            }
+            _eventSubscriptions[EventType].Add(System);
+            return this;
+        }
+
+        public IECSService RaiseEvent<TEvent>(TEvent Event) where TEvent : IEvent
+        {
+            Type eventType = typeof(TEvent);
+            if (!_eventSubscriptions.ContainsKey(eventType))
+            {
+                return this;
+            }
+            foreach (IEventfulSystem system in _eventSubscriptions[eventType])
+            {
+                system.HandleEvent(Event);
+            }
             return this;
         }
     }

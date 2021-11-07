@@ -7,6 +7,8 @@ namespace WarnerEngine.Lib.ECS
 {
     public abstract class APollingSystem<TC1> : ISystem where TC1 : IComponent
     {
+        public abstract void Initialize();
+
         public void Process()
         {
             ProcessImplementation(GameService.GetService<IECSService>().GetEntitiesWithComponent<TC1>());
@@ -17,6 +19,8 @@ namespace WarnerEngine.Lib.ECS
 
     public abstract class APollingSystem<TC1, TC2> : ISystem where TC1 : IComponent where TC2 : IComponent
     {
+        public abstract void Initialize();
+
         public void Process()
         {
             ProcessImplementation(
