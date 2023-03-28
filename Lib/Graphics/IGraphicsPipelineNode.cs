@@ -5,7 +5,7 @@ namespace WarnerEngine.Lib.Graphics
     public interface IGraphicsPipelineNode
     {
         IGraphicsPipelineNode Next { get; }
-        public string TargetID { get; }
+        string TargetID { get; }
         Effect ActiveEffect { get; }
         DepthStencilState DepthState { get; }
 
