@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Threading;
 using System.Xml.Serialization;
 
 using Microsoft.Xna.Framework;
@@ -167,6 +168,7 @@ namespace WarnerEngine.Services.Implementations
             string[] files = manifests.ToArray();
 #else
             string[] files = Directory.GetFiles("Content/", "content_manifest.xml", SearchOption.AllDirectories);
+            List<ContentItem> contentItems = new List<ContentItem>();
 #endif
             XmlSerializer s = new XmlSerializer(typeof(ContentItem[]));
             foreach (string file in files)
@@ -178,43 +180,65 @@ namespace WarnerEngine.Services.Implementations
 #endif
                 using (Stream fs = TitleContainer.OpenStream(file))
                 {
-                    ContentItem[] contentItems = (ContentItem[])s.Deserialize(fs);
-                    foreach (ContentItem item in contentItems)
+                    ContentItem[] tempItems = (ContentItem[])s.Deserialize(fs);
+                    for (int i = 0; i < tempItems.Length; i++)
                     {
-                        string filePath = Path.Combine(manifestPath, item.Path);
-                        switch (item.Type)
-                        {
-                            case "Animation":
-                                LoadAsset<Animation>(filePath);
-                                break;
-                            case "Animation4":
-                                LoadAllAnimationDirections(filePath);
-                                break;
-                            case "Texture":
-                                LoadKeyedAsset<Texture2D>(item.Key, filePath);
-                                break;
-                            case "Sound":
-                                LoadKeyedAsset<SoundEffect>(item.Key, filePath);
-                                break;
-                            case "SpriteFont":
-                                LoadKeyedAsset<SpriteFont>(item.Key, filePath);
-                                break;
-                            case "Dialog":
-                                LoadAsset<DialogLink>(filePath);
-                                break;
-                            case "Effect":
-                                LoadKeyedAsset<Effect>(item.Key, filePath);
-                                break;
-                            default:
-                                LoadKeyedAssetImplementation(item.Key, filePath, contentTypesToAssetTypes[item.Type]);
-                                break;
-                        }
+                        tempItems[i].Path = Path.Combine(manifestPath, tempItems[i].Path);
                     }
+                    contentItems.AddRange(tempItems);
                 }
+            }
+
+            List<Thread> threads = new List<Thread>();
+            for (int i = 0; i < 4; i++)
+            {
+                Func<int, Action> starter = (capturedIndex) => (() => LoadContentThread(contentItems, capturedIndex, 4));
+                var thread = new Thread(new ThreadStart(starter(i)));
+                thread.Start();
+                threads.Add(thread);
+            }
+            foreach (Thread t in threads)
+            {
+                t.Join();
             }
             // Build the texture atlas from all of the textures loaded
             //textureAtlas.BulkAddTextures(assets[typeof(Texture2D)]);
             return this;
+        }
+
+        private void LoadContentThread(List<ContentItem> Items, int ThreadID, int ThreadCount)
+        {
+            for (int j = ThreadID; j < Items.Count; j += ThreadCount)
+            {
+                var item = Items[j];
+                switch (item.Type)
+                {
+                    case "Animation":
+                        LoadAsset<Animation>(item.Path);
+                        break;
+                    case "Animation4":
+                        LoadAllAnimationDirections(item.Path);
+                        break;
+                    case "Texture":
+                        LoadKeyedAsset<Texture2D>(item.Key, item.Path);
+                        break;
+                    case "Sound":
+                        LoadKeyedAsset<SoundEffect>(item.Key, item.Path);
+                        break;
+                    case "SpriteFont":
+                        LoadKeyedAsset<SpriteFont>(item.Key, item.Path);
+                        break;
+                    case "Dialog":
+                        LoadAsset<DialogLink>(item.Path);
+                        break;
+                    case "Effect":
+                        LoadKeyedAsset<Effect>(item.Key, item.Path);
+                        break;
+                    default:
+                        LoadKeyedAssetImplementation(item.Key, item.Path, contentTypesToAssetTypes[item.Type]);
+                        break;
+                }
+            }
         }
 
         private (string, object)[] LoadTexture(string Key, string Resource)
@@ -303,11 +327,17 @@ namespace WarnerEngine.Services.Implementations
             (string, object)[] loadedAssets = assetLoaders[AssetType](Key, Path);
             if (!assets.ContainsKey(AssetType))
             {
-                assets[AssetType] = new Dictionary<string, object>();
+                lock (assets)
+                {
+                    assets[AssetType] = new Dictionary<string, object>();
+                }
             }
             foreach ((string key, object asset) in loadedAssets)
             {
-                assets[AssetType][key] = asset;
+                lock (assets) 
+                {
+                    assets[AssetType][key] = asset;
+                }
             }
             return this;
         }
