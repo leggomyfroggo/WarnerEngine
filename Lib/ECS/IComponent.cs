@@ -4,6 +4,6 @@ namespace WarnerEngine.Lib.ECS
 {
     public interface IComponent
     {
-        UInt64 ParentID { get; }
+        UInt64 ParentID { get; set; }
     }
 }

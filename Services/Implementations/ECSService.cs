@@ -15,6 +15,8 @@ namespace WarnerEngine.Services.Implementations
         private Dictionary<Type, Dictionary<UInt64, IComponent>> _components;
         private List<ISystem> _systems;
 
+        private Dictionary<Type, List<IEventfulSystem>> _eventSubscriptions;
+
         public Type GetBackingInterfaceType()
         {
             return typeof(IECSService);
@@ -31,6 +33,7 @@ namespace WarnerEngine.Services.Implementations
             _entities = new Dictionary<UInt64, IEntity>();
             _components = new Dictionary<Type, Dictionary<UInt64, IComponent>>();
             _systems = new List<ISystem>();
+            _eventSubscriptions = new Dictionary<Type, List<IEventfulSystem>>();
         }
 
         public void PreDraw(float DT)
@@ -88,7 +91,10 @@ namespace WarnerEngine.Services.Implementations
         public IECSService RegisterComponent(UInt64 EntityID, IComponent Component)
         {
             Type t = Component.GetType();
-            _components[t] = _components[t] ?? new Dictionary<UInt64, IComponent>();
+            if (!_components.ContainsKey(t))
+            {
+                _components[t] = new Dictionary<UInt64, IComponent>();
+            }
             _components[t].Add(EntityID, Component);
             return this;
         }
@@ -112,12 +118,42 @@ namespace WarnerEngine.Services.Implementations
 
         public IEnumerable<UInt64> GetEntitiesWithComponent<TComponent>() where TComponent : IComponent
         {
-            return _components[typeof(TComponent)].Keys;
+            _components.TryGetValue(typeof(TComponent), out var entityIDs);
+            if (entityIDs?.Keys == null)
+            {
+                return new HashSet<UInt64>();
+            }
+            return entityIDs.Keys;
         }
 
         public IECSService RegisterSystem(ISystem System)
         {
+            System.Initialize();
             _systems.Add(System);
+            return this;
+        }
+
+        public IECSService SubscribeToEventType(Type EventType, IEventfulSystem System)
+        {
+            if (!_eventSubscriptions.ContainsKey(EventType))
+            {
+                _eventSubscriptions[EventType] = new List<IEventfulSystem>();
+            }
+            _eventSubscriptions[EventType].Add(System);
+            return this;
+        }
+
+        public IECSService RaiseEvent<TEvent>(TEvent Event) where TEvent : IEvent
+        {
+            Type eventType = typeof(TEvent);
+            if (!_eventSubscriptions.ContainsKey(eventType))
+            {
+                return this;
+            }
+            foreach (IEventfulSystem system in _eventSubscriptions[eventType])
+            {
+                system.HandleEvent(Event);
+            }
             return this;
         }
     }

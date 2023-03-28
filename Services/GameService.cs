@@ -32,12 +32,13 @@ namespace WarnerEngine.Services
         public static void Initialize()
         {
             RegisterService(new Implementations.EventService());
-            RegisterService(new Implementations.ECSService());
             RegisterService(new Implementations.InputService());
+            RegisterService(new Implementations.ECSService());
             RegisterService(new Implementations.TerminalService());
             RegisterService(new Implementations.SceneService());
             RegisterService(new Implementations.NewSceneService());
             RegisterService(new Implementations.InteractionService());
+            RegisterService(new Implementations.GraphicsService());
             RegisterService(new Implementations.RenderService());
             RegisterService(new Implementations.AudioService());
             RegisterService(new Implementations.ContentService());
@@ -54,6 +55,7 @@ namespace WarnerEngine.Services
             RegisterService(new Implementations.TerminalService());
             RegisterService(new Implementations.SceneService());
             RegisterService(new Implementations.InteractionService());
+            RegisterService(new Implementations.GraphicsService());
             RegisterService(new Implementations.RenderService());
             RegisterService(new Implementations.AudioService());
             RegisterService(new Implementations.Test.TestContentService());

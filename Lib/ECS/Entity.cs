@@ -25,6 +25,7 @@ namespace WarnerEngine.Lib.ECS
         public IEntity AddComponent(IComponent Component)
         {
             GameService.GetService<IECSService>().RegisterComponent(ID, Component);
+            Component.ParentID = ID;
             return this;
         }
 

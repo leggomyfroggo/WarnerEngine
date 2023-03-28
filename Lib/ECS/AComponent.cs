@@ -4,18 +4,22 @@ namespace WarnerEngine.Lib.ECS
 {
     public abstract class AComponent : IComponent
     {
-        private UInt64 _parentID;
+        private UInt64? _parentID;
         public UInt64 ParentID
         {
             get
             {
-                return _parentID;
+                return _parentID.Value;
             }
-        }
 
-        public AComponent(UInt64 ParentID)
-        {
-            _parentID = ParentID;
+            set
+            {
+                if (_parentID != null)
+                {
+                    throw new Exception("Parent ID has already been set for this component");
+                }
+                _parentID = value;
+            }
         }
     }
 }
